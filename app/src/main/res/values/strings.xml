@@ -5,4 +5,7 @@
     <string name="PersonActivityHelloWorld">This is the person activity</string>
     <string name="SearchActivityHelloWorld">This is the search activity</string>
     <string name="SettingsActivityHelloWorld">This is the settings activity</string>
+    <string name="MainActivityHelloWorld">Hello World this is the right activity!</string>
+    <string name="LoginFragmentHelloWorld">Login Fragment</string>
+    <string name="MapFragmentHelloWorld">Map Fragment</string>
 </resources>

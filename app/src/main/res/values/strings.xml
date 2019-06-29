@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FMC</string>
+    <string name="EventActivityHelloWorld">This is the event activity!</string>
+    <string name="FilterActivityHelloWorld">This is the filter activity</string>
+    <string name="PersonActivityHelloWorld">This is the person activity</string>
+    <string name="SearchActivityHelloWorld">This is the search activity</string>
+    <string name="SettingsActivityHelloWorld">This is the settings activity</string>
 </resources>

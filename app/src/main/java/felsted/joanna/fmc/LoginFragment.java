@@ -24,6 +24,15 @@ public class LoginFragment extends Fragment {
 //    private RegisterRequest mRegisterRequest; //eventually I will be editing these as the text changes
 //    private LoginRequest mLoginRequest;
 
+    /*
+        mTrueButton = (Button) findViewById(R.id.true_button);
+        mTrueButton.setOnClickListener(new View.OnClickListener(){
+           @Override
+           public void onClick(View v){
+               checkAnswer(true);
+           }
+        });
+     */
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -33,6 +42,14 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
+
+        mRegister = v.findViewById(R.id.Register);
+        mRegister.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                switchToMapActivity();
+            }
+        });
         return v;
     }
 

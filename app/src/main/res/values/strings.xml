@@ -8,4 +8,16 @@
     <string name="MainActivityHelloWorld">Hello World this is the right activity!</string>
     <string name="LoginFragmentHelloWorld">Login Fragment</string>
     <string name="MapFragmentHelloWorld">Map Fragment</string>
+    <string name="register">Register</string>
+    <string name="sign_in">Sign In</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="server_host">Server Host</string>
+    <string name="server_port">Server Port</string>
+    <string name="user_name">User Name</string>
+    <string name="password">Password</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="gender">Gender</string>
 </resources>

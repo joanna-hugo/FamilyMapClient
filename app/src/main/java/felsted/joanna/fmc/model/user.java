@@ -11,17 +11,17 @@ public class user {
 
     //THIS IS A SINGLETON
     // there should NEVER be more than one user at a time
-    private user(){
+    private user() {
 
     }
 
-    public static user getInstance(){
+    public static user getInstance() {
         if (instance == null)
             instance = new user();
         return instance;
     }
 
-    public void logout(){
+    public void logout() {
         authToken = null;
         username = null;
         personID = null;

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 public class LoginFragment extends Fragment {
@@ -17,9 +18,14 @@ public class LoginFragment extends Fragment {
     private EditText mFirstName;
     private EditText mLastName;
     private EditText mEmail;
+
+    private RadioButton mMale;
+    private RadioButton mFemale;
     private RadioGroup mGender;
+
     private Button mSignIn;
     private Button mRegister;
+
 
 //    private RegisterRequest mRegisterRequest; //eventually I will be editing these as the text changes
 //    private LoginRequest mLoginRequest;
@@ -58,5 +64,22 @@ public class LoginFragment extends Fragment {
     {
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.switchToMapFragment();
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.mMale:
+                if (checked)
+                    // Pirates are the best
+                    break;
+            case R.id.mFemale:
+                if (checked)
+                    // Ninjas rule
+                    break;
+        }
     }
 }

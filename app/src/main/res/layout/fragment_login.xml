@@ -16,26 +16,24 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/serverHost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/server_host" />
 
         <EditText
+            android:id="@+id/serverHost"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"/>
 
     </LinearLayout>
 
-    <!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
         <TextView
-            android:id="@+id/serverPort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/server_port"
@@ -47,6 +45,7 @@
             app:layout_constraintVertical_bias="0.272" />
 
         <EditText
+            android:id="@+id/serverPort"
             android:layout_width="match_parent"
             android:layout_height="10dp" />
 
@@ -58,7 +57,6 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/user_name"
@@ -70,6 +68,7 @@
             app:layout_constraintVertical_bias="0.272" />
 
         <EditText
+            android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="10dp" />
 
@@ -81,12 +80,13 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/password"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/password" />
 
         <EditText
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="10dp" />
 
@@ -98,7 +98,6 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/first_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/first_name"
@@ -110,6 +109,7 @@
             app:layout_constraintVertical_bias="0.272" />
 
         <EditText
+            android:id="@+id/first_name"
             android:layout_width="match_parent"
             android:layout_height="10dp" />
 
@@ -121,7 +121,6 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/last_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/last_name"
@@ -133,6 +132,7 @@
             app:layout_constraintVertical_bias="0.272" />
 
         <EditText
+            android:id="@+id/last_name"
             android:layout_width="match_parent"
             android:layout_height="10dp" />
     </LinearLayout>
@@ -161,7 +161,6 @@
 
 
     <TextView
-        android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/email"
@@ -171,16 +170,19 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.272" />
-        -->
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"/>
+
 
     <!-- Gender Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom|center_vertical"
-        android:orientation="horizontal"
-        tools:layout_editor_absoluteX="41dp"
-        tools:layout_editor_absoluteY="142dp">
+        android:orientation="horizontal">
 
         <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
@@ -204,6 +206,8 @@
         </RadioGroup>
     </LinearLayout>
 
+
+    <!--Sign In/Register Buttons -->
     <Button
         android:id="@+id/Register"
         android:layout_width="wrap_content"
@@ -211,10 +215,17 @@
         android:layout_marginTop="192dp"
         android:layout_marginEnd="148dp"
         android:layout_marginRight="148dp"
-        android:text="Register"
+        android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!--Sign In/Register Buttons -->
+    <Button
+        android:id="@+id/SignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:layout_marginEnd="84dp"
+        android:layout_marginRight="84dp"
+        android:text="@string/sign_in"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 </android.support.constraint.ConstraintLayout>

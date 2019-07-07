@@ -1,4 +1,4 @@
-package felsted.joanna.fmc.requests;
+package felsted.joanna.fmc.model;
 
 public class loginRequest {
     private String serverHost;
@@ -11,6 +11,10 @@ public class loginRequest {
         this.serverPort = serverPort;
         this.username = username;
         this.password = password;
+    }
+
+    public loginRequest(){
+
     }
 
     public boolean allInfo(){

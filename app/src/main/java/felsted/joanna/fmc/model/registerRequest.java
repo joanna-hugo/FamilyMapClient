@@ -1,4 +1,4 @@
-package felsted.joanna.fmc.requests;
+package felsted.joanna.fmc.model;
 
 public class registerRequest {
     private String serverHost;
@@ -20,6 +20,9 @@ public class registerRequest {
         this.lastName = lastName;
         this.email = email;
         this.gender = gender;
+    }
+    public registerRequest(){
+
     }
 
     public boolean allInfo(){

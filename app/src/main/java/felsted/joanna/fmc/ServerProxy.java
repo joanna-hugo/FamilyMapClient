@@ -1,7 +1,7 @@
 package felsted.joanna.fmc;
 import felsted.joanna.fmc.model.*;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson; //TODO undo this later, I'm not working on this rn
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,42 +50,42 @@ public class ServerProxy {
      }
 }
      */
-    public loginResponse login(loginRequest request){
-        try {
-            // connect to server
-            URL url = new URL("connection://10.0.2.2:8080/user/" + "login");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-//            connection.setDoOutput(true);
-            connection.addRequestProperty("Accept", "application/json");
-            connection.connect();
-
-            // send request data
-            Gson gson = new Gson();
-            String reqData = gson.toJson(request);
-            OutputStream reqBody = connection.getOutputStream();
-            writeString(reqData, reqBody);
-            reqBody.close();
-            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                System.out.println("Route successfully claimed.");
-            } else {
-                System.out.println("ERROR: " + connection.getResponseMessage());
-            }
-
-            // get response data
-            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                InputStream respBody = connection.getInputStream();
-                String respData = readString(respBody);
-                System.out.println(respData);
-                return respData;
-            } else {
-                System.out.println("ERROR: " + connection.getResponseMessage());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public loginResponse login(loginRequest request){
+////        try {
+////            // connect to server
+////            URL url = new URL("connection://10.0.2.2:8080/user/" + "login");
+////            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+////            connection.setRequestMethod("POST");
+//////            connection.setDoOutput(true);
+////            connection.addRequestProperty("Accept", "application/json");
+////            connection.connect();
+////
+////            // send request data
+////            Gson gson = new Gson();
+////            String reqData = gson.toJson(request);
+////            OutputStream reqBody = connection.getOutputStream();
+////            writeString(reqData, reqBody);
+////            reqBody.close();
+////            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+////                System.out.println("Route successfully claimed.");
+////            } else {
+////                System.out.println("ERROR: " + connection.getResponseMessage());
+////            }
+////
+////            // get response data
+////            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+////                InputStream respBody = connection.getInputStream();
+////                String respData = readString(respBody);
+////                System.out.println(respData);
+////                return respData;
+////            } else {
+////                System.out.println("ERROR: " + connection.getResponseMessage());
+////            }
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
+////        return null;
+//    }
 
     // write a String to an OutputStream
     private void writeString(String str, OutputStream os) throws IOException {

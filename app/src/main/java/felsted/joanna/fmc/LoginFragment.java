@@ -193,7 +193,7 @@ public class LoginFragment extends Fragment {
                 switchToMapActivity();
             }
         });
-        mRegister.setEnabled(false);
+        mRegister.setEnabled(true); //TODO change this to false for full functionality
 
         mSignIn = v.findViewById(R.id.SignIn);
         mRegister.setOnClickListener(new View.OnClickListener(){
@@ -202,7 +202,7 @@ public class LoginFragment extends Fragment {
                 switchToMapActivity();
             }
         });
-        mSignIn.setEnabled(false);
+        mSignIn.setEnabled(true); //TODO temp change just for testing, set to true when ready
 
         return v;
     }

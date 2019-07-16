@@ -10,6 +10,19 @@ import felsted.joanna.fmc.model.settings;
 public class MainActivity extends AppCompatActivity {
     settings mSettings;
 
+    //TODO Figure out where to store "settings" info (pass in continually or in some shared space)
+    //TODO Connect client to server through the Server Proxy
+    //TODO Wire up Login Fragment to Server
+    //TODO setup maps https://developers.google.com/maps/documentation/android-sdk/start
+    //TODO Map Fragment
+    //TODO Activities
+        //TODO Event Activity
+        //TODO Filter Activity
+        //TODO Person Activity
+        //TODO Search Activity
+        //TODO Settings Activity
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

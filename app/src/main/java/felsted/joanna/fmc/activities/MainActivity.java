@@ -22,6 +22,14 @@ public class MainActivity extends AppCompatActivity {
         //TODO Person Activity
         //TODO Search Activity
         //TODO Settings Activity
+    //Probably helpful
+        // chapter 14 SQLite DB
+        // chapter 12 Dialogs
+        // chapter 25 HTTP
+        // chapter 27 SEARCH
+        // chapter 33 Locations
+        // chapter 34 Maps
+
 
 
     @Override

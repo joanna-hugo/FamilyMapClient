@@ -1,9 +1,11 @@
 package felsted.joanna.fmc.activities;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.io.IOException;
+
 import felsted.joanna.fmc.R;
+import felsted.joanna.fmc.ServerProxy;
 import felsted.joanna.fmc.model.registerRequest;
 import felsted.joanna.fmc.model.loginRequest;
 
@@ -32,13 +37,15 @@ public class LoginFragment extends Fragment {
     private Button mSignIn;
     private Button mRegister;
 
-
-    private registerRequest mRegisterRequest; //eventually I will be editing these as the text changes
+    private registerRequest mRegisterRequest; //TODO eventually I will be editing these as the text changes
     private loginRequest mLoginRequest;
+
+    private static final String TAG = "LoginFrag";
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -194,16 +201,17 @@ public class LoginFragment extends Fragment {
                 switchToMapActivity();
             }
         });
-        mRegister.setEnabled(true); //TODO change this to false for full functionality
+        mRegister.setEnabled(false); //TODO change this to false for full functionality
 
         mSignIn = v.findViewById(R.id.SignIn);
-        mRegister.setOnClickListener(new View.OnClickListener(){
+        mSignIn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                new LoginRequest().execute(); //TODO how do I see if login successful? Maybe I don't want to do in background?
                 switchToMapActivity();
             }
         });
-        mSignIn.setEnabled(true); //TODO temp change just for testing, set to true when ready
+        mSignIn.setEnabled(false); //TODO temp change just for testing, set to true when ready
 
         return v;
     }
@@ -236,6 +244,21 @@ public class LoginFragment extends Fragment {
             mSignIn.setEnabled(true);
         }if(mRegisterRequest.allInfo()) {
             mRegister.setEnabled(true);
+        }
+    }
+
+    private class LoginRequest extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... params){
+            Boolean success = false;
+            try{
+                String result = new ServerProxy().getUrlString("PUT URL HERE LATER");
+                Log.i(TAG, "Fetched contents of URL: " + result);
+                success = true;
+            }catch(IOException ioe){
+                Log.e(TAG, "Failed to fetch URL: ", ioe);
+            }
+            return null;
         }
     }
 }

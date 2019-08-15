@@ -20,6 +20,7 @@ import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.ServerProxy;
 import felsted.joanna.fmc.model.registerRequest;
 import felsted.joanna.fmc.model.loginRequest;
+import felsted.joanna.fmc.model.loginResponse;
 
 public class LoginFragment extends Fragment {
     private EditText mServerHost;
@@ -53,10 +54,11 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
+        //TODO abstract listener setup into a voi function (to cleanup screen)
         mRegisterRequest = new registerRequest();
         mLoginRequest =  new loginRequest();
 
-        mServerHost = (EditText) v.findViewById(R.id.serverHost);
+        mServerHost = v.findViewById(R.id.serverHost);
         mServerHost.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -193,12 +195,32 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        mGender = v.findViewById(R.id.gender_radio_group);
+        mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch(checkedId){
+                    case R.id.mFemale:
+                        mRegisterRequest.setGender("f");
+                        break;
+                    case R.id.mMale:
+                        mRegisterRequest.setGender("m");
+                }
+                changeAccessibility();
+            }
+        });
+
+        mMale = v.findViewById(R.id.mMale);
+
+        mFemale = v.findViewById(R.id.mFemale);
+
+
 
         mRegister = v.findViewById(R.id.Register);
         mRegister.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                switchToMapActivity();
+                new RegisterRequest().execute();
             }
         });
         mRegister.setEnabled(false); //TODO change this to false for full functionality
@@ -207,8 +229,7 @@ public class LoginFragment extends Fragment {
         mSignIn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                new LoginRequest().execute(); //TODO how do I see if login successful? Maybe I don't want to do in background?
-                switchToMapActivity();
+                new LoginRequest().execute(); //this function handles switching to mapFrag if needed
             }
         });
         mSignIn.setEnabled(false); //TODO temp change just for testing, set to true when ready
@@ -242,7 +263,7 @@ public class LoginFragment extends Fragment {
     private void changeAccessibility() {
         if(mLoginRequest.allInfo()) {
             mSignIn.setEnabled(true);
-        }if(mRegisterRequest.allInfo()) {
+            }if(mRegisterRequest.allInfo()) {
             mRegister.setEnabled(true);
         }
     }
@@ -250,11 +271,26 @@ public class LoginFragment extends Fragment {
     private class LoginRequest extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... params){
-            Boolean success = false;
             try{
-                String result = new ServerProxy().login("http://10.0.2.2:8080/user/login");
-                Log.i(TAG, "Fetched contents of URL: " + result);
-                success = true;
+                loginResponse result = new ServerProxy().login(mLoginRequest);
+                //TODO I should save the auth token somewhere
+                Log.i(TAG, "logged in " + result.getUsername());
+                switchToMapActivity();
+            }catch(IOException ioe){
+                Log.e(TAG, "Failed to fetch URL: ", ioe);
+            }
+            return null;
+        }
+    }
+
+    private class RegisterRequest extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... params){
+            try{
+                loginResponse result = new ServerProxy().register(mRegisterRequest);
+                //TODO I should save the auth token somewhere
+                Log.i(TAG, "logged in " + result.getUsername());
+                switchToMapActivity();
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
             }

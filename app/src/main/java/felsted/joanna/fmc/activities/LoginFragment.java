@@ -252,7 +252,7 @@ public class LoginFragment extends Fragment {
         protected Void doInBackground(Void... params){
             Boolean success = false;
             try{
-                String result = new ServerProxy().getUrlString("PUT URL HERE LATER");
+                String result = new ServerProxy().login("http://10.0.2.2:8080/user/login");
                 Log.i(TAG, "Fetched contents of URL: " + result);
                 success = true;
             }catch(IOException ioe){

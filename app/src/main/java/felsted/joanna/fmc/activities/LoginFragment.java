@@ -223,7 +223,7 @@ public class LoginFragment extends Fragment {
                 new RegisterRequest().execute();
             }
         });
-        mRegister.setEnabled(false); //TODO change this to false for full functionality
+        mRegister.setEnabled(true); //TODO change to false when done testing
 
         mSignIn = v.findViewById(R.id.SignIn);
         mSignIn.setOnClickListener(new View.OnClickListener(){
@@ -232,7 +232,7 @@ public class LoginFragment extends Fragment {
                 new LoginRequest().execute(); //this function handles switching to mapFrag if needed
             }
         });
-        mSignIn.setEnabled(false); //TODO temp change just for testing, set to true when ready
+        mSignIn.setEnabled(false);
 
         return v;
     }
@@ -286,14 +286,17 @@ public class LoginFragment extends Fragment {
     private class RegisterRequest extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... params){
-            try{
-                loginResponse result = new ServerProxy().register(mRegisterRequest);
-                //TODO I should save the auth token somewhere
-                Log.i(TAG, "logged in " + result.getUsername());
-                switchToMapActivity();
-            }catch(IOException ioe){
-                Log.e(TAG, "Failed to fetch URL: ", ioe);
-            }
+//            try{
+//                loginResponse result = new ServerProxy().register(mRegisterRequest); //TODO uncomment this, this is just for testing so I don't have to login every time
+//                //TODO I should save the auth token somewhere
+            //TODO check for 200 response, then create a toast if not
+//                Log.i(TAG, "logged in " + result.getUsername());
+//                switchToMapActivity();
+//            }catch(IOException ioe){
+//                Log.e(TAG, "Failed to fetch URL: ", ioe);
+//            }
+
+            switchToMapActivity(); //TODO uncomment above when done with testing
             return null;
         }
     }

@@ -3,9 +3,13 @@ package felsted.joanna.fmc.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,18 +22,38 @@ import android.widget.ImageView;
 import com.google.android.gms.common.api.GoogleApiActivity;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
 
 import felsted.joanna.fmc.R;
+import felsted.joanna.fmc.ServerProxy;
+import felsted.joanna.fmc.model.event;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends SupportMapFragment {
     private String TAG = "MapFrag";
     private static final String[] LOCATION_PERMISSIONS = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
     };
+    private static final int REQUEST_LOCATION_PERMISSIONS = 0;
 
-    private ImageView mImageView;
     private GoogleApiClient mClient;
+    private GoogleMap mMap;
+    private Bitmap mMapImage;
+    private event[] Events;
+    private event mMapItem;
+    private Location mCurrentLocation;
+
 
     public static MapFragment newInstance(){
         return new MapFragment();
@@ -54,20 +78,13 @@ public class MapFragment extends Fragment {
                     }
                 })
                 .build();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_map, container, false);
-
-        configureSearchButton(v);
-        configureFilterButton(v);
-        configureSettingsButton(v);
-        configurePersonButton(v);
-        mImageView = (ImageView) v.findViewById(R.id.image);
-
-        return v;
+        getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                updateUI();
+            }
+        });
     }
 
     @Override
@@ -94,51 +111,71 @@ public class MapFragment extends Fragment {
         searchItem.setEnabled(mClient.isConnected());
     }
 
-    private void configureSearchButton(View v){
-        Button searchButton = v.findViewById(R.id.toSearch);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), SearchActivity.class));
+    private void updateUI() {
+        if (mMap == null || mMapImage == null) {
+            return;
+        }
+
+        LatLng itemPoint = new LatLng(mMapItem.getLatitude(), mMapItem.getLongitude());
+        LatLng myPoint = new LatLng(
+                mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+
+        BitmapDescriptor itemBitmap = BitmapDescriptorFactory.fromBitmap(mMapImage);
+        MarkerOptions itemMarker = new MarkerOptions()
+                .position(itemPoint)
+                .icon(itemBitmap);
+        MarkerOptions myMarker = new MarkerOptions()
+                .position(myPoint);
+
+        mMap.clear();
+        mMap.addMarker(itemMarker);
+        mMap.addMarker(myMarker);
+
+
+        LatLngBounds bounds = new LatLngBounds.Builder()
+                .include(itemPoint)
+                .include(myPoint)
+                .build();
+
+        int margin = getResources().getDimensionPixelSize(R.dimen.map_inset_margin);
+        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, margin);
+        mMap.animateCamera(update);
+    }
+
+    private class getEvents extends AsyncTask<Location,Void,Void> {
+        private event mEvent;
+        private Bitmap mBitmap;
+        private Location mLocation;
+
+        @Override
+        protected Void doInBackground(Location... params) {
+            mLocation = params[0];
+            ServerProxy server = new ServerProxy();
+            try {
+                event[] items = server.getEvents("123MyAuth");
+
+                if (items.length== 0) {
+                    return null;
+                }
+
+                mEvent = items[0];
+
+//                byte[] bytes = server.getUrlBytes(mEvent.getUrl()); //TODO
+//                mBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            } catch (IOException ioe) {
+                Log.i(TAG, "Unable to decode bitmap", ioe);
             }
-        });
-    }
+            return null;
+        }
 
-    private void configureFilterButton(View v){
-        Button searchButton = v.findViewById(R.id.toFilter);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), FilterActivity.class));
-            }
-        });
-    }
+        @Override
+        protected void onPostExecute(Void result) {
+            mMapImage = mBitmap;
+            mMapItem = mEvent;
+            mCurrentLocation = mLocation;
 
-    private void configureSettingsButton(View v){
-        Button searchButton = v.findViewById(R.id.toSettings);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), SettingsActivity.class));
-            }
-        });
+            updateUI(); //TODO
+        }
     }
-
-    private void configurePersonButton(View v){
-        Button searchButton = v.findViewById(R.id.toPerson);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), PersonActivity.class));
-            }
-        });
-    }
-
-    private boolean hasLocationPermission() { //TODO actually, I'm not sure I need this for what I'm doing
-        int result = ContextCompat
-                .checkSelfPermission(getActivity(), LOCATION_PERMISSIONS[0]);
-        return result == PackageManager.PERMISSION_GRANTED;
-    }
-
 
 }

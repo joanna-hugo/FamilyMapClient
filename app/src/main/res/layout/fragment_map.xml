@@ -14,7 +14,7 @@
         android:layout_centerInParent="true"
         android:background="@android:color/white"
         tools:layout_editor_absoluteX="51dp"
-        tools:layout_editor_absoluteY="180dp" />
+        tools:layout_editor_absoluteY="149dp" />
 
     <TextView
         android:layout_width="100dp"

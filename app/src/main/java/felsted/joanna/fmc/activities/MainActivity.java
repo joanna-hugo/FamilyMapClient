@@ -14,7 +14,7 @@ import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.settings;
 
 public class MainActivity extends AppCompatActivity {
-    settings mSettings; //NOTE THIS IS WHERE I KEEP THE SETTING APPARENTLY TODO
+    settings mSettings = settings.getInstance(); //NOTE THIS IS WHERE I KEEP THE SETTING APPARENTLY TODO
     private static final int REQUEST_ERROR = 0;
 
     //TODO Figure out where to store "settings" info (pass in continually or in some shared space)
@@ -65,14 +65,23 @@ public class MainActivity extends AppCompatActivity {
 
     protected void switchToMapFragment()
     {
-        settings s = null;
-        s = s.getInstance();
-        s.setMapFragInMain(true);
-        s.setMainLoadMapFragOnCreate(true);
+        mSettings.setMapFragInMain(true);
+        mSettings.setMainLoadMapFragOnCreate(true);
         Fragment mapFrag = new MapFragment();
         FragmentManager fm = this.getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.fragment_container, mapFrag)
+                .commit();
+    }
+
+    protected void switchToLoginFragment()
+    {
+        mSettings.setMapFragInMain(false);
+        mSettings.setMainLoadMapFragOnCreate(false);
+        Fragment loginFrag = new LoginFragment();
+        FragmentManager fm = this.getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.fragment_container, loginFrag)
                 .commit();
     }
 

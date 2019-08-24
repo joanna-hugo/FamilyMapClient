@@ -60,7 +60,6 @@ public class MapFragment extends Fragment {
             }
         });
 
-
         configureSearchButton(view);
         configureFilterButton(view);
         configureSettingsButton(view);
@@ -223,25 +222,22 @@ public class MapFragment extends Fragment {
         map.addPolyline(options);
     }
 
-    private boolean startSettingsActivity(MenuItem item){
+    private void startSettingsActivity(MenuItem item){
         Intent intent = new Intent(getActivity(), SettingsActivity.class);
 //        intent.putExtra("SettingsActivity", Util.getGson().toJson(settings)); TODO investigate if this is a good way to pass settings object between activities
         startActivity(intent);
-        return true;
     }
 
-    private boolean startSearchActivity(MenuItem item){
+    private void startSearchActivity(MenuItem item){
         Intent intent = new Intent(getActivity(), SearchActivity.class);
 //        intent.putExtra("SettingsActivity", Util.getGson().toJson(settings)); TODO investigate if this is a good way to pass settings object between activities
         startActivity(intent);
-        return true;
     }
 
-    private boolean startFilterActivity(MenuItem item){
+    private void startFilterActivity(MenuItem item){
         Intent intent = new Intent(getActivity(), FilterActivity.class);
 //        intent.putExtra("SettingsActivity", Util.getGson().toJson(settings)); TODO investigate if this is a good way to pass settings object between activities
         startActivity(intent);
-        return true;
     }
 
 

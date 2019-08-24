@@ -41,4 +41,7 @@
     <string name="resync">RESYNC</string>
     <string name="logout_and_return_to_the_login_screen">Logout and Return to the Login Screen</string>
     <string name="logout">LOGOUT</string>
+    <string name="first_name_person">FIRST NAME</string>
+    <string name="last_name_person">LAST NAME</string>
+    <string name="gender_person">GENDER</string>
 </resources>

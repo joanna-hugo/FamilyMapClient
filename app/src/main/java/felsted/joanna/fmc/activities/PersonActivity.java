@@ -14,20 +14,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.bignerdranch.expandablerecyclerview.ChildViewHolder;
-import com.bignerdranch.expandablerecyclerview.ParentViewHolder;
-import com.bignerdranch.expandablerecyclerview.model.Parent;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import felsted.joanna.fmc.R;
+import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.event;
 import felsted.joanna.fmc.model.person;
 
 public class PersonActivity extends AppCompatActivity {
 
+    private FamilyModel mFamilyModel;
     private List<event> mEvents = new ArrayList<event>();
     private person mPerson = new person();
 
@@ -84,15 +81,12 @@ public class PersonActivity extends AppCompatActivity {
         mEvents.add(temp3);
     }
 
-
     private void updateUI() {
         List<event> crimes = mEvents;
 
         mAdapter = new EventAdapter(crimes);
         mEventRecyclerView.setAdapter(mAdapter);
     }
-
-
 
     private class EventHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mType;
@@ -101,7 +95,7 @@ public class PersonActivity extends AppCompatActivity {
         private TextView mName;
 
         private event myEvent;
-        public EventHolder(LayoutInflater inflater, ViewGroup parent) {
+        private EventHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_event, parent, false));
 
             mType =  itemView.findViewById(R.id.event_type);
@@ -111,7 +105,7 @@ public class PersonActivity extends AppCompatActivity {
             itemView.setOnClickListener(this);
         }
 
-        public void bind(event e) {
+        private void bind(event e) {
             myEvent = e;
             mType.setText(myEvent.getEventType());
             String loc = myEvent.getCity() + ", " + myEvent.getCountry();
@@ -122,8 +116,19 @@ public class PersonActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v){
+            /*
+            Create a New Explicit or Implicit Intent object in source activity.
+Call intent.putExtra(String key, Object data) method to save data in it.
+Call startActivity(intent) method in source activity to pass the intent to android os.
+Call getIntent() method in target activity.
+Use intent.getStringExtra(String key) to get the transferred data.
+             */
             Toast.makeText(v.getContext(),
-                    "you clicked a " + myEvent.getEventType() + " event!", Toast.LENGTH_SHORT).show(); //TODO this should launch an event activity
+                    "you clicked a " + myEvent.getEventType() + " event!", Toast.LENGTH_SHORT).show();
+
+            Intent i = new Intent(v.getContext(), EventActivity.class);
+            i.putExtra("center_event", myEvent.getEventID());
+            startActivity(new Intent(i));
         }
     }
 
@@ -131,7 +136,7 @@ public class PersonActivity extends AppCompatActivity {
 
         private List<event> myEvents;
 
-        public EventAdapter(List<event> events) {
+        private EventAdapter(List<event> events) {
             myEvents = events;
         }
 
@@ -154,8 +159,14 @@ public class PersonActivity extends AppCompatActivity {
         }
     }
 
+    public FamilyModel getFamilyModel() {
+        return mFamilyModel;
+    }
 
-    //--------------
+    public void setFamilyModel(FamilyModel familyModel) {
+        mFamilyModel = familyModel;
+    }
+//--------------
     // NOTE If you want to make the list expandable, follow this BigNerdRanch Tutorial
     // https://bignerdranch.github.io/expandable-recycler-view/
 }

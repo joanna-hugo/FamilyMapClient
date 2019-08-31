@@ -1,7 +1,9 @@
 package felsted.joanna.fmc.activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,11 +13,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import felsted.joanna.fmc.R;
+import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.settings;
 
 public class MainActivity extends AppCompatActivity {
-    settings mSettings = settings.getInstance(); //NOTE THIS IS WHERE I KEEP THE SETTING APPARENTLY TODO
+    settings mSettings = settings.getInstance(); // NOTE THIS IS WHERE I KEEP THE SETTING APPARENTLY TODO
     private static final int REQUEST_ERROR = 0;
+    private Context mContext;
+    private SQLiteDatabase mDatabase;
 
     //TODO Figure out where to store "settings" info (pass in continually or in some shared space)
     //DONE Connect client to server through the Server Proxy
@@ -63,11 +68,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    protected void switchToMapFragment()
+    protected void switchToMapFragment(FamilyModel familyModel)
     {
         mSettings.setMapFragInMain(true);
         mSettings.setMainLoadMapFragOnCreate(true);
         Fragment mapFrag = new MapFragment();
+        ((MapFragment) mapFrag).setFamilyModel(familyModel);
         FragmentManager fm = this.getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.fragment_container, mapFrag)

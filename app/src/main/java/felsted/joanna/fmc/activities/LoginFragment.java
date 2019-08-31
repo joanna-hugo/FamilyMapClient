@@ -1,5 +1,7 @@
 package felsted.joanna.fmc.activities;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +20,10 @@ import java.io.IOException;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.ServerProxy;
+import felsted.joanna.fmc.db.dbOpener;
+import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.eventListResponse;
+import felsted.joanna.fmc.model.personListResponse;
 import felsted.joanna.fmc.model.registerRequest;
 import felsted.joanna.fmc.model.loginRequest;
 import felsted.joanna.fmc.model.loginResponse;
@@ -40,6 +46,8 @@ public class LoginFragment extends Fragment {
 
     private registerRequest mRegisterRequest; //TODO eventually I will be editing these as the text changes
     private loginRequest mLoginRequest;
+
+    private FamilyModel familyModel;
 
     private static final String TAG = "LoginFrag";
 
@@ -238,9 +246,9 @@ public class LoginFragment extends Fragment {
     }
 
 
-    private void switchToMapActivity() {
+    private void switchToMapActivity(FamilyModel familyModel) {
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.switchToMapFragment();
+        mainActivity.switchToMapFragment(familyModel);
     }
 
     public void onRadioButtonClicked(View view) {
@@ -273,9 +281,13 @@ public class LoginFragment extends Fragment {
         protected Void doInBackground(Void... params){
             try{
                 loginResponse result = new ServerProxy().login(mLoginRequest);
-                //TODO I should save the auth token somewhere
                 Log.i(TAG, "logged in " + result.getUsername());
-                switchToMapActivity();
+                personListResponse persons = new ServerProxy().getPersons(result.getAuthToken());
+                eventListResponse events = new ServerProxy().getEvents(result.getAuthToken());
+                familyModel.setEvents(events.getData());
+                familyModel.setPersons(persons.getData());
+                familyModel.setToken(result.getAuthToken());
+                switchToMapActivity(familyModel);
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
             }
@@ -288,15 +300,18 @@ public class LoginFragment extends Fragment {
         protected Void doInBackground(Void... params){
 //            try{
 //                loginResponse result = new ServerProxy().register(mRegisterRequest); //TODO uncomment this, this is just for testing so I don't have to login every time
-//                //TODO I should save the auth token somewhere
             //TODO check for 200 response, then create a toast if not
-//                Log.i(TAG, "logged in " + result.getUsername());
+//                personListResponse persons = new ServerProxy().getPersons(result.getAuthToken());
+//                eventListResponse events = new ServerProxy().getEvents(result.getAuthToken());
+//                familyModel.setEvents(events.getData());
+//                familyModel.setPersons(persons.getData());
+//                familyModel.setToken(result.getAuthToken());
 //                switchToMapActivity();
 //            }catch(IOException ioe){
 //                Log.e(TAG, "Failed to fetch URL: ", ioe);
 //            }
 
-            switchToMapActivity(); //TODO uncomment above when done with testing
+            switchToMapActivity(familyModel); //TODO uncomment above when done with testing
             return null;
         }
     }

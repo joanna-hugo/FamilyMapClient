@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import felsted.joanna.fmc.R;
+import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.settings;
 
 public class SettingsActivity extends AppCompatActivity  {
@@ -35,6 +36,8 @@ public class SettingsActivity extends AppCompatActivity  {
 
     private settings mSettings = settings.getInstance();
     private String TAG = "SETTINGS";
+
+    private FamilyModel mFamilyModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -319,4 +322,19 @@ public class SettingsActivity extends AppCompatActivity  {
         }
     }
 
+    public settings getSettings() {
+        return mSettings;
+    }
+
+    public void setSettings(settings settings) {
+        mSettings = settings;
+    }
+
+    public FamilyModel getFamilyModel() {
+        return mFamilyModel;
+    }
+
+    public void setFamilyModel(FamilyModel familyModel) {
+        mFamilyModel = familyModel;
+    }
 }

@@ -24,6 +24,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import felsted.joanna.fmc.R;
+import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.event;
 
 import static android.graphics.Color.BLUE;
 import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
@@ -35,6 +37,7 @@ public class MapFragment extends Fragment {
     private GoogleMap map;
     private TextView textView;
     private MapView mapView;
+    private FamilyModel mFamilyModel;
 
     //TODO get ACTUAL events
     //TODO write bottom section of screen layout
@@ -125,11 +128,18 @@ public class MapFragment extends Fragment {
 
     }
 
-    void centerMap() {
+    public void centerMap() {
         LatLng byu = new LatLng(40.2518, -111.6493);
         CameraUpdate update = CameraUpdateFactory.newLatLng(byu);
         map.moveCamera(update);
         map.addMarker(new MarkerOptions().position(byu));
+    }
+
+    public void centerMap(event e) {
+        LatLng center_event = new LatLng(e.getLatitude(), e.getLongitude());
+        CameraUpdate update = CameraUpdateFactory.newLatLng(center_event);
+        map.moveCamera(update);
+        map.addMarker(new MarkerOptions().position(center_event));
     }
 
     void zoomMap(float amount) {
@@ -283,4 +293,11 @@ public class MapFragment extends Fragment {
         });
     }
 
+    public FamilyModel getFamilyModel() {
+        return mFamilyModel;
+    }
+
+    public void setFamilyModel(FamilyModel familyModel) {
+        mFamilyModel = familyModel;
+    }
 }

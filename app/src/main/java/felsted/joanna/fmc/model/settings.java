@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import java.util.Map;
  * Created by bondd on 12/9/2017.
  */
 
-public class settings {
+public class settings implements Serializable {
 
     //TODO layout for all of these
     //TODO pass this item between all activities

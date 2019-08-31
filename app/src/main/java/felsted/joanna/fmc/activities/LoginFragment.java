@@ -1,7 +1,5 @@
 package felsted.joanna.fmc.activities;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,9 +18,10 @@ import java.io.IOException;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.ServerProxy;
-import felsted.joanna.fmc.db.dbOpener;
 import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.event;
 import felsted.joanna.fmc.model.eventListResponse;
+import felsted.joanna.fmc.model.person;
 import felsted.joanna.fmc.model.personListResponse;
 import felsted.joanna.fmc.model.registerRequest;
 import felsted.joanna.fmc.model.loginRequest;
@@ -47,7 +46,7 @@ public class LoginFragment extends Fragment {
     private registerRequest mRegisterRequest; //TODO eventually I will be editing these as the text changes
     private loginRequest mLoginRequest;
 
-    private FamilyModel familyModel;
+    private FamilyModel mFamilyModel = new FamilyModel();
 
     private static final String TAG = "LoginFrag";
 
@@ -55,6 +54,26 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        fakeTestData();
+    }
+
+    //TODO make a function to insert fake persons and events
+    private void fakeTestData(){
+        //String personID, String descendant, String firstName, String lastName,
+        //                  String gender, String father, String mother, String spouse
+        mFamilyModel.addPerson(new person("Sheila_Parker", "sheila",
+                "Sheila", "Parker", "f", "Patrick_Spencer", "Im_really_good_at_names", ""));
+        mFamilyModel.addPerson(new person("Patrick_Spencer", "sheila",
+                "Patrick", "Spencer", "m", "", "", "Im_really_good_at_names"));
+        mFamilyModel.addPerson(new person("Im_really_good_at_names", "sheila",
+                "Nicole", "Spencer", "f", "", "", "Patrick_Spencer"));
+
+        //String eventID, String descendant, String person, Double latitude,
+        //                 Double longitude, String country, String city, String eventType, int year
+        mFamilyModel.addEvent(new event("Sheila_Family_Map", "sheila", "Sheila_Parker", 40.7500d, -110.1167d, "United States", "Salt Lake City", "started family map", 2016));
+        mFamilyModel.addEvent(new event("Sheila_Family_Map2", "sheila", "Patrick_Spencer", 45.50d, -115d, "United States", "Murray", "birth", 1990));
+        mFamilyModel.addEvent(new event("Sheila_Family_Map3", "sheila", "Sheila_Parker", 43d, -116d, "United States", "Area 51", "bored", 2000));
+
     }
 
     @Override
@@ -284,10 +303,10 @@ public class LoginFragment extends Fragment {
                 Log.i(TAG, "logged in " + result.getUsername());
                 personListResponse persons = new ServerProxy().getPersons(result.getAuthToken());
                 eventListResponse events = new ServerProxy().getEvents(result.getAuthToken());
-                familyModel.setEvents(events.getData());
-                familyModel.setPersons(persons.getData());
-                familyModel.setToken(result.getAuthToken());
-                switchToMapActivity(familyModel);
+                mFamilyModel.setEvents(events.getData());
+                mFamilyModel.setPersons(persons.getData());
+                mFamilyModel.setToken(result.getAuthToken());
+                switchToMapActivity(mFamilyModel);
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
             }
@@ -303,15 +322,15 @@ public class LoginFragment extends Fragment {
             //TODO check for 200 response, then create a toast if not
 //                personListResponse persons = new ServerProxy().getPersons(result.getAuthToken());
 //                eventListResponse events = new ServerProxy().getEvents(result.getAuthToken());
-//                familyModel.setEvents(events.getData());
-//                familyModel.setPersons(persons.getData());
-//                familyModel.setToken(result.getAuthToken());
+//                mFamilyModel.setEvents(events.getData());
+//                mFamilyModel.setPersons(persons.getData());
+//                mFamilyModel.setToken(result.getAuthToken());
 //                switchToMapActivity();
 //            }catch(IOException ioe){
 //                Log.e(TAG, "Failed to fetch URL: ", ioe);
 //            }
 
-            switchToMapActivity(familyModel); //TODO uncomment above when done with testing
+            switchToMapActivity(mFamilyModel); //TODO uncomment above when done with testing
             return null;
         }
     }

@@ -1,5 +1,7 @@
 package felsted.joanna.fmc.model;
 
+import java.io.Serializable;
+
 /**
  * This is the model Person class. It's data members include --
  *     Person ID: Unique identifier for this person (non-empty string)
@@ -15,7 +17,7 @@ package felsted.joanna.fmc.model;
  *
  * Data members can only be accessed through getters and setters
  */
-public class person {
+public class person  implements Serializable {
     /*
     Person ID: Unique identifier for this person (non-empty string)
     Descendant: User (Username) to which this person belongs

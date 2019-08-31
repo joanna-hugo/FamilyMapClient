@@ -248,7 +248,9 @@ public class SettingsActivity extends AppCompatActivity  {
                 Toast.makeText(SettingsActivity.this,
                         "Button worked but logout not hooked up",
                         Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(v.getContext(), MainActivity.class));
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                intent.putExtra("FAMILY_MODEL", mFamilyModel);
+                startActivity(intent);
             }
         });
     }

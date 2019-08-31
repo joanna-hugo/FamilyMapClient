@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.event;
+import felsted.joanna.fmc.model.settings;
 
 import static android.graphics.Color.BLUE;
 import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
@@ -38,6 +39,7 @@ public class MapFragment extends Fragment {
     private TextView textView;
     private MapView mapView;
     private FamilyModel mFamilyModel;
+    private settings mSettings = settings.getInstance();
 
     //TODO get ACTUAL events
     //TODO write bottom section of screen layout
@@ -50,7 +52,9 @@ public class MapFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        textView = (TextView) view.findViewById(R.id.mapText);
+//        locationsFromFamilyMap();
+        textView = view.findViewById(R.id.mapText);
+
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -66,7 +70,8 @@ public class MapFragment extends Fragment {
         configureSearchButton(view);
         configureFilterButton(view);
         configureSettingsButton(view);
-        configurePersonButton(view);
+//        configurePersonButton(view);
+        setTextViewListener();
         return view;
 
     }
@@ -89,7 +94,7 @@ public class MapFragment extends Fragment {
         searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
             @Override
             public boolean onMenuItemClick(MenuItem item){
-                startSearchActivity(item);
+                startSearchActivity();
                 return true;
             }
         });
@@ -98,7 +103,7 @@ public class MapFragment extends Fragment {
         filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
             @Override
             public boolean onMenuItemClick(MenuItem item){
-                startFilterActivity(item);
+                startFilterActivity();
                 return true;
             }
         });
@@ -107,7 +112,7 @@ public class MapFragment extends Fragment {
         settingsItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
            @Override
            public boolean onMenuItemClick(MenuItem settingsItem){
-                startSettingsActivity(settingsItem);
+                startSettingsActivity();
                 return true;
            }
         });
@@ -163,37 +168,38 @@ public class MapFragment extends Fragment {
         });
     }
 
-    String[][] locations = {
-            {"Fairbanks", "64.8378", "-147.7164"},
-            {"Anchorage", "61.2181", "-149.9003"},
-            {"Sitka", "57.0531", "-135.3300"},
-            {"North Pole", "64.7511", "-147.3494"}
-    };
-    String getCity(String[] strings) {
-        return strings[0];
+    void setTextViewListener(){
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String person_id = (String)textView.getTag();
+                startPersonActivity(person_id);
+            }
+        });
     }
-    LatLng getLatLng(String[] strings) {
-        return new LatLng(Double.valueOf(strings[1]), Double.valueOf(strings[2]));
+
+    LatLng getLatLng(event e) {
+        return new LatLng(e.getLatitude(), e.getLongitude());
     }
 
     void addMarkers() {
-        for (String[] strings : locations) {
-            addMarker(getCity(strings), getLatLng(strings));
+        for(event e :mFamilyModel.getEvents()){
+            addMarker(e.getCity(), new LatLng(e.getLatitude(), e.getLongitude()), e);
         }
     }
 
-    void addMarker(String city, LatLng latLng) {
+    void addMarker(String city, LatLng latLng, event e) {
         MarkerOptions options =
                 new MarkerOptions().position(latLng).title(city)
                         .icon(defaultMarker(HUE_BLUE));
         Marker marker = map.addMarker(options);
-        marker.setTag(city);
+        marker.setTag(e.getEventID());
     }
 
     void setBounds() {
         LatLngBounds.Builder builder = LatLngBounds.builder();
-        for (String[] strings : locations) {
-            builder.include(getLatLng(strings));
+        for (event e : mFamilyModel.getEvents()) {
+            builder.include(getLatLng(e));
         }
         LatLngBounds bounds = builder.build();
         CameraUpdate update =
@@ -205,8 +211,10 @@ public class MapFragment extends Fragment {
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                String city = (String)marker.getTag();
-                textView.setText(city);
+                event e = mFamilyModel.getEvent((String) marker.getTag());
+                String loc = e.getCountry() + ", " + e.getCity();
+                textView.setText(loc);
+                textView.setTag(e.getPersonID());
                 return false;
             }
         });
@@ -214,12 +222,18 @@ public class MapFragment extends Fragment {
 
     void drawLines() {
         LatLng lastCity = null;
-        for (String[] strings : locations) {
-            LatLng latLng = getLatLng(strings);
+        for (event e : mFamilyModel.getEvents()) {
+            LatLng latLng = getLatLng(e);
             if (lastCity != null)
                 drawLine(lastCity, latLng);
             lastCity = latLng;
         }
+//        for (String[] strings : locations) {
+//            LatLng latLng = getLatLng(strings);
+//            if (lastCity != null)
+//                drawLine(lastCity, latLng);
+//            lastCity = latLng;
+//        }
     }
 
     static final float WIDTH = 10;  // in pixels
@@ -232,21 +246,36 @@ public class MapFragment extends Fragment {
         map.addPolyline(options);
     }
 
-    private void startSettingsActivity(MenuItem item){
+    private void startSettingsActivity(){
         Intent intent = new Intent(getActivity(), SettingsActivity.class);
 //        intent.putExtra("SettingsActivity", Util.getGson().toJson(settings)); TODO investigate if this is a good way to pass settings object between activities
+        intent.putExtra("SETTINGS", mSettings);
+        intent.putExtra("FAMILY_MODEL", mFamilyModel);
         startActivity(intent);
     }
 
-    private void startSearchActivity(MenuItem item){
+    private void startSearchActivity(){
         Intent intent = new Intent(getActivity(), SearchActivity.class);
 //        intent.putExtra("SettingsActivity", Util.getGson().toJson(settings)); TODO investigate if this is a good way to pass settings object between activities
+        intent.putExtra("SETTINGS", mSettings);
+        intent.putExtra("FAMILY_MODEL", mFamilyModel);
         startActivity(intent);
     }
 
-    private void startFilterActivity(MenuItem item){
+    private void startPersonActivity(String personID){
+        Intent intent = new Intent(getActivity(), PersonActivity.class);
+        intent.putExtra("SETTINGS", mSettings);
+        intent.putExtra("FAMILY_MODEL", mFamilyModel);
+        intent.putExtra("PERSON_ID", personID);
+
+        startActivity(intent);
+    }
+
+    private void startFilterActivity(){
         Intent intent = new Intent(getActivity(), FilterActivity.class);
 //        intent.putExtra("SettingsActivity", Util.getGson().toJson(settings)); TODO investigate if this is a good way to pass settings object between activities
+        intent.putExtra("SETTINGS", mSettings);
+        intent.putExtra("FAMILY_MODEL", mFamilyModel);
         startActivity(intent);
     }
 
@@ -258,7 +287,7 @@ public class MapFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), SearchActivity.class));
+                startSearchActivity();
             }
         });
     }
@@ -268,7 +297,7 @@ public class MapFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), FilterActivity.class));
+                startFilterActivity();
             }
         });
     }
@@ -278,20 +307,20 @@ public class MapFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), SettingsActivity.class));
+                startSettingsActivity();
             }
         });
     }
 
-    private void configurePersonButton(View v){
-        Button searchButton = v.findViewById(R.id.toPerson);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), PersonActivity.class));
-            }
-        });
-    }
+//    private void configurePersonButton(View v){
+//        Button searchButton = v.findViewById(R.id.toPerson);
+//        searchButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startPersonActivity();
+//            }
+//        });
+//    }
 
     public FamilyModel getFamilyModel() {
         return mFamilyModel;

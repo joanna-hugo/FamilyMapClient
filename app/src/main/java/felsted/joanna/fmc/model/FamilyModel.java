@@ -72,6 +72,55 @@ public class FamilyModel implements Serializable {
         return events.get(0);
     }
 
+    public event getFathersBirth(String person_id){
+        person p = getPerson(person_id);
+        List<event> fatherEvents= getPersonsEvents(p.getFather());
+
+        if(fatherEvents.isEmpty()){
+            return null;
+        }
+        event temp = fatherEvents.get(0);
+        for(event e: fatherEvents){
+            if (e.getYear() < temp.getYear()){
+                temp = e;
+            }
+        }
+        return temp;
+    }
+
+    public event getMothersBirth(String person_id){
+        person p = getPerson(person_id);
+        List<event> motherEvents= getPersonsEvents(p.getMother());
+
+        if(motherEvents.isEmpty()){
+            return null;
+        }
+        event temp = motherEvents.get(0);
+        for(event e: motherEvents){
+            if (e.getYear() < temp.getYear()){
+                temp = e;
+            }
+        }
+        return temp;
+    }
+
+    public event getSpousesBirth(String person_id){
+        person p = getPerson(person_id);
+        List<event> spouseEvengs= getPersonsEvents(p.getSpouse());
+
+        if(spouseEvengs.isEmpty()){
+            return null;
+        }
+        event temp = spouseEvengs.get(0);
+        for(event e: spouseEvengs){
+            if (e.getYear() < temp.getYear()){
+                temp = e;
+            }
+        }
+        return temp;
+    }
+
+
     public void addEvent(event e){
         events.add(e);
     }

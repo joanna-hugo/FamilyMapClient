@@ -23,9 +23,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.List;
+
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.event;
+import felsted.joanna.fmc.model.person;
 import felsted.joanna.fmc.model.settings;
 
 import static android.graphics.Color.BLUE;
@@ -41,20 +44,19 @@ public class MapFragment extends Fragment {
     private FamilyModel mFamilyModel;
     private settings mSettings = settings.getInstance();
 
-    //TODO get ACTUAL events
+    static final float WIDTH = 10;  // in pixels
+    static final int color = BLUE;
+
     //TODO write bottom section of screen layout
     //TODO get information from clicking on markers to show up in bottom half of screen
 
-    //TODO clicking on the Event box (bottom half of screen) takes user to Person Activity (person being the person the event is about)
     //TODO clicking on the icons in the menu takes the user to the settings, filters, or search activity
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-//        locationsFromFamilyMap();
         textView = view.findViewById(R.id.mapText);
-
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -63,25 +65,40 @@ public class MapFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
-                initMap();
+//                initMap();
+                centerMap();
+                zoomMap(10);
+                setMapType();
+                setClickListener();
+                zoomMap(2);
+                addMarkers();
+                setBounds();
+                setMarkerListener();
+                drawLines();
             }
         });
 
         configureSearchButton(view);
         configureFilterButton(view);
         configureSettingsButton(view);
-//        configurePersonButton(view);
         setTextViewListener();
         return view;
 
     }
 
-    // really need to override all lifecycle methods
-    // to make the MapView work correctly
     @Override
     public void onResume() {
         super.onResume();
         mapView.onResume();
+    }
+
+    //TODO update map when returning from changing settings
+
+    @Override
+    public void onStart(){
+        super.onStart(); //NOTE this is the function when returning from settings activity
+//        initMap();
+//        drawLines();
     }
 
     @Override
@@ -120,7 +137,6 @@ public class MapFragment extends Fragment {
     }
 
     void initMap() {
-
         centerMap();
         zoomMap(10);
         setMapType();
@@ -130,17 +146,30 @@ public class MapFragment extends Fragment {
         setBounds();
         setMarkerListener();
         drawLines();
-
     }
 
     public void centerMap() {
-        LatLng byu = new LatLng(40.2518, -111.6493);
+        LatLng byu = new LatLng(40.2518, -111.6493); //TODO why an error here? when moving Person --> Event
         CameraUpdate update = CameraUpdateFactory.newLatLng(byu);
         map.moveCamera(update);
         map.addMarker(new MarkerOptions().position(byu));
     }
 
     public void centerMap(event e) {
+//        if(map == null){
+////            View view = inflater.inflate(R.layout.fragment_map, container, false);
+////
+////            mapView = view.findViewById(R.id.map);
+////            mapView.onCreate(savedInstanceState);
+//
+//            mapView.getMapAsync(new OnMapReadyCallback() {
+//                @Override
+//                public void onMapReady(GoogleMap googleMap) {
+//                    map = googleMap;
+//                    initMap();
+//                }
+//            });
+//        }
         LatLng center_event = new LatLng(e.getLatitude(), e.getLongitude());
         CameraUpdate update = CameraUpdateFactory.newLatLng(center_event);
         map.moveCamera(update);
@@ -152,11 +181,8 @@ public class MapFragment extends Fragment {
         map.moveCamera(update);
     }
 
-    //    static final int mapType = MAP_TYPE_NORMAL;
-    static final int mapType = MAP_TYPE_SATELLITE;
-
     void setMapType() {
-        map.setMapType(mapType);
+        map.setMapType(mSettings.getMapType());
     }
 
     void setClickListener() {
@@ -183,7 +209,7 @@ public class MapFragment extends Fragment {
     }
 
     void addMarkers() {
-        for(event e :mFamilyModel.getEvents()){
+        for(event e :mFamilyModel.getEvents()){ //TODO why error Person --> Event
             addMarker(e.getCity(), new LatLng(e.getLatitude(), e.getLongitude()), e);
         }
     }
@@ -221,11 +247,46 @@ public class MapFragment extends Fragment {
     }
 
     void drawLines() {
+        /*
+                    spouse lines
+                        selected event to birth event of spouse (or earliest event)
+                    family tree lines
+                        selected event and birth (or earliest event) of father (if no father or no father events, no line
+                        selected event and birth (or earliest event) of mother (if no father or no father events, no line
+                        these lines are drawn recursively up through the generations with thinner and thinner lines
+                    life story lines
+                        connecting each event in a persons story, ordered chronologically
+                            if some events not visible (bc of filtering) leave them out
+                 */
+        if(mSettings.isShowLifeStoryLines()){
+            for (event e1: mFamilyModel.getEvents()){
+                drawFamLines(e1, mSettings.getFamilyTreeLinesColor(), WIDTH);
+            }
+        }
+        if(mSettings.isShowSpouseLines()){
+            for(event e: mFamilyModel.getEvents()){
+                event spouse = mFamilyModel.getSpousesBirth(e.getPersonID());
+                if(spouse != null) {
+                    drawLine(getLatLng(e), getLatLng(spouse), mSettings.getSpouseLinesColor(), WIDTH);
+                }
+
+            }
+        }
+        if(mSettings.isShowLifeStoryLines()){
+            for(event e: mFamilyModel.getEvents()){
+                for(event e2 :mFamilyModel.getPersonsEvents(e.getPersonID())){
+                    if(e2 != null) {
+                        drawLine(getLatLng(e), getLatLng(e2), mSettings.getLifeStoryLinesColor(), WIDTH);
+                    }
+                }
+            }
+        }
+
         LatLng lastCity = null;
         for (event e : mFamilyModel.getEvents()) {
             LatLng latLng = getLatLng(e);
             if (lastCity != null)
-                drawLine(lastCity, latLng);
+                drawLine(lastCity, latLng, color, WIDTH);
             lastCity = latLng;
         }
 //        for (String[] strings : locations) {
@@ -236,13 +297,29 @@ public class MapFragment extends Fragment {
 //        }
     }
 
-    static final float WIDTH = 10;  // in pixels
-    static final int color = BLUE;
+    void drawFamLines(event e, int color, float width){
+//        person temp = mFamilyModel.getPerson(e.getPersonID());
+        //TODO test with large family, do we need return statement, or will the if statements work?
 
-    void drawLine(LatLng point1, LatLng point2) {
+        //TODO lines get progessively thinner
+        event dad= mFamilyModel.getFathersBirth(e.getPersonID());
+        if(dad != null){
+            drawLine(getLatLng(e), getLatLng(dad), color, width);
+            drawFamLines(dad, color, width);
+        }
+
+        event mom= mFamilyModel.getMothersBirth(e.getPersonID());
+        if(mom != null){
+            drawLine(getLatLng(e), getLatLng(mom), color, width);
+            drawFamLines(mom, color, width);
+        }
+
+    }
+
+    void drawLine(LatLng point1, LatLng point2, int color, float width) {
         PolylineOptions options =
                 new PolylineOptions().add(point1, point2)
-                        .color(color).width(WIDTH);
+                        .color(color).width(width);
         map.addPolyline(options);
     }
 
@@ -311,16 +388,6 @@ public class MapFragment extends Fragment {
             }
         });
     }
-
-//    private void configurePersonButton(View v){
-//        Button searchButton = v.findViewById(R.id.toPerson);
-//        searchButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startPersonActivity();
-//            }
-//        });
-//    }
 
     public FamilyModel getFamilyModel() {
         return mFamilyModel;

@@ -41,31 +41,11 @@ public class PersonActivity extends AppCompatActivity {
         setFamilyModel((FamilyModel) i.getSerializableExtra("FAMILY_MODEL"));
 
         setupData(personID);
-        //((TextView)findViewById(R.id.textPersonFirstName)).setText(person.getFirstName());
-        //
-//        TextView first_name = view.findViewById()
-
-        configureEventButton();
 
         mEventRecyclerView = (RecyclerView) findViewById(R.id.event_recycler_view);
         mEventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         updateUI();
-    }
-
-//    protected void onCreateView()
-
-    private void configureEventButton(){
-        Button searchButton = findViewById(R.id.toEvent);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), EventActivity.class);
-                intent.putExtra("SETTINGS", mSettings);
-                intent.putExtra("FAMILY_MODEL", mFamilyModel);
-                startActivity(intent);
-            }
-        });
     }
 
     private void setupData(String personID){
@@ -116,7 +96,7 @@ public class PersonActivity extends AppCompatActivity {
 
             Intent i = new Intent(v.getContext(), EventActivity.class);
             i.putExtra("SETTINGS", mSettings);
-            i.putExtra("center_event", myEvent.getEventID());
+            i.putExtra("CENTER_EVENT_ID", myEvent.getEventID());
             i.putExtra("FAMILY_MODEL", mFamilyModel);
             startActivity(new Intent(i));
         }

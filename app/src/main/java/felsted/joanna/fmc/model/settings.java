@@ -15,7 +15,6 @@ import java.util.Map;
 public class settings implements Serializable {
 
     //TODO layout for all of these
-    //TODO pass this item between all activities
         //TODO go for extra cred and add to DB whenever changed??
 
     private static final settings instance = new settings(); //can also think of as SINGLETON

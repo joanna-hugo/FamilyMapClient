@@ -31,15 +31,31 @@ public class EventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
+        Intent i = getIntent();
+        setFamilyModel((FamilyModel) i.getSerializableExtra("FAMILY_MODEL"));
+
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
-        if(fragment == null){
-            fragment= new MapFragment();
-            fm.beginTransaction()
-                    .add(R.id.fragment_container, fragment)
-                    .commit();
-        }
+
+        MapFragment mapFrag = new MapFragment();
+        mapFrag.setFamilyModel(mFamilyModel);
+        String center_event_id = (String) i.getStringExtra("CENTER_EVENT_ID");
+        fm.beginTransaction()
+                .add(R.id.fragment_container, mapFrag) //TODO .add() or .replace()?
+                .commit();
+
+//        mapFrag.centerMap(mFamilyModel.getEvent(center_event_id));
+
+
+        /*
+        MapFragment mapFragment = new MapFragment();
+        mapFragment.setHideOptions(true);
+        mapFragment.setFamilyModel(familyModel);
+        mapFragment.setEventId(eventId);
+
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mapFragment).commit();
+         */
 
         configureBackButton();
     }

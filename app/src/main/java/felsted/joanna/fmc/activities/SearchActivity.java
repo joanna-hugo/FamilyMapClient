@@ -7,8 +7,12 @@ import android.view.View;
 import android.widget.Button;
 
 import felsted.joanna.fmc.R;
+import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.settings;
 
 public class SearchActivity extends AppCompatActivity {
+    private FamilyModel mFamilyModel;
+    private settings mSettings = settings.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +38,10 @@ public class SearchActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), EventActivity.class));
+                Intent intent = new Intent(v.getContext(), EventActivity.class);
+                intent.putExtra("SETTINGS", mSettings);
+                intent.putExtra("FAMILY_MODEL", mFamilyModel);
+                startActivity(intent);
             }
         });
     }
@@ -44,9 +51,19 @@ public class SearchActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), PersonActivity.class));
+                Intent intent = new Intent(v.getContext(), PersonActivity.class);
+                intent.putExtra("SETTINGS", mSettings);
+                intent.putExtra("FAMILY_MODEL", mFamilyModel);
+                startActivity(intent);
             }
         });
     }
 
+    public FamilyModel getFamilyModel() {
+        return mFamilyModel;
+    }
+
+    public void setFamilyModel(FamilyModel familyModel) {
+        mFamilyModel = familyModel;
+    }
 }

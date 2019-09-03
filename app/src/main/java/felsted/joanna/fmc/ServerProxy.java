@@ -15,8 +15,11 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import felsted.joanna.fmc.model.event;
+import felsted.joanna.fmc.model.eventListResponse;
 import felsted.joanna.fmc.model.loginRequest;
 import felsted.joanna.fmc.model.loginResponse;
+import felsted.joanna.fmc.model.personListResponse;
 import felsted.joanna.fmc.model.registerRequest;
 
 public class ServerProxy {
@@ -179,6 +182,86 @@ instead of localhost or 127.0.0.1.
             connection.disconnect();
         }
         return null; //this may cause problems, but the if/else statement should catch everything
+    }
+
+    public personListResponse getPersons(String token) throws IOException{
+
+        URL url = new URL ("http://10.0.2.2:8080/person");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        try{
+            connection.setDoInput(true); //TODO generalize this after testing
+            connection.setDoOutput(true);
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("authorization", token);
+
+            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
+            wr.flush();
+
+            StringBuilder sb = new StringBuilder();
+            int HttpResult = connection.getResponseCode();
+            if (HttpResult == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream(), "utf-8"));
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                br.close();
+                System.out.println("" + sb.toString());
+
+                Gson gson = new Gson();
+                personListResponse rsp = gson.fromJson(sb.toString(), personListResponse.class);
+                return rsp;
+            }else{
+                throw new IOException("server not responding"); //TODO handle this error better, for end user convenience
+            }
+        } catch (Exception e) {
+            System.out.println("ruh ro");
+        }finally{
+            connection.disconnect();
+        }
+        return new personListResponse();
+    }
+
+    public eventListResponse getEvents(String token) throws IOException{ //TODO flesh this out
+
+        URL url = new URL ("http://10.0.2.2:8080/person");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        try{
+            connection.setDoInput(true); //TODO generalize this after testing
+            connection.setDoOutput(true);
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("authorization", token);
+
+            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
+            wr.flush();
+
+            StringBuilder sb = new StringBuilder();
+            int HttpResult = connection.getResponseCode();
+            if (HttpResult == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream(), "utf-8"));
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                br.close();
+                System.out.println("" + sb.toString());
+
+                Gson gson = new Gson();
+                eventListResponse rsp = gson.fromJson(sb.toString(), eventListResponse.class);
+                return rsp;
+            }else{
+                throw new IOException("server not responding"); //TODO handle this error better, for end user convenience
+            }
+        } catch (Exception e) {
+            System.out.println("ruh ro");
+        }finally{
+            connection.disconnect();
+        }
+        return null;
     }
 
 }

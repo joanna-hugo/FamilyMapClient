@@ -20,7 +20,6 @@
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
     <string name="gender">Gender</string>
-    <string name="search">Search</string>
     <string name="filters">Filters</string>
     <string name="settings">Settings</string>
     <string name="person">Person</string>
@@ -33,4 +32,17 @@
     <string name="event_activity">Event Activity</string>
     <string name="event">Event</string>
     <string name="register400">Register unsuccessful</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="search">Search</string>
+    <string name="life_story_lines">Life Story Lines</string>
+    <string name="family_tree_lines_color">Family Tree Lines Color</string>
+    <string name="spouse_lines">Spouse Lines</string>
+    <string name="map_type">Map Type</string>
+    <string name="resync_data_from_familymap_server">Resync Data from FamilyMap Server</string>
+    <string name="resync">RESYNC</string>
+    <string name="logout_and_return_to_the_login_screen">Logout and Return to the Login Screen</string>
+    <string name="logout">LOGOUT</string>
+    <string name="first_name_person">FIRST NAME</string>
+    <string name="last_name_person">LAST NAME</string>
+    <string name="gender_person">GENDER</string>
 </resources>

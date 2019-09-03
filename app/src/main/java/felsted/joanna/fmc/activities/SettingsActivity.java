@@ -1,13 +1,43 @@
 package felsted.joanna.fmc.activities;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Spinner;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+
+import com.google.android.gms.maps.GoogleMap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import felsted.joanna.fmc.R;
+import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.settings;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity  {
+
+    //DONE Life Story line color
+    //DONE Family Tree line color
+    //DONE Spouse line color
+    //DONE Map Type
+    //DONE Re-sync data
+    //DONE Logout
+    //TODO make layout pretty
+    //TODO hook up Re-sync to server
+
+    private settings mSettings = settings.getInstance();
+    private String TAG = "SETTINGS";
+
+    private FamilyModel mFamilyModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,6 +45,12 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         configureBackButton();
+        configureLifeStorySpinner();
+        configureFamilyTreeSpinner();
+        configureSpouseSpinner();
+        configureMapTypeSpinner();
+        configureReSync();
+        configureLogout();
     }
 
     private void configureBackButton(){
@@ -25,5 +61,282 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void configureLifeStorySpinner(){
+//        https://www.journaldev.com/9231/android-spinner-drop-down-list
+
+        //https://docs.oracle.com/javase/tutorial/uiswing/components/spinner.html
+        Spinner life_story_spinner = findViewById(R.id.life_story_spinner);
+
+        // Spinner click listener
+        life_story_spinner.setOnItemSelectedListener(new life_story_listener());
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<>();
+        categories.add("Blue");
+        categories.add("Black");
+        categories.add("Red");
+        categories.add("Green");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        life_story_spinner.setAdapter(dataAdapter);
+
+        //set default to GREEN to match default settings object
+        life_story_spinner.setSelection(3); //TODO make this fancy so the default matches the settings at the time
+
+
+
+        ToggleButton button = findViewById(R.id.life_story_button);
+        button.setChecked(true);
+        button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mSettings.setShowLifeStoryLines(true);
+                    Log.i(TAG, "set ShowLifeStoryLines to true");
+                } else {
+                    mSettings.setShowLifeStoryLines(false);
+                    Log.i(TAG, "set ShowLifeStoryLines to false");
+                }
+            }
+        });
+    }
+
+    private void configureFamilyTreeSpinner(){
+//        https://www.journaldev.com/9231/android-spinner-drop-down-list
+
+        //https://docs.oracle.com/javase/tutorial/uiswing/components/spinner.html
+        Spinner life_story_spinner = findViewById(R.id.family_tree_spinner);
+
+        // Spinner click listener
+        life_story_spinner.setOnItemSelectedListener(new family_tree_listener());
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<>();
+        categories.add("Blue");
+        categories.add("Black");
+        categories.add("Red");
+        categories.add("Green");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        life_story_spinner.setAdapter(dataAdapter);
+
+        //set default to BLUE to match default settings object
+        life_story_spinner.setSelection(0); //TODO make this fancy so the default matches the settings at the time
+
+
+        ToggleButton button = findViewById(R.id.family_tree_button);
+        button.setChecked(true);
+        button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mSettings.setShowLifeStoryLines(true);
+                    Log.i(TAG, "set ShowLifeStoryLines to true");
+                } else {
+                    mSettings.setShowLifeStoryLines(false);
+                    Log.i(TAG, "set ShowLifeStoryLines to false");
+                }
+            }
+        });
+    }
+
+    private void configureSpouseSpinner(){
+//        https://www.journaldev.com/9231/android-spinner-drop-down-list
+
+        //https://docs.oracle.com/javase/tutorial/uiswing/components/spinner.html
+        Spinner life_story_spinner = findViewById(R.id.spouse_spinner);
+
+        // Spinner click listener
+        life_story_spinner.setOnItemSelectedListener(new spouse_listener());
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<>();
+        categories.add("Blue");
+        categories.add("Black");
+        categories.add("Red");
+        categories.add("Green");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        life_story_spinner.setAdapter(dataAdapter);
+
+        //set default to RED to match default settings object
+        life_story_spinner.setSelection(2); //TODO make this fancy so the default matches the settings at the time
+
+        ToggleButton button = findViewById(R.id.spouse_button);
+        button.setChecked(true);
+        button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mSettings.setShowLifeStoryLines(true);
+                } else {
+                    mSettings.setShowLifeStoryLines(false);
+                }
+            }
+        });
+    }
+
+    private void configureMapTypeSpinner(){
+//        https://www.journaldev.com/9231/android-spinner-drop-down-list
+
+        //https://docs.oracle.com/javase/tutorial/uiswing/components/spinner.html
+        Spinner life_story_spinner = findViewById(R.id.map_spinner);
+
+        // Spinner click listener
+        life_story_spinner.setOnItemSelectedListener(new map_listener());
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<>();
+        categories.add("Normal");
+        categories.add("Hybrid");
+        categories.add("Satellite");
+        categories.add("Terrain");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        life_story_spinner.setAdapter(dataAdapter);
+
+        //set default to NORMAL to match default settings object
+        life_story_spinner.setSelection(0); //TODO make this fancy so the default matches the settings at the time
+    }
+
+    private void configureReSync(){
+        Button sync = findViewById(R.id.resync_button);
+        sync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO RESYNC THE DATA FROM THE SERVER AND ISSUE A TOAST POPUP
+                Toast.makeText(SettingsActivity.this,
+                        "Button worked but sync not hooked up",
+                        Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
+
+    private void configureLogout(){
+        Button logout = findViewById(R.id.logout_button);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO LOGOUT
+                Toast.makeText(SettingsActivity.this,
+                        "Button worked but logout not hooked up",
+                        Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                intent.putExtra("FAMILY_MODEL", mFamilyModel);
+                startActivity(intent);
+            }
+        });
+    }
+
+    //HELPER CLASSES FOLLOW
+    private class life_story_listener implements AdapterView.OnItemSelectedListener{
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            int index = parent.getSelectedItemPosition();
+            switch(index){
+                case 0: mSettings.setLifeStoryLinesColor(Color.BLUE);
+                case 1: mSettings.setLifeStoryLinesColor(Color.BLACK);
+                case 2: mSettings.setLifeStoryLinesColor(Color.RED);
+                case 3: mSettings.setLifeStoryLinesColor(Color.GREEN);
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    }
+
+    private class family_tree_listener implements AdapterView.OnItemSelectedListener{
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            int index = parent.getSelectedItemPosition();
+            switch(index){
+                case 0: mSettings.setFamilyTreeLinesColor(Color.BLUE);
+                case 1: mSettings.setFamilyTreeLinesColor(Color.BLACK);
+                case 2: mSettings.setFamilyTreeLinesColor(Color.RED);
+                case 3: mSettings.setFamilyTreeLinesColor(Color.GREEN);
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    }
+
+    private class spouse_listener implements AdapterView.OnItemSelectedListener{
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            int index = parent.getSelectedItemPosition();
+            switch(index){
+                case 0: mSettings.setSpouseLinesColor(Color.BLUE);
+                case 1: mSettings.setSpouseLinesColor(Color.BLACK);
+                case 2: mSettings.setSpouseLinesColor(Color.RED);
+                case 3: mSettings.setSpouseLinesColor(Color.GREEN);
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    }
+
+    private class map_listener implements AdapterView.OnItemSelectedListener{
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            int index = parent.getSelectedItemPosition();
+            switch(index){
+                case 0: mSettings.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                case 1: mSettings.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                case 2: mSettings.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                case 3: mSettings.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    }
+
+    public settings getSettings() {
+        return mSettings;
+    }
+
+    public void setSettings(settings settings) {
+        mSettings = settings;
+    }
+
+    public FamilyModel getFamilyModel() {
+        return mFamilyModel;
+    }
+
+    public void setFamilyModel(FamilyModel familyModel) {
+        mFamilyModel = familyModel;
     }
 }

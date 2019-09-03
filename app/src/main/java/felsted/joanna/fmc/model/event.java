@@ -1,5 +1,7 @@
 package felsted.joanna.fmc.model;
 
+import java.io.Serializable;
+
 /**
  * This is the model Event class. It's members include --
  *     Event ID: Unique identifier for this event (non-empty string)
@@ -15,7 +17,7 @@ package felsted.joanna.fmc.model;
  * New events can only be constructed when given ALL data members
  * All members can only be accessed through getters and setters
  */
-public class event {
+public class event  implements Serializable {
 
     /*
     Event ID: Unique identifier for this event (non-empty string)

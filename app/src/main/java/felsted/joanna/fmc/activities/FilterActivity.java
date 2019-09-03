@@ -6,8 +6,10 @@ import android.view.View;
 import android.widget.Button;
 
 import felsted.joanna.fmc.R;
+import felsted.joanna.fmc.model.FamilyModel;
 
 public class FilterActivity extends AppCompatActivity {
+    private FamilyModel mFamilyModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,5 +27,13 @@ public class FilterActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public FamilyModel getFamilyModel() {
+        return mFamilyModel;
+    }
+
+    public void setFamilyModel(FamilyModel familyModel) {
+        mFamilyModel = familyModel;
     }
 }

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -214,8 +215,6 @@ public class LoginFragment extends Fragment {
 
         mFemale = v.findViewById(R.id.mFemale);
 
-
-
         mRegister = v.findViewById(R.id.Register);
         mRegister.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -223,7 +222,7 @@ public class LoginFragment extends Fragment {
                 new RegisterRequest().execute();
             }
         });
-        mRegister.setEnabled(false); //TODO change this to false for full functionality
+        mRegister.setEnabled(false);
 
         mSignIn = v.findViewById(R.id.SignIn);
         mSignIn.setOnClickListener(new View.OnClickListener(){
@@ -232,7 +231,7 @@ public class LoginFragment extends Fragment {
                 new LoginRequest().execute(); //this function handles switching to mapFrag if needed
             }
         });
-        mSignIn.setEnabled(false); //TODO temp change just for testing, set to true when ready
+        mSignIn.setEnabled(false);
 
         return v;
     }
@@ -241,23 +240,6 @@ public class LoginFragment extends Fragment {
     private void switchToMapActivity() {
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.switchToMapFragment();
-    }
-
-    public void onRadioButtonClicked(View view) {
-        // Is the button now checked?
-        boolean checked = ((RadioButton) view).isChecked();
-
-        // Check which radio button was clicked
-        switch(view.getId()) {
-            case R.id.mMale:
-                if (checked)
-                    // Pirates are the best
-                    break;
-            case R.id.mFemale:
-                if (checked)
-                    // Ninjas rule
-                    break;
-        }
     }
 
     private void changeAccessibility() {
@@ -276,12 +258,15 @@ public class LoginFragment extends Fragment {
                 //TODO I should save the auth token somewhere
                 Log.i(TAG, "logged in " + result.getUsername());
                 switchToMapActivity();
+                //TODO check that it was successful, and throw up a toast if unsuccessful
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
+                Toast.makeText(LoginFragment.this.getContext(), R.string.register400, Toast.LENGTH_SHORT).show();
             }
             return null;
         }
     }
+
 
     private class RegisterRequest extends AsyncTask<Void, Void, Void>{
         @Override
@@ -291,8 +276,10 @@ public class LoginFragment extends Fragment {
                 //TODO I should save the auth token somewhere
                 Log.i(TAG, "logged in " + result.getUsername());
                 switchToMapActivity();
+                //TODO check that it was successful, and throw up a toast if unsuccessful
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
+                Toast.makeText(LoginFragment.this.getContext(), R.string.register400, Toast.LENGTH_SHORT).show();
             }
             return null;
         }

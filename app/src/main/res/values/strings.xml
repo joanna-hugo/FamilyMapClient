@@ -32,4 +32,5 @@
     <string name="person_activity">Person Activity</string>
     <string name="event_activity">Event Activity</string>
     <string name="event">Event</string>
+    <string name="register400">Register unsuccessful</string>
 </resources>

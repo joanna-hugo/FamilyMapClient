@@ -20,6 +20,7 @@ import felsted.joanna.fmc.model.loginResponse;
 import felsted.joanna.fmc.model.registerRequest;
 
 public class ServerProxy {
+    private String authToken; // TODO will this stay after I call login/register
 
     /*
         NOTE
@@ -51,7 +52,6 @@ instead of localhost or 127.0.0.1.
         return sb.toString();
     }
 
-    // TODO make register function
     // TODO abstract as much as possible into helper functions
 
 
@@ -116,6 +116,7 @@ instead of localhost or 127.0.0.1.
 
                 Gson gson = new Gson();
                 loginResponse rsp = gson.fromJson(sb.toString(), loginResponse.class);
+                authToken=rsp.getAuthToken();
                 return rsp;
             }else{
                 throw new IOException("server not responding"); //TODO handle this error better, for end user convenience
@@ -166,8 +167,10 @@ instead of localhost or 127.0.0.1.
 
                 Gson gson = new Gson();
                 loginResponse rsp = gson.fromJson(sb.toString(), loginResponse.class);
+                authToken = rsp.getAuthToken();
                 return rsp;
             }else{
+                //TODO make this a more meaningful error, maybe use the same procedure as above but make an error message
                 throw new IOException("server not responding"); //TODO handle this error better, for end user convenience
             }
         } catch (JSONException je) {

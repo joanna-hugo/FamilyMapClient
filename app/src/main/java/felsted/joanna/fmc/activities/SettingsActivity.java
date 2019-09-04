@@ -33,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity  {
     //DONE Logout
     //TODO make layout pretty
     //TODO hook up Re-sync to server
+    //TODO make map reload when going back to map (in case settings change)
 
     private settings mSettings = settings.getInstance();
     private String TAG = "SETTINGS";

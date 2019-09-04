@@ -51,6 +51,7 @@ public class MapFragment extends Fragment {
     //TODO get information from clicking on markers to show up in bottom half of screen
 
     //TODO clicking on the icons in the menu takes the user to the settings, filters, or search activity
+        //TODO the buttons are in the MENU
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -11,6 +11,11 @@ import felsted.joanna.fmc.model.FamilyModel;
 public class FilterActivity extends AppCompatActivity {
     private FamilyModel mFamilyModel;
 
+    //TODO make layout pretty
+    //TODO filter by event-type
+    //TODO filter by gender
+    //TODO filter by side
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

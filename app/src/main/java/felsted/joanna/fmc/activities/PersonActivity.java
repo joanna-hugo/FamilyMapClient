@@ -31,6 +31,12 @@ public class PersonActivity extends AppCompatActivity {
     private RecyclerView mEventRecyclerView;
     private EventAdapter mAdapter;
 
+    //TODO pretty layout
+    //TODO order events chronologically
+    //TODO list family
+    //TODO trigger person activity by clicking on person (person activity for THAT person)
+    //TODO up button (what button?)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

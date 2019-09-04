@@ -13,6 +13,16 @@ import felsted.joanna.fmc.model.settings;
 public class SearchActivity extends AppCompatActivity {
     private FamilyModel mFamilyModel;
     private settings mSettings = settings.getInstance();
+
+    //TODO make layout
+    //TODO allow filtering
+    //TODO search function
+        //TODO search names (first and last)
+        //TODO search countries,
+        //TODO search cities,
+        //TODO search event-types,
+        //TODO search years
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

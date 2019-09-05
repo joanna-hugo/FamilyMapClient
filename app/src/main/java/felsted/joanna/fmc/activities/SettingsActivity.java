@@ -45,24 +45,12 @@ public class SettingsActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        configureBackButton();
         configureLifeStorySpinner();
         configureFamilyTreeSpinner();
         configureSpouseSpinner();
         configureMapTypeSpinner();
         configureReSync();
         configureLogout();
-    }
-
-    private void configureBackButton(){
-        Button searchButton = findViewById(R.id.settingsBack);
-
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     private void configureLifeStorySpinner(){

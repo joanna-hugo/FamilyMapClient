@@ -44,11 +44,17 @@ public class MapFragment extends Fragment {
     static final float WIDTH = 10;  // in pixels
     static final int color = BLUE;
 
+
+    //TODO update map when returning from changing Settings
     //TODO write bottom section of screen layout
     //TODO get information from clicking on markers to show up in bottom half of screen
 
     //TODO clicking on the icons in the menu takes the user to the Settings, Filters, or search activity
         //TODO the buttons are in the MENU
+    //TODO filter by event-type
+    //TODO filter by gender
+    //TODO filter by side
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -82,8 +88,6 @@ public class MapFragment extends Fragment {
         super.onResume();
         mapView.onResume();
     }
-
-    //TODO update map when returning from changing Settings
 
     @Override
     public void onStart(){

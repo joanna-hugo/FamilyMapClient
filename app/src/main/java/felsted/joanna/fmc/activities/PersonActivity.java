@@ -34,7 +34,6 @@ public class PersonActivity extends AppCompatActivity {
     //TODO order events chronologically
     //TODO list family
     //TODO trigger person activity by clicking on person (person activity for THAT person)
-    //TODO up button (what button?)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

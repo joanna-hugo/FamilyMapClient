@@ -7,135 +7,217 @@
     tools:context=".activities.SettingsActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="375dp"
         android:layout_height="400dp"
-        android:orientation="vertical">
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp">
 
         <!-- this contains a row for each setting -->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal">
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/settings_background"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
             <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
+
+            <Spinner
+                android:id="@+id/life_story_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_toLeftOf="@+id/life_story_button"
+                android:layout_toStartOf="@+id/life_story_button"
+                android:prompt="@string/back"></Spinner>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/life_story_lines"/>
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/life_story_spinner"
-                android:prompt="@string/back"
-                android:layout_gravity="end">
-            </Spinner>
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/life_story_lines" />
 
             <ToggleButton
+                android:id="@+id/life_story_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/life_story_button"
-                android:layout_gravity="end"/>
-        </LinearLayout>
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp" />
 
-        <LinearLayout
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal">
+            android:background="@drawable/settings_background"
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
             <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/family_tree_lines_color"/>
 
             <Spinner
+                android:id="@+id/family_tree_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/family_tree_spinner"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_toLeftOf="@+id/family_tree_button"
+                android:layout_toStartOf="@+id/family_tree_button"
                 android:prompt="@string/back">
 
             </Spinner>
 
-            <ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/family_tree_button"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
-            <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/spouse_lines"/>
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/spouse_spinner">
-            </Spinner>
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="13dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/family_tree_lines_color" />
 
             <ToggleButton
+                android:id="@+id/family_tree_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spouse_button"/>
-        </LinearLayout>
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp" />
 
-        <LinearLayout
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal">
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/settings_background"
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
             <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/map_type"/>
 
             <Spinner
+                android:id="@+id/spouse_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/map_spinner">
-            </Spinner>
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_toLeftOf="@+id/spouse_button"
+                android:layout_toStartOf="@+id/spouse_button"></Spinner>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
-            <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/resync_data_from_familymap_server"/>
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/spouse_lines" />
 
-            <Button
+            <ToggleButton
+                android:id="@+id/spouse_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id = "@+id/resync_button"
-                android:text="@string/resync"/>
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="19dp"
+                android:layout_marginRight="19dp" />
+        </RelativeLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal">
+            android:background="@drawable/settings_background"
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
             <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
+
+            <Spinner
+                android:id="@+id/map_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"></Spinner>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/logout_and_return_to_the_login_screen"/>
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/map_type" />
 
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/settings_background"
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
+            <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
             <Button
+                android:id="@+id/resync_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id = "@+id/logout_button"
-                android:text="@string/logout"/>
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:text="@string/resync" />
 
-        </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/resync_data_from_familymap_server" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@drawable/settings_background"
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
+            <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
+            <Button
+                android:id="@+id/logout_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="31dp"
+                android:layout_marginRight="31dp"
+                android:text="@string/logout" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/logout_and_return_to_the_login_screen" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -149,14 +231,4 @@
         android:text="@string/settings_activity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/settingsBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="80dp"
-        android:layout_marginRight="80dp"
-        android:text="@string/settingsBack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Settings" />
 </android.support.constraint.ConstraintLayout>

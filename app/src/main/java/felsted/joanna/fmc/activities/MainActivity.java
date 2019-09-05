@@ -22,24 +22,11 @@ public class MainActivity extends AppCompatActivity {
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
-    //TODO Figure out where to store "Settings" info (pass in continually or in some shared space)
+    //DONE Figure out where to store "Settings" info (pass in continually or in some shared space)
     //DONE Connect client to server through the Server Proxy
     //DONE Wire up Login Fragment to Server
-    //TODO setup maps https://developers.google.com/maps/documentation/android-sdk/start
-    //TODO Map Fragment
-    //TODO Activities
-        //TODO Event Activity
-        //TODO Filter Activity
-        //TODO Person Activity
-        //TODO Search Activity
-        //TODO Settings Activity
-    //Probably helpful
-        // chapter 14 SQLite DB
-        // chapter 12 Dialogs
-        // chapter 25 HTTP
-        // chapter 27 SEARCH
-        // chapter 33 Locations
-        // chapter 34 Maps
+    //DONE setup maps https://developers.google.com/maps/documentation/android-sdk/start
+    //TODO up button coming back to login screen
 
 
 
@@ -112,5 +99,6 @@ public class MainActivity extends AppCompatActivity {
 
             errorDialog.show();
         }
+
     }
 }

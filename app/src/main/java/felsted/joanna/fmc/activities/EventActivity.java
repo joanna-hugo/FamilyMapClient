@@ -42,7 +42,7 @@ public class EventActivity extends AppCompatActivity {
         mapFrag.setFamilyModel(mFamilyModel);
         String center_event_id = (String) i.getStringExtra("CENTER_EVENT_ID");
         fm.beginTransaction()
-                .add(R.id.fragment_container, mapFrag) //TODO .add() or .replace()?
+                .add(R.id.fragment_container, mapFrag)
                 .commit();
 
 //        mapFrag.centerMap(mFamilyModel.getEvent(center_event_id));

@@ -17,9 +17,7 @@ public class FilterActivity extends AppCompatActivity {
     //TODO add all buttons and listeners
     //TODO add recycler view(?) to dynamically show event_types
         //TODO I should get the person activity running well then apply what I learn here
-    //TODO filter by event-type
-    //TODO filter by gender
-    //TODO filter by side
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

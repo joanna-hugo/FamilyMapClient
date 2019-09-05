@@ -44,7 +44,7 @@ public class LoginFragment extends Fragment {
     private Button mSignIn;
     private Button mRegister;
 
-    private registerRequest mRegisterRequest; //TODO eventually I will be editing these as the text changes
+    private registerRequest mRegisterRequest;
     private loginRequest mLoginRequest;
 
     private FamilyModel mFamilyModel = new FamilyModel();
@@ -58,7 +58,6 @@ public class LoginFragment extends Fragment {
         fakeTestData();
     }
 
-    //TODO make a function to insert fake persons and events
     private void fakeTestData(){
         //String personID, String descendant, String firstName, String lastName,
         //                  String gender, String father, String mother, String spouse
@@ -304,9 +303,13 @@ public class LoginFragment extends Fragment {
                 Log.i(TAG, "logged in " + result.getUsername());
                 personListResponse persons = new ServerProxy().getPersons(result.getAuthToken());
                 eventListResponse events = new ServerProxy().getEvents(result.getAuthToken());
+                mFamilyModel.setCurrentUser(result.getPersonID());
                 mFamilyModel.setEvents(events.getData());
                 mFamilyModel.setPersons(persons.getData());
                 mFamilyModel.setToken(result.getAuthToken());
+                mFamilyModel.setupFilters();
+                mFamilyModel.setupAncestors();
+                mFamilyModel.setupChildren();
                 switchToMapActivity(mFamilyModel);
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
@@ -322,6 +325,7 @@ public class LoginFragment extends Fragment {
 //            try{
 //                loginResponse result = new ServerProxy().register(mRegisterRequest); //TODO uncomment this, this is just for testing so I don't have to login every time
             //TODO check for 200 response, then create a toast if not
+
 //                personListResponse persons = new ServerProxy().getPersons(result.getAuthToken());
 //                eventListResponse events = new ServerProxy().getEvents(result.getAuthToken());
 //                mFamilyModel.setEvents(events.getData());

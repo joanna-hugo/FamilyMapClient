@@ -5,13 +5,24 @@ import android.util.Log;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 public class FamilyModel implements Serializable {
+    private String currentUser;
     private List<person> persons = new ArrayList<>();
     private List<event> events = new ArrayList<>();
+
+    private List<person> maternalAncestors = new ArrayList<>();
+    private List<person> paternalAncestors = new ArrayList<>();
+    private Map<String, List<String>> children= new HashMap<>();
+    //sorted list of events for each person
+    //list of children for each person
+    //paternal ancestors
+    //maternal ancestors
     private String token = new String();
 
     public String getToken() {
@@ -21,8 +32,6 @@ public class FamilyModel implements Serializable {
     public void setToken(String token) {
         this.token = token;
     }
-
-    private String currentUser;
 
     public List<person> getPersons() {
         return persons;
@@ -140,4 +149,71 @@ public class FamilyModel implements Serializable {
             filters.addEventTypeFilter(e.getEventType());
         }
     }
+
+    public void setupAncestors(){
+        traverseFamily(true, currentUser);
+        traverseFamily(false, currentUser);
+    }
+
+    public void setupChildren(){
+        for (person p : persons) {
+            //if needed, create a map entry for Father
+            if (!children.containsKey(p.getFather())) {
+                children.put(p.getFather(), new ArrayList<String>());
+            }
+            //add current user as child to father (if father exists)
+            if(!p.getFather().equals("")) {
+                children.get(p.getFather()).add(p.getPersonID());
+            }
+
+            //if needed, create a map entry for Mother
+            if (!children.containsKey(p.getMother())) {
+                children.put(p.getMother(), new ArrayList<String>());
+            }
+            //add current user as child to Mother
+            if(!p.getMother().equals("")){
+                children.get(p.getMother()).add(p.getPersonID());
+            }
+        }
+    }
+
+    public Boolean isMaternal(String person_id){
+        return maternalAncestors.contains(person_id);
+    }
+
+    public Boolean isPaternal(String person_id){
+        return paternalAncestors.contains(person_id);
+    }
+    private void traverseFamily(Boolean isMaternal, String person_id){
+        //if isMaternal add to maternal ancestors
+            //otherwise, add to paternal ancestors
+
+        //get the father
+        //get the mother
+        person root = getPerson(person_id);
+        String father_id = root.getFather();
+        String mother_id = root.getMother();
+
+        //if father, then add to array and traverseFamily
+        if(!father_id.equals("")){
+            person father = getPerson(father_id);
+            if(isMaternal){
+                maternalAncestors.add(father);
+            }else{
+                paternalAncestors.add(father);
+            }
+            traverseFamily(isMaternal, father_id);
+        }
+        //if mother, then add to array and traverseFamily
+        if(!mother_id.equals("")){
+            person mother = getPerson(mother_id);
+            if(isMaternal){
+                maternalAncestors.add(mother);
+            }else{
+                paternalAncestors.add(mother);
+            }
+            traverseFamily(isMaternal, mother_id);
+        }
+    }
+
 }

@@ -79,10 +79,7 @@ public class SettingsActivity extends AppCompatActivity  {
         life_story_spinner.setAdapter(dataAdapter);
 
         //set default to GREEN to match default Settings object
-        life_story_spinner.setSelection(3); //TODO make this fancy so the default matches the Settings at the time
-
-
-
+        life_story_spinner.setSelection(3);
         ToggleButton button = findViewById(R.id.life_story_button);
         button.setChecked(true);
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -125,9 +122,7 @@ public class SettingsActivity extends AppCompatActivity  {
         life_story_spinner.setAdapter(dataAdapter);
 
         //set default to BLUE to match default Settings object
-        life_story_spinner.setSelection(0); //TODO make this fancy so the default matches the Settings at the time
-
-
+        life_story_spinner.setSelection(0);
         ToggleButton button = findViewById(R.id.family_tree_button);
         button.setChecked(true);
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -170,8 +165,7 @@ public class SettingsActivity extends AppCompatActivity  {
         life_story_spinner.setAdapter(dataAdapter);
 
         //set default to RED to match default Settings object
-        life_story_spinner.setSelection(2); //TODO make this fancy so the default matches the Settings at the time
-
+        life_story_spinner.setSelection(2);
         ToggleButton button = findViewById(R.id.spouse_button);
         button.setChecked(true);
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -186,7 +180,7 @@ public class SettingsActivity extends AppCompatActivity  {
         });
     }
 
-    private void configureMapTypeSpinner(){
+    private void configureMapTypeSpinner() {
 //        https://www.journaldev.com/9231/android-spinner-drop-down-list
 
         //https://docs.oracle.com/javase/tutorial/uiswing/components/spinner.html
@@ -212,7 +206,7 @@ public class SettingsActivity extends AppCompatActivity  {
         life_story_spinner.setAdapter(dataAdapter);
 
         //set default to NORMAL to match default Settings object
-        life_story_spinner.setSelection(0); //TODO make this fancy so the default matches the Settings at the time
+        life_story_spinner.setSelection(0);
     }
 
     private void configureReSync(){
@@ -220,7 +214,6 @@ public class SettingsActivity extends AppCompatActivity  {
         sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO RESYNC THE DATA FROM THE SERVER AND ISSUE A TOAST POPUP
                 Toast.makeText(SettingsActivity.this,
                         "Button worked but sync not hooked up",
                         Toast.LENGTH_SHORT).show();
@@ -243,6 +236,20 @@ public class SettingsActivity extends AppCompatActivity  {
                 startActivity(intent);
             }
         });
+    }
+
+    private int colorToInt(int color){
+        switch(color){
+            case Color.BLUE :
+                return 0;
+            case Color.BLACK :
+                return 1;
+            case Color.RED :
+                return 2;
+            case Color.GREEN :
+                return 3;
+            default : return 0;
+        }
     }
 
     //HELPER CLASSES FOLLOW

@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.Filters;
 import felsted.joanna.fmc.model.Settings;
 import felsted.joanna.fmc.model.event;
 
@@ -40,6 +41,7 @@ public class MapFragment extends Fragment {
     private MapView mapView;
     private FamilyModel mFamilyModel;
     private Settings mSettings = Settings.getInstance();
+    private Filters mFilters = Filters.getInstance();
 
     static final float WIDTH = 10;  // in pixels
     static final int color = BLUE;
@@ -51,9 +53,9 @@ public class MapFragment extends Fragment {
 
     //TODO clicking on the icons in the menu takes the user to the Settings, Filters, or search activity
         //TODO the buttons are in the MENU
-    //TODO filter by event-type
-    //TODO filter by gender
-    //TODO filter by side
+    //DONE filter by event-type
+    //DONE filter by gender
+    //DONE filter by maternal/paternal side
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,7 +82,6 @@ public class MapFragment extends Fragment {
         setTextViewListener();
 
         return view;
-
     }
 
     @Override
@@ -158,27 +159,6 @@ public class MapFragment extends Fragment {
         }
     }
 
-    public void centerMap(event e) {
-//        if(map == null){
-////            View view = inflater.inflate(R.layout.fragment_map, container, false);
-////
-////            mapView = view.findViewById(R.id.map);
-////            mapView.onCreate(savedInstanceState);
-//
-//            mapView.getMapAsync(new OnMapReadyCallback() {
-//                @Override
-//                public void onMapReady(GoogleMap googleMap) {
-//                    map = googleMap;
-//                    initMap();
-//                }
-//            });
-//        }
-        LatLng center_event = new LatLng(e.getLatitude(), e.getLongitude());
-        CameraUpdate update = CameraUpdateFactory.newLatLng(center_event);
-        map.moveCamera(update);
-        map.addMarker(new MarkerOptions().position(center_event));
-    }
-
     void zoomMap(float amount) {
         CameraUpdate update = CameraUpdateFactory.zoomTo(amount);
         map.moveCamera(update);
@@ -212,9 +192,40 @@ public class MapFragment extends Fragment {
     }
 
     void addMarkers() {
-        for(event e :mFamilyModel.getEvents()){ //TODO why error Person --> Event
-            addMarker(e.getCity(), new LatLng(e.getLatitude(), e.getLongitude()), e);
+        for(event e :mFamilyModel.getEvents()){
+            if(checkFilters(e)) {
+                addMarker(e.getCity(), new LatLng(e.getLatitude(), e.getLongitude()), e);
+            }
         }
+    }
+
+    Boolean checkFilters(event e){
+        //filter by event-type
+        if(!mFilters.getEventFilter(e.getEventType())){
+            return false;
+        }
+
+        //filter by gender
+        String person_id = e.getPersonID();
+        String gender = mFamilyModel.getPerson(person_id).getGender();
+        if(gender.equals("m") & !mFilters.getShowMale()){
+            return false;
+        }
+        if(gender.equals("f") & !mFilters.getShowFemale()){
+            return false;
+        }
+
+        //filter by maternal/paternal side
+        if(e.getPersonID().equals(mFamilyModel.getCurrentUser())){
+            return true; //if the event is for the root user, it won't be in maternal/paternal lists
+        }
+        if(!mFilters.getShowMale() && mFamilyModel.isPaternal(e.getPersonID())){
+            return false;
+        }
+        if(!mFilters.getShowFemale() && mFamilyModel.isMaternal(e.getPersonID())){
+            return false;
+        }
+        return true;
     }
 
     void addMarker(String city, LatLng latLng, event e) {
@@ -328,7 +339,6 @@ public class MapFragment extends Fragment {
 
     private void startSettingsActivity(){
         Intent intent = new Intent(getActivity(), SettingsActivity.class);
-//        intent.putExtra("SettingsActivity", Util.getGson().toJson(Settings)); TODO investigate if this is a good way to pass Settings object between activities
         intent.putExtra("SETTINGS", mSettings);
         intent.putExtra("FAMILY_MODEL", mFamilyModel);
         startActivity(intent);
@@ -336,7 +346,6 @@ public class MapFragment extends Fragment {
 
     private void startSearchActivity(){
         Intent intent = new Intent(getActivity(), SearchActivity.class);
-//        intent.putExtra("SettingsActivity", Util.getGson().toJson(Settings)); TODO investigate if this is a good way to pass Settings object between activities
         intent.putExtra("SETTINGS", mSettings);
         intent.putExtra("FAMILY_MODEL", mFamilyModel);
         startActivity(intent);
@@ -353,7 +362,6 @@ public class MapFragment extends Fragment {
 
     private void startFilterActivity(){
         Intent intent = new Intent(getActivity(), FilterActivity.class);
-//        intent.putExtra("SettingsActivity", Util.getGson().toJson(Settings)); TODO investigate if this is a good way to pass Settings object between activities
         intent.putExtra("SETTINGS", mSettings);
         intent.putExtra("FAMILY_MODEL", mFamilyModel);
         startActivity(intent);

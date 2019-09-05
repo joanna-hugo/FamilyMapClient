@@ -17,7 +17,7 @@ import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.Settings;
 
 public class MainActivity extends AppCompatActivity {
-    Settings mSettings = Settings.getInstance(); // NOTE THIS IS WHERE I KEEP THE SETTING APPARENTLY TODO
+    Settings mSettings = Settings.getInstance(); // NOTE THIS IS WHERE I KEEP THE SETTING APPARENTLY DONE
     private static final int REQUEST_ERROR = 0;
     private Context mContext;
     private SQLiteDatabase mDatabase;
@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
     //DONE Wire up Login Fragment to Server
     //DONE setup maps https://developers.google.com/maps/documentation/android-sdk/start
     //TODO up button coming back to login screen
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

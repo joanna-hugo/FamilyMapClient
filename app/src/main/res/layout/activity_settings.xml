@@ -31,8 +31,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="12dp"
                 android:layout_toLeftOf="@+id/life_story_button"
                 android:layout_toStartOf="@+id/life_story_button"
                 android:prompt="@string/back"></Spinner>
@@ -72,8 +72,8 @@
                 android:id="@+id/family_tree_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="12dp"
                 android:layout_toLeftOf="@+id/family_tree_button"
                 android:layout_toStartOf="@+id/family_tree_button"
                 android:prompt="@string/back">
@@ -118,8 +118,8 @@
                 android:id="@+id/spouse_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="12dp"
                 android:layout_toLeftOf="@+id/spouse_button"
                 android:layout_toStartOf="@+id/spouse_button"></Spinner>
 
@@ -160,8 +160,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginEnd="40dp"
-                android:layout_marginRight="40dp"></Spinner>
+                android:layout_marginEnd="42dp"
+                android:layout_marginRight="40dp"
+                android:gravity="center_horizontal"></Spinner>
 
             <TextView
                 android:layout_width="wrap_content"

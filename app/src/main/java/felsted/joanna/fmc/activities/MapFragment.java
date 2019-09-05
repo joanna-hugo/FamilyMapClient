@@ -47,7 +47,7 @@ public class MapFragment extends Fragment {
     static final int color = BLUE;
 
 
-    //TODO update map when returning from changing Settings
+    //TODO update map when returning from other activities (change filters or settings)
     //TODO write bottom section of screen layout
     //TODO get information from clicking on markers to show up in bottom half of screen
 
@@ -131,6 +131,7 @@ public class MapFragment extends Fragment {
     }
 
     void initMap() {
+        mFamilyModel.setupFilters(); //TODO comment out when actually logging in
         centerMap();
         zoomMap(10);
         setMapType();
@@ -296,17 +297,11 @@ public class MapFragment extends Fragment {
             }
         }
 
-        LatLng lastCity = null;
-        for (event e : mFamilyModel.getEvents()) {
-            LatLng latLng = getLatLng(e);
-            if (lastCity != null)
-                drawLine(lastCity, latLng, color, WIDTH);
-            lastCity = latLng;
-        }
-//        for (String[] strings : locations) {
-//            LatLng latLng = getLatLng(strings);
+//        LatLng lastCity = null;
+//        for (event e : mFamilyModel.getEvents()) {
+//            LatLng latLng = getLatLng(e);
 //            if (lastCity != null)
-//                drawLine(lastCity, latLng);
+//                drawLine(lastCity, latLng, color, WIDTH); //TODO generalize color to use settings
 //            lastCity = latLng;
 //        }
     }

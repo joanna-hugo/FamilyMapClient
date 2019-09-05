@@ -17,11 +17,12 @@ public class SearchActivity extends AppCompatActivity {
     //TODO make layout
     //TODO allow filtering
     //TODO search function
-        //TODO search names (first and last)
-        //TODO search countries,
-        //TODO search cities,
-        //TODO search event-types,
-        //TODO search years
+        //TODO search names (first and last) (persons)
+
+        //TODO search countries, (events)
+        //TODO search cities, (events)
+        //TODO search event-types, (events)
+        //TODO search years (events)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

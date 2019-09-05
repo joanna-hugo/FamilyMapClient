@@ -14,8 +14,6 @@ public class FamilyModel implements Serializable {
     private List<event> events = new ArrayList<>();
     private String token = new String();
 
-
-
     public String getToken() {
         return token;
     }
@@ -120,7 +118,6 @@ public class FamilyModel implements Serializable {
         return temp;
     }
 
-
     public void addEvent(event e){
         events.add(e);
     }
@@ -135,5 +132,12 @@ public class FamilyModel implements Serializable {
 
     public void setCurrentUser(String currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public void setupFilters(){
+        Filters filters = Filters.getInstance();
+        for(event e: events){
+            filters.addEventTypeFilter(e.getEventType());
+        }
     }
 }

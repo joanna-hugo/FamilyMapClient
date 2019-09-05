@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,14 +16,14 @@ import java.util.List;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.Settings;
 import felsted.joanna.fmc.model.event;
 import felsted.joanna.fmc.model.person;
-import felsted.joanna.fmc.model.settings;
 
 public class PersonActivity extends AppCompatActivity {
 
     private FamilyModel mFamilyModel;
-    private settings mSettings = settings.getInstance();
+    private Settings mSettings = Settings.getInstance();
     private List<event> mEvents = new ArrayList<event>();
     private person mPerson = new person();
 

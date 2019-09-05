@@ -8,11 +8,11 @@ import android.widget.Button;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
-import felsted.joanna.fmc.model.settings;
+import felsted.joanna.fmc.model.Settings;
 
 public class SearchActivity extends AppCompatActivity {
     private FamilyModel mFamilyModel;
-    private settings mSettings = settings.getInstance();
+    private Settings mSettings = Settings.getInstance();
 
     //TODO make layout
     //TODO allow filtering

@@ -21,11 +21,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SearchActivity" />
-        <activity android:name=".activities.FilterActivity" />
-        <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.PersonActivity" />
-        <activity android:name=".activities.EventActivity" />
+        <activity android:name=".activities.SearchActivity"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.FilterActivity"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.SettingsActivity"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity
+            android:name=".activities.PersonActivity"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.EventActivity"
+            android:parentActivityName=".activities.MainActivity"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

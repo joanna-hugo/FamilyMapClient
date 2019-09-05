@@ -15,11 +15,11 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.Settings;
 import felsted.joanna.fmc.model.event;
-import felsted.joanna.fmc.model.settings;
 
 public class EventActivity extends AppCompatActivity {
-    settings mSettings = settings.getInstance();
+    Settings mSettings = Settings.getInstance();
     private static final int REQUEST_ERROR = 0;
     private FamilyModel mFamilyModel;
 
@@ -56,18 +56,6 @@ public class EventActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mapFragment).commit();
          */
-
-        configureBackButton();
-    }
-
-    private void configureBackButton(){
-        Button searchButton = findViewById(R.id.EventBack);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     @Override
@@ -98,11 +86,11 @@ public class EventActivity extends AppCompatActivity {
         String event_id = i.getStringExtra("center_event");
     }
 
-    public settings getSettings() {
+    public Settings getSettings() {
         return mSettings;
     }
 
-    public void setSettings(settings settings) {
+    public void setSettings(Settings settings) {
         mSettings = settings;
     }
 

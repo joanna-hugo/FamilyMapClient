@@ -7,11 +7,16 @@ import android.widget.Button;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.Filters;
 
 public class FilterActivity extends AppCompatActivity {
     private FamilyModel mFamilyModel;
+    private Filters filters = Filters.getInstance();
 
     //TODO make layout pretty
+    //TODO add all buttons and listeners
+    //TODO add recycler view(?) to dynamically show event_types
+        //TODO I should get the person activity running well then apply what I learn here
     //TODO filter by event-type
     //TODO filter by gender
     //TODO filter by side

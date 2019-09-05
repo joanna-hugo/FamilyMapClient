@@ -14,15 +14,15 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
-import felsted.joanna.fmc.model.settings;
+import felsted.joanna.fmc.model.Settings;
 
 public class MainActivity extends AppCompatActivity {
-    settings mSettings = settings.getInstance(); // NOTE THIS IS WHERE I KEEP THE SETTING APPARENTLY TODO
+    Settings mSettings = Settings.getInstance(); // NOTE THIS IS WHERE I KEEP THE SETTING APPARENTLY TODO
     private static final int REQUEST_ERROR = 0;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
-    //TODO Figure out where to store "settings" info (pass in continually or in some shared space)
+    //TODO Figure out where to store "Settings" info (pass in continually or in some shared space)
     //DONE Connect client to server through the Server Proxy
     //DONE Wire up Login Fragment to Server
     //TODO setup maps https://developers.google.com/maps/documentation/android-sdk/start
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
         if(fragment == null){
-            settings s = null;
+            Settings s = null;
             s = s.getInstance();
             if (!s.isMainLoadMapFragOnCreate())
                 fragment = new LoginFragment();

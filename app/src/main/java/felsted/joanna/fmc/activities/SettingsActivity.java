@@ -21,7 +21,7 @@ import java.util.List;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
-import felsted.joanna.fmc.model.settings;
+import felsted.joanna.fmc.model.Settings;
 
 public class SettingsActivity extends AppCompatActivity  {
 
@@ -33,9 +33,9 @@ public class SettingsActivity extends AppCompatActivity  {
     //DONE Logout
     //TODO make layout pretty
     //TODO hook up Re-sync to server
-    //TODO make map reload when going back to map (in case settings change)
+    //TODO make map reload when going back to map (in case Settings change)
 
-    private settings mSettings = settings.getInstance();
+    private Settings mSettings = Settings.getInstance();
     private String TAG = "SETTINGS";
 
     private FamilyModel mFamilyModel;
@@ -56,6 +56,7 @@ public class SettingsActivity extends AppCompatActivity  {
 
     private void configureBackButton(){
         Button searchButton = findViewById(R.id.settingsBack);
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,8 +90,8 @@ public class SettingsActivity extends AppCompatActivity  {
         // attaching data adapter to spinner
         life_story_spinner.setAdapter(dataAdapter);
 
-        //set default to GREEN to match default settings object
-        life_story_spinner.setSelection(3); //TODO make this fancy so the default matches the settings at the time
+        //set default to GREEN to match default Settings object
+        life_story_spinner.setSelection(3); //TODO make this fancy so the default matches the Settings at the time
 
 
 
@@ -135,8 +136,8 @@ public class SettingsActivity extends AppCompatActivity  {
         // attaching data adapter to spinner
         life_story_spinner.setAdapter(dataAdapter);
 
-        //set default to BLUE to match default settings object
-        life_story_spinner.setSelection(0); //TODO make this fancy so the default matches the settings at the time
+        //set default to BLUE to match default Settings object
+        life_story_spinner.setSelection(0); //TODO make this fancy so the default matches the Settings at the time
 
 
         ToggleButton button = findViewById(R.id.family_tree_button);
@@ -180,8 +181,8 @@ public class SettingsActivity extends AppCompatActivity  {
         // attaching data adapter to spinner
         life_story_spinner.setAdapter(dataAdapter);
 
-        //set default to RED to match default settings object
-        life_story_spinner.setSelection(2); //TODO make this fancy so the default matches the settings at the time
+        //set default to RED to match default Settings object
+        life_story_spinner.setSelection(2); //TODO make this fancy so the default matches the Settings at the time
 
         ToggleButton button = findViewById(R.id.spouse_button);
         button.setChecked(true);
@@ -222,8 +223,8 @@ public class SettingsActivity extends AppCompatActivity  {
         // attaching data adapter to spinner
         life_story_spinner.setAdapter(dataAdapter);
 
-        //set default to NORMAL to match default settings object
-        life_story_spinner.setSelection(0); //TODO make this fancy so the default matches the settings at the time
+        //set default to NORMAL to match default Settings object
+        life_story_spinner.setSelection(0); //TODO make this fancy so the default matches the Settings at the time
     }
 
     private void configureReSync(){
@@ -325,11 +326,11 @@ public class SettingsActivity extends AppCompatActivity  {
         }
     }
 
-    public settings getSettings() {
+    public Settings getSettings() {
         return mSettings;
     }
 
-    public void setSettings(settings settings) {
+    public void setSettings(Settings settings) {
         mSettings = settings;
     }
 

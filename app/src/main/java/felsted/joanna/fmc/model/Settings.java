@@ -1,23 +1,20 @@
 package felsted.joanna.fmc.model;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by bondd on 12/9/2017.
  */
 
-public class settings implements Serializable {
+public class Settings implements Serializable {
 
     //TODO layout for all of these
         //TODO go for extra cred and add to DB whenever changed??
 
-    private static final settings instance = new settings(); //can also think of as SINGLETON
+    private static final Settings instance = new Settings(); //can also think of as SINGLETON
 
     private boolean mainLoadMapFragOnCreate = false;
 
@@ -34,9 +31,9 @@ public class settings implements Serializable {
 
 
     //SINGLETON
-    private settings(){ }
+    private Settings(){ }
 
-    public static settings getInstance(){
+    public static Settings getInstance(){
         return instance;
     }
 

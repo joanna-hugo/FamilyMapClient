@@ -1,6 +1,7 @@
 package felsted.joanna.fmc.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,16 +24,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.util.List;
-
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.Settings;
 import felsted.joanna.fmc.model.event;
-import felsted.joanna.fmc.model.person;
-import felsted.joanna.fmc.model.settings;
 
 import static android.graphics.Color.BLUE;
-import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
@@ -42,7 +39,7 @@ public class MapFragment extends Fragment {
     private TextView textView;
     private MapView mapView;
     private FamilyModel mFamilyModel;
-    private settings mSettings = settings.getInstance();
+    private Settings mSettings = Settings.getInstance();
 
     static final float WIDTH = 10;  // in pixels
     static final int color = BLUE;
@@ -50,7 +47,7 @@ public class MapFragment extends Fragment {
     //TODO write bottom section of screen layout
     //TODO get information from clicking on markers to show up in bottom half of screen
 
-    //TODO clicking on the icons in the menu takes the user to the settings, filters, or search activity
+    //TODO clicking on the icons in the menu takes the user to the Settings, Filters, or search activity
         //TODO the buttons are in the MENU
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,16 +63,8 @@ public class MapFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
-//                initMap();
-                centerMap();
-                zoomMap(10);
-                setMapType();
-                setClickListener();
-                zoomMap(2);
-                addMarkers();
-                setBounds();
-                setMarkerListener();
-                drawLines();
+                initMap();
+                mFamilyModel.setupFilters();
             }
         });
 
@@ -83,6 +72,7 @@ public class MapFragment extends Fragment {
         configureFilterButton(view);
         configureSettingsButton(view);
         setTextViewListener();
+
         return view;
 
     }
@@ -93,13 +83,11 @@ public class MapFragment extends Fragment {
         mapView.onResume();
     }
 
-    //TODO update map when returning from changing settings
+    //TODO update map when returning from changing Settings
 
     @Override
     public void onStart(){
-        super.onStart(); //NOTE this is the function when returning from settings activity
-//        initMap();
-//        drawLines();
+        super.onStart();
     }
 
     @Override
@@ -150,10 +138,20 @@ public class MapFragment extends Fragment {
     }
 
     public void centerMap() {
-        LatLng byu = new LatLng(40.2518, -111.6493); //TODO why an error here? when moving Person --> Event
-        CameraUpdate update = CameraUpdateFactory.newLatLng(byu);
-        map.moveCamera(update);
-        map.addMarker(new MarkerOptions().position(byu));
+        Intent i  = getActivity().getIntent();
+        //CENTER_EVENT_ID
+        if(i.hasExtra("CENTER_EVENT_ID")){
+            event e = mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"));
+            LatLng center = getLatLng(e); //TODO why an error here? when moving Person --> Event
+            CameraUpdate update = CameraUpdateFactory.newLatLng(center);
+            map.moveCamera(update);
+            map.addMarker(new MarkerOptions().position(center));
+        }else {
+            LatLng byu = new LatLng(40.2518, -111.6493);
+            CameraUpdate update = CameraUpdateFactory.newLatLng(byu);
+            map.moveCamera(update);
+            map.addMarker(new MarkerOptions().position(byu));
+        }
     }
 
     public void centerMap(event e) {
@@ -326,7 +324,7 @@ public class MapFragment extends Fragment {
 
     private void startSettingsActivity(){
         Intent intent = new Intent(getActivity(), SettingsActivity.class);
-//        intent.putExtra("SettingsActivity", Util.getGson().toJson(settings)); TODO investigate if this is a good way to pass settings object between activities
+//        intent.putExtra("SettingsActivity", Util.getGson().toJson(Settings)); TODO investigate if this is a good way to pass Settings object between activities
         intent.putExtra("SETTINGS", mSettings);
         intent.putExtra("FAMILY_MODEL", mFamilyModel);
         startActivity(intent);
@@ -334,7 +332,7 @@ public class MapFragment extends Fragment {
 
     private void startSearchActivity(){
         Intent intent = new Intent(getActivity(), SearchActivity.class);
-//        intent.putExtra("SettingsActivity", Util.getGson().toJson(settings)); TODO investigate if this is a good way to pass settings object between activities
+//        intent.putExtra("SettingsActivity", Util.getGson().toJson(Settings)); TODO investigate if this is a good way to pass Settings object between activities
         intent.putExtra("SETTINGS", mSettings);
         intent.putExtra("FAMILY_MODEL", mFamilyModel);
         startActivity(intent);
@@ -351,7 +349,7 @@ public class MapFragment extends Fragment {
 
     private void startFilterActivity(){
         Intent intent = new Intent(getActivity(), FilterActivity.class);
-//        intent.putExtra("SettingsActivity", Util.getGson().toJson(settings)); TODO investigate if this is a good way to pass settings object between activities
+//        intent.putExtra("SettingsActivity", Util.getGson().toJson(Settings)); TODO investigate if this is a good way to pass Settings object between activities
         intent.putExtra("SETTINGS", mSettings);
         intent.putExtra("FAMILY_MODEL", mFamilyModel);
         startActivity(intent);

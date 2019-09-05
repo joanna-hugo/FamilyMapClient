@@ -31,7 +31,7 @@ public class SettingsActivity extends AppCompatActivity  {
     //DONE Map Type
     //DONE Re-sync data
     //DONE Logout
-    //TODO make layout pretty
+    //DONE make layout pretty
     //TODO hook up Re-sync to server
     //TODO make map reload when going back to map (in case Settings change)
 

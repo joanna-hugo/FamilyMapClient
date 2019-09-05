@@ -7,22 +7,23 @@
     tools:context=".activities.SettingsActivity">
 
     <LinearLayout
-        android:layout_width="375dp"
+        android:layout_width="wrap_content"
         android:layout_height="400dp"
         android:layout_gravity="center"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp">
+        android:orientation="vertical">
 
         <!-- this contains a row for each setting -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="7dp"
             android:background="@drawable/settings_background"
             android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp">
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp">
             <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
 
             <Spinner
@@ -59,9 +60,12 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="7dp"
             android:background="@drawable/settings_background"
             android:orientation="horizontal"
-            android:paddingTop="5dp">
+            android:paddingTop="7dp">
             <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
 
             <Spinner
@@ -102,9 +106,12 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="7dp"
             android:background="@drawable/settings_background"
             android:orientation="horizontal"
-            android:paddingTop="5dp">
+            android:paddingTop="7dp">
             <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
 
             <Spinner
@@ -139,9 +146,12 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="7dp"
             android:background="@drawable/settings_background"
             android:orientation="horizontal"
-            android:paddingTop="5dp">
+            android:paddingTop="7dp">
             <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
 
             <Spinner
@@ -166,9 +176,12 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="7dp"
             android:background="@drawable/settings_background"
             android:orientation="horizontal"
-            android:paddingTop="5dp">
+            android:paddingTop="7dp">
             <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
             <Button
                 android:id="@+id/resync_button"
@@ -193,9 +206,12 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="64dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="7dp"
             android:background="@drawable/settings_background"
             android:orientation="horizontal"
-            android:paddingTop="5dp">
+            android:paddingTop="7dp">
             <!--this is a setting row, it contains a text, expanding list of colors, and a radio button -->
             <Button
                 android:id="@+id/logout_button"

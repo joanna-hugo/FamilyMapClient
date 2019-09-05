@@ -21,9 +21,12 @@
 
         <TextView
             android:id="@+id/mapText"
+            android:drawableLeft="@drawable/ic_person"
             android:layout_width="match_parent"
             android:layout_height="126dp"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="bottom"
+            android:textSize="25dp"
+            android:textColor="@color/BLACK"/>
     </LinearLayout>
 
     <Button

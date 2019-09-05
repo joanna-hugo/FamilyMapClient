@@ -29,6 +29,7 @@ import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.Filters;
 import felsted.joanna.fmc.model.Settings;
 import felsted.joanna.fmc.model.event;
+import felsted.joanna.fmc.model.person;
 
 import static android.graphics.Color.BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
@@ -253,8 +254,11 @@ public class MapFragment extends Fragment {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 event e = mFamilyModel.getEvent((String) marker.getTag());
-                String loc = e.getCountry() + ", " + e.getCity();
-                textView.setText(loc);
+                person p = mFamilyModel.getPerson(e.getPersonID());
+                String info = e.getEventType() + " : " +e.getCity() + ", " + e.getCountry() + "(" + e.getYear() + ")";
+                String name = p.getFirstName() + " " + p.getLastName();
+                String all = name + "\n" + info;
+                textView.setText(all);
                 textView.setTag(e.getPersonID());
                 return false;
             }

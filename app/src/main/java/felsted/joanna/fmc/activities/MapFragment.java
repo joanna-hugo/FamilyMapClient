@@ -2,7 +2,10 @@ package felsted.joanna.fmc.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -18,11 +22,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
@@ -32,13 +41,15 @@ import felsted.joanna.fmc.model.event;
 import felsted.joanna.fmc.model.person;
 
 import static android.graphics.Color.BLUE;
+import static android.graphics.Color.RED;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap map;
     private TextView textView;
+    private ImageView genderImageView;
     private MapView mapView;
     private FamilyModel mFamilyModel;
     private Settings mSettings = Settings.getInstance();
@@ -63,19 +74,17 @@ public class MapFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
+//        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+//                .findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
+
         textView = view.findViewById(R.id.mapText);
+        genderImageView = view.findViewById(R.id.mapGender);
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
 
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                map = googleMap;
-                initMap();
-                mFamilyModel.setupFilters();
-            }
-        });
+//        mapView.getMapAsync(onMapReady(map));
 
         configureSearchButton(view);
         configureFilterButton(view);
@@ -83,6 +92,17 @@ public class MapFragment extends Fragment {
         setTextViewListener();
 
         return view;
+    }
+
+    // NOTE
+    // https://stackoverflow.com/questions/35496493/getmapasync-in-fragment
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mapView = (MapView) view.findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
     }
 
     @Override
@@ -131,6 +151,23 @@ public class MapFragment extends Fragment {
 
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        initMap();
+        mFamilyModel.setupFilters();
+        Intent i  = getActivity().getIntent(); // NOTE THIS IS WHAT IS MOVING THE MAP
+            //CENTER_EVENT_ID
+            if(i.hasExtra("CENTER_EVENT_ID")){
+                event e = mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"));
+                LatLng center = getLatLng(e); //TODO why an error here? when moving Person --> Event
+                CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
+                map.animateCamera(update);
+                map.addMarker(new MarkerOptions().position(center));
+            }
+
+    }
+
     void initMap() {
         mFamilyModel.setupFilters(); //TODO comment out when actually logging in
         centerMap();
@@ -150,11 +187,12 @@ public class MapFragment extends Fragment {
         if(i.hasExtra("CENTER_EVENT_ID")){
             event e = mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"));
             LatLng center = getLatLng(e); //TODO why an error here? when moving Person --> Event
-            CameraUpdate update = CameraUpdateFactory.newLatLng(center);
-            map.moveCamera(update);
+            System.out.println(center.toString());
+            CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
+            map.animateCamera(CameraUpdateFactory.zoomIn());
             map.addMarker(new MarkerOptions().position(center));
         }else {
-            LatLng byu = new LatLng(40.2518, -111.6493);
+            LatLng byu = new LatLng(140.2518, -111.6493); //TODO generalize this
             CameraUpdate update = CameraUpdateFactory.newLatLng(byu);
             map.moveCamera(update);
             map.addMarker(new MarkerOptions().position(byu));
@@ -250,6 +288,7 @@ public class MapFragment extends Fragment {
     }
 
     void setMarkerListener() {
+        //NOTE this is where I set the textView text
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -260,6 +299,15 @@ public class MapFragment extends Fragment {
                 String all = name + "\n" + info;
                 textView.setText(all);
                 textView.setTag(e.getPersonID());
+
+                //genderImageView.setImageResource(R.drawable.adroid)
+                if(p.getGender().startsWith("m") || p.getGender().startsWith("M")) {
+                    Drawable genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_male).sizeDp(40);
+                    genderImageView.setImageDrawable(genderIcon);
+                }else{
+                    Drawable genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_female).sizeDp(40);
+                    genderImageView.setImageDrawable(genderIcon);
+                }
                 return false;
             }
         });

@@ -309,10 +309,18 @@ public class SettingsActivity extends AppCompatActivity  {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             int index = parent.getSelectedItemPosition();
             switch(index){
-                case 0: mSettings.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                case 1: mSettings.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                case 2: mSettings.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                case 3: mSettings.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                case 0:
+                    mSettings.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    break;
+                case 1:
+                    mSettings.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                    break;
+                case 2:
+                    mSettings.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                    break;
+                case 3:
+                    mSettings.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                    break;
             }
         }
         @Override

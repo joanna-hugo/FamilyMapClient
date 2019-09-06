@@ -11,16 +11,16 @@ import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.Settings;
 
 public class MainActivity extends AppCompatActivity {
-    Settings mSettings = Settings.getInstance(); // NOTE THIS IS WHERE I KEEP THE SETTING APPARENTLY DONE
+    Settings mSettings = Settings.getInstance(); // NOTE THIS IS WHERE I KEEP THE SETTINGS.  DONE
     private static final int REQUEST_ERROR = 0;
-    private Context mContext;
-    private SQLiteDatabase mDatabase;
 
     //DONE Figure out where to store "Settings" info (pass in continually or in some shared space)
     //DONE Connect client to server through the Server Proxy
@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Iconify.with(new FontAwesomeModule());
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
@@ -45,35 +47,10 @@ public class MainActivity extends AppCompatActivity {
                 s.setMapFragInMain(true);
                 fragment = new MapFragment();
             }
-
-            fragment = new LoginFragment();
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)
                     .commit();
         }
-    }
-
-    protected void switchToMapFragment(FamilyModel familyModel)
-    {
-        mSettings.setMapFragInMain(true);
-        mSettings.setMainLoadMapFragOnCreate(true);
-        Fragment mapFrag = new MapFragment();
-        ((MapFragment) mapFrag).setFamilyModel(familyModel);
-        FragmentManager fm = this.getSupportFragmentManager();
-        fm.beginTransaction()
-                .replace(R.id.fragment_container, mapFrag)
-                .commit();
-    }
-
-    protected void switchToLoginFragment()
-    {
-        mSettings.setMapFragInMain(false);
-        mSettings.setMainLoadMapFragOnCreate(false);
-        Fragment loginFrag = new LoginFragment();
-        FragmentManager fm = this.getSupportFragmentManager();
-        fm.beginTransaction()
-                .replace(R.id.fragment_container, loginFrag)
-                .commit();
     }
 
     @Override
@@ -98,5 +75,28 @@ public class MainActivity extends AppCompatActivity {
             errorDialog.show();
         }
 
+    }
+
+    protected void switchToMapFragment(FamilyModel familyModel)
+    {
+        mSettings.setMapFragInMain(true);
+        mSettings.setMainLoadMapFragOnCreate(true);
+        Fragment mapFrag = new MapFragment();
+        ((MapFragment) mapFrag).setFamilyModel(familyModel);
+        FragmentManager fm = this.getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.fragment_container, mapFrag)
+                .commit();
+    }
+
+    protected void switchToLoginFragment()
+    {
+        mSettings.setMapFragInMain(false);
+        mSettings.setMainLoadMapFragOnCreate(false);
+        Fragment loginFrag = new LoginFragment();
+        FragmentManager fm = this.getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.fragment_container, loginFrag)
+                .commit();
     }
 }

@@ -47,7 +47,7 @@ public class LoginFragment extends Fragment {
     private registerRequest mRegisterRequest;
     private loginRequest mLoginRequest;
 
-    private FamilyModel mFamilyModel = new FamilyModel();
+    private FamilyModel mFamilyModel = FamilyModel.getInstance();
 
     private static final String TAG = "LoginFrag";
 

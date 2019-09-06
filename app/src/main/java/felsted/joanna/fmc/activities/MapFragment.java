@@ -51,7 +51,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private TextView textView;
     private ImageView genderImageView;
     private MapView mapView;
-    private FamilyModel mFamilyModel;
+    private FamilyModel mFamilyModel = FamilyModel.getInstance();
     private Settings mSettings = Settings.getInstance();
     private Filters mFilters = Filters.getInstance();
 
@@ -74,17 +74,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-//        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
-
         textView = view.findViewById(R.id.mapText);
         genderImageView = view.findViewById(R.id.mapGender);
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
-
-//        mapView.getMapAsync(onMapReady(map));
 
         configureSearchButton(view);
         configureFilterButton(view);
@@ -163,7 +157,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 LatLng center = getLatLng(e); //TODO why an error here? when moving Person --> Event
                 CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
                 map.animateCamera(update);
-                map.addMarker(new MarkerOptions().position(center));
+//                map.addMarker(new MarkerOptions().position(center));
             }
 
     }
@@ -186,10 +180,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         //CENTER_EVENT_ID
         if(i.hasExtra("CENTER_EVENT_ID")){
             event e = mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"));
-            LatLng center = getLatLng(e); //TODO why an error here? when moving Person --> Event
-            System.out.println(center.toString());
+            LatLng center = getLatLng(e);
             CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
-            map.animateCamera(CameraUpdateFactory.zoomIn());
+            map.animateCamera(update);
             map.addMarker(new MarkerOptions().position(center));
         }else {
             LatLng byu = new LatLng(140.2518, -111.6493); //TODO generalize this
@@ -205,7 +198,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void setMapType() {
-        map.setMapType(mSettings.getMapType());
+        switch(mSettings.getMapType()){
+            case 2 :
+                map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            case 3 :
+                map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                break;
+            case 4 :
+                map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                break;
+            default : map.setMapType(GoogleMap.MAP_TYPE_NORMAL); // will get here if case 1
+        }
     }
 
     void setClickListener() {
@@ -348,14 +352,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         }
-
-//        LatLng lastCity = null;
-//        for (event e : mFamilyModel.getEvents()) {
-//            LatLng latLng = getLatLng(e);
-//            if (lastCity != null)
-//                drawLine(lastCity, latLng, color, WIDTH); //TODO generalize color to use settings
-//            lastCity = latLng;
-//        }
     }
 
     void drawFamLines(event e, int color, float width){

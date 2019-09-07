@@ -39,7 +39,7 @@ public class SettingsActivity extends AppCompatActivity  {
     //DONE Re-sync data
     //DONE Logout
     //DONE make layout pretty
-    //TODO hook up Re-sync to server
+    //DONE hook up Re-sync to server //TODO test
     //DONE make map reload when going back to map (in case Settings change)
 
     private Settings mSettings = Settings.getInstance();
@@ -213,7 +213,7 @@ public class SettingsActivity extends AppCompatActivity  {
         life_story_spinner.setAdapter(dataAdapter);
 
         //set default to NORMAL to match default Settings object
-        life_story_spinner.setSelection(0);
+        life_story_spinner.setSelection(mapToInt(mSettings.getMapType()));
     }
 
     private void configureReSync(){
@@ -253,6 +253,18 @@ public class SettingsActivity extends AppCompatActivity  {
             case Color.RED :
                 return 2;
             case Color.GREEN :
+                return 3;
+            default : return 0; // BLUE
+        }
+    }
+
+    private int mapToInt(int mapType){
+        switch(mapType){
+            case GoogleMap.MAP_TYPE_HYBRID :
+                return 1;
+            case GoogleMap.MAP_TYPE_SATELLITE:
+                return 2;
+            case GoogleMap.MAP_TYPE_TERRAIN:
                 return 3;
             default : return 0; // BLUE
         }

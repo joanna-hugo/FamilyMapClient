@@ -1,6 +1,8 @@
 package felsted.joanna.fmc.model;
 
-public class loginRequest {
+import java.io.Serializable;
+
+public class loginRequest implements Serializable {
     private String serverHost;
     private String serverPort;
     private String username;

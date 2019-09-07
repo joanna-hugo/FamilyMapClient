@@ -2,6 +2,7 @@ package felsted.joanna.fmc.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,12 +18,17 @@ import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.GoogleMap;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import felsted.joanna.fmc.R;
+import felsted.joanna.fmc.ServerProxy;
 import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.Settings;
+import felsted.joanna.fmc.model.eventListResponse;
+import felsted.joanna.fmc.model.loginResponse;
+import felsted.joanna.fmc.model.personListResponse;
 
 public class SettingsActivity extends AppCompatActivity  {
 
@@ -216,9 +222,9 @@ public class SettingsActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 Toast.makeText(SettingsActivity.this,
-                        "Button worked but sync not hooked up",
+                        "Resyncing data",
                         Toast.LENGTH_SHORT).show();
-                finish();
+                new Resync().execute();
             }
         });
     }
@@ -228,18 +234,14 @@ public class SettingsActivity extends AppCompatActivity  {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                //TODO LOGOUT
+                //DONE LOGOUT
                 Toast.makeText(SettingsActivity.this,
                         "Logging out...",
                         Toast.LENGTH_SHORT).show();
 
                 mSettings.setMainLoadMapFragOnCreate(false);
-//                logout(v);
-//                Looper.loop();
-//                Looper.myLooper().quit();
+                mFamilyModel.logout();
                 finish();
-//                Intent intent = new Intent(v.getContext(), MainActivity.class);
-//                startActivity(intent);
             }
         });
     }
@@ -256,14 +258,33 @@ public class SettingsActivity extends AppCompatActivity  {
         }
     }
 
-    private void logout(View v){
-        mSettings.setMainLoadMapFragOnCreate(false);
-//        Intent intent = new Intent(v.getContext(), MainActivity.class);
-//        startActivity(intent);
-        finish();
+    //HELPER CLASSES FOLLOW
+
+    private class Resync extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params){
+            try{
+                loginResponse result = new ServerProxy().login(mFamilyModel.getReSyncRequest());
+                Toast.makeText(SettingsActivity.this,
+                        "ReSyncing Data...",
+                        Toast.LENGTH_LONG).show();
+                personListResponse persons = new ServerProxy().getPersons(result.getAuthToken());
+                eventListResponse events = new ServerProxy().getEvents(result.getAuthToken());
+                mFamilyModel.setCurrentUser(result.getPersonID());
+                mFamilyModel.setEvents(events.getData());
+                mFamilyModel.setPersons(persons.getData());
+                mFamilyModel.setToken(result.getAuthToken());
+                mFamilyModel.setupFilters();
+                mFamilyModel.setupAncestors();
+                mFamilyModel.setupChildren();
+            }catch(IOException ioe){
+                Log.e(TAG, "Failed to fetch URL: ", ioe);
+                Toast.makeText(SettingsActivity.this, R.string.register400, Toast.LENGTH_SHORT).show();
+            }
+            return null;
+        }
     }
 
-    //HELPER CLASSES FOLLOW
     private class life_story_listener implements AdapterView.OnItemSelectedListener{
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

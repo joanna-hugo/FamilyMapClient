@@ -310,6 +310,7 @@ public class LoginFragment extends Fragment {
                 mFamilyModel.setupFilters();
                 mFamilyModel.setupAncestors();
                 mFamilyModel.setupChildren();
+                mFamilyModel.setReSyncRequest(mLoginRequest);
                 switchToMapActivity(mFamilyModel);
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);

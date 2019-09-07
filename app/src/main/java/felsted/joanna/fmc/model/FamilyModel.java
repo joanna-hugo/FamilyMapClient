@@ -20,12 +20,21 @@ public class FamilyModel implements Serializable {
     private List<person> paternalAncestors = new ArrayList<>();
     private Map<String, List<String>> children= new HashMap<>();
 
+    private loginRequest reSyncRequest =  new loginRequest();
+
     private static FamilyModel instance = new FamilyModel();
-    //sorted list of events for each person
-    //list of children for each person
-    //paternal ancestors
-    //maternal ancestors
+
     private FamilyModel(){};
+
+    public void logout(){
+        this.currentUser = "";
+        this.persons.clear();
+        this.events.clear();
+        this.token = "";
+        this.maternalAncestors.clear();
+        this.paternalAncestors.clear();
+        this.children.clear();
+    }
 
     public static FamilyModel getInstance() {
         return instance;
@@ -253,6 +262,14 @@ public class FamilyModel implements Serializable {
             }
             traverseFamily(isMaternal, mother_id);
         }
+    }
+
+    public loginRequest getReSyncRequest() {
+        return reSyncRequest;
+    }
+
+    public void setReSyncRequest(loginRequest reSyncRequest) {
+        this.reSyncRequest = reSyncRequest;
     }
 
 }

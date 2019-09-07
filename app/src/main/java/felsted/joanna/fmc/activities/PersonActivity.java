@@ -1,6 +1,8 @@
 package felsted.joanna.fmc.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bignerdranch.expandablerecyclerview.ChildViewHolder;
+import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter;
+import com.bignerdranch.expandablerecyclerview.ParentViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -192,7 +198,7 @@ public class PersonActivity extends AppCompatActivity {
         @Override
         public void onClick(View v){
 //            Toast.makeText(v.getContext(),
-//                    "you clicked a " + myEvent.getEventType() + " event!", Toast.LENGTH_SHORT).show();
+//                    "you clicked a " + mTextView.getEventType() + " event!", Toast.LENGTH_SHORT).show();
 
             Intent i = new Intent(v.getContext(), PersonActivity.class);
             i.putExtra("SETTINGS", mSettings);
@@ -228,6 +234,73 @@ public class PersonActivity extends AppCompatActivity {
         }
     }
 
+    // -------------------------
+
+//    private class TitlesHolder extends ParentViewHolder{
+//        private TextView mTitleText;
+//
+//        public TitlesHolder(View itemView){
+//            super(itemView);
+//            mTitleText = itemView.findViewById(R.id.title_view);
+//        }
+//        public void bind(String text){
+//            mTitleText.setText(text);
+//        }
+//    }
+//
+//    private class EventTextHolder extends ChildViewHolder{
+//        private TextView mTextView;
+//        private event myEvent;
+//
+//        public EventTextHolder(View itemView){
+//            super(itemView);
+//            mTextView = itemView.findViewById(R.id.event_text);
+//        }
+//
+//        public void bind(event e){
+//            myEvent = e;
+//            person p = mFamilyModel.getPerson(myEvent.getPersonID());
+//
+//            String info = myEvent.getEventType() + " : " + myEvent.getCity() + ", " + myEvent.getCountry() + " (" + myEvent.getYear() + ")";
+//            String name = p.getFirstName() + " " + p.getLastName();
+//            String all = info  + "\n" + name;
+//            mTextView.setText(all);
+//        }
+//    }
+//
+//    public class TitleAdapter extends ExpandableRecyclerAdapter<String, event, TitlesHolder, EventTextHolder> {
+//
+//        private LayoutInflater mInflater;
+//
+//        public TitleAdapter(Context context, @NonNull List<String> TitleList) {
+//            super(parentItemList);
+//            mInflater = LayoutInflater.from(context);
+//        }
+//
+//        // onCreate ...
+//        @Override
+//        public TitlesHolder onCreateParentViewHolder(@NonNull ViewGroup parentViewGroup, int viewType) {
+//            View recipeView = mInflater.inflate(R.layout.title_text, parentViewGroup, false);
+//            return new TitlesHolder(recipeView);
+//        }
+//
+//        @Override
+//        public EventTextHolder onCreateChildViewHolder(@NonNull ViewGroup childViewGroup, int viewType) {
+//            View ingredientView = mInflater.inflate(R.layout.ingredient_view, childViewGroup, false);
+//            return new EventTextHolder(ingredientView);
+//        }
+//
+//        // onBind ...
+//        @Override
+//        public void onBindParentViewHolder(@NonNull TitlesHolder recipeViewHolder, int parentPosition, @NonNull String title) {
+//            TitlesHolder.bind(title);
+//        }
+//
+//        @Override
+//        public void onBindChildViewHolder(@NonNull EventTextHolder ingredientViewHolder, int parentPosition, int childPosition, @NonNull event event) {
+//            ingredientViewHolder.bind(event);
+//        }
+//    }
 
 //--------------
     // NOTE If you want to make the list expandable, follow this BigNerdRanch Tutorial

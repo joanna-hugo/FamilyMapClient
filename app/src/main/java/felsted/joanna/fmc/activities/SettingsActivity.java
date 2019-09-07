@@ -2,6 +2,7 @@ package felsted.joanna.fmc.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -227,13 +228,18 @@ public class SettingsActivity extends AppCompatActivity  {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO LOGOUT
+//                //TODO LOGOUT
                 Toast.makeText(SettingsActivity.this,
-                        "Button worked but logout not hooked up",
+                        "Logging out...",
                         Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
-                intent.putExtra("FAMILY_MODEL", mFamilyModel);
-                startActivity(intent);
+
+                mSettings.setMainLoadMapFragOnCreate(false);
+//                logout(v);
+//                Looper.loop();
+//                Looper.myLooper().quit();
+                finish();
+//                Intent intent = new Intent(v.getContext(), MainActivity.class);
+//                startActivity(intent);
             }
         });
     }
@@ -248,6 +254,13 @@ public class SettingsActivity extends AppCompatActivity  {
                 return 3;
             default : return 0; // BLUE
         }
+    }
+
+    private void logout(View v){
+        mSettings.setMainLoadMapFragOnCreate(false);
+//        Intent intent = new Intent(v.getContext(), MainActivity.class);
+//        startActivity(intent);
+        finish();
     }
 
     //HELPER CLASSES FOLLOW

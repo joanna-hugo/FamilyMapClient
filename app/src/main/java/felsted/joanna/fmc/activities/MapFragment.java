@@ -304,13 +304,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 textView.setText(all);
                 textView.setTag(e.getPersonID());
 
-                //genderImageView.setImageResource(R.drawable.adroid)
+//                genderImageView.setImageResource(R.drawable.ic_person);
                 if(p.getGender().startsWith("m") || p.getGender().startsWith("M")) {
                     Drawable genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_male).sizeDp(40);
                     genderImageView.setImageDrawable(genderIcon);
+                    genderImageView.setColorFilter(BLUE);
                 }else{
                     Drawable genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_female).sizeDp(40);
                     genderImageView.setImageDrawable(genderIcon);
+                    genderImageView.setColorFilter(RED);
                 }
                 return false;
             }

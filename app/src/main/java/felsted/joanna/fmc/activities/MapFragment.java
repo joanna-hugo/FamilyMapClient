@@ -59,9 +59,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     static final int color = BLUE;
 
 
-    //TODO update map when returning from other activities (change filters or settings)
-    //TODO write bottom section of screen layout
-    //TODO get information from clicking on markers to show up in bottom half of screen
+    //DONE update map when returning from other activities (change filters or settings)
+    //DONE write bottom section of screen layout
+    //DONE get information from clicking on markers to show up in bottom half of screen
 
     //TODO clicking on the icons in the menu takes the user to the Settings, Filters, or search activity
         //TODO the buttons are in the MENU
@@ -74,15 +74,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
+        setHasOptionsMenu(true);
+
         textView = view.findViewById(R.id.mapText);
         genderImageView = view.findViewById(R.id.mapGender);
 
         mapView = view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
 
-        configureSearchButton(view);
-        configureFilterButton(view);
-        configureSettingsButton(view);
         setTextViewListener();
 
         return view;
@@ -116,6 +115,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setHasOptionsMenu(true);
         inflater.inflate(R.menu.fragment_map, menu); //TODO ...why aren't my buttons coming up?
 
+        //NOTE https://www.concretepage.com/android/android-options-menu-example-using-getmenuinflater-inflate-oncreateoptionsmenu-and-onoptionsitemselected
         MenuItem searchItem = menu.findItem(R.id.search_button);
         searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
             @Override
@@ -304,7 +304,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 textView.setText(all);
                 textView.setTag(e.getPersonID());
 
-//                genderImageView.setImageResource(R.drawable.ic_person);
                 if(p.getGender().startsWith("m") || p.getGender().startsWith("M")) {
                     Drawable genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_male).sizeDp(40);
                     genderImageView.setImageDrawable(genderIcon);
@@ -414,37 +413,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
     //----------- Temporary Setup Functions
-
-    private void configureSearchButton(View v){
-        Button searchButton = v.findViewById(R.id.toSearch);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startSearchActivity();
-            }
-        });
-    }
-
-    private void configureFilterButton(View v){
-        Button searchButton = v.findViewById(R.id.toFilter);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startFilterActivity();
-            }
-        });
-    }
-
-    private void configureSettingsButton(View v){
-        Button searchButton = v.findViewById(R.id.toSettings);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startSettingsActivity();
-            }
-        });
-    }
-
     public FamilyModel getFamilyModel() {
         return mFamilyModel;
     }

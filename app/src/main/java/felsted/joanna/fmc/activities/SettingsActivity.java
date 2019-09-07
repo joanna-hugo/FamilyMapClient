@@ -79,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity  {
         life_story_spinner.setAdapter(dataAdapter);
 
         //set default to GREEN to match default Settings object
-        life_story_spinner.setSelection(3);
+        life_story_spinner.setSelection(colorToInt(mSettings.getLifeStoryLinesColor()));
         ToggleButton button = findViewById(R.id.life_story_button);
         button.setChecked(true);
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -122,7 +122,7 @@ public class SettingsActivity extends AppCompatActivity  {
         life_story_spinner.setAdapter(dataAdapter);
 
         //set default to BLUE to match default Settings object
-        life_story_spinner.setSelection(0);
+        life_story_spinner.setSelection(colorToInt(mSettings.getFamilyTreeLinesColor()));
         ToggleButton button = findViewById(R.id.family_tree_button);
         button.setChecked(true);
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -165,7 +165,7 @@ public class SettingsActivity extends AppCompatActivity  {
         life_story_spinner.setAdapter(dataAdapter);
 
         //set default to RED to match default Settings object
-        life_story_spinner.setSelection(2);
+        life_story_spinner.setSelection(colorToInt(mSettings.getSpouseLinesColor()));
         ToggleButton button = findViewById(R.id.spouse_button);
         button.setChecked(true);
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -240,15 +240,13 @@ public class SettingsActivity extends AppCompatActivity  {
 
     private int colorToInt(int color){
         switch(color){
-            case Color.BLUE :
-                return 0;
             case Color.BLACK :
                 return 1;
             case Color.RED :
                 return 2;
             case Color.GREEN :
                 return 3;
-            default : return 0;
+            default : return 0; // BLUE
         }
     }
 
@@ -258,10 +256,18 @@ public class SettingsActivity extends AppCompatActivity  {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             int index = parent.getSelectedItemPosition();
             switch(index){
-                case 0: mSettings.setLifeStoryLinesColor(Color.BLUE);
-                case 1: mSettings.setLifeStoryLinesColor(Color.BLACK);
-                case 2: mSettings.setLifeStoryLinesColor(Color.RED);
-                case 3: mSettings.setLifeStoryLinesColor(Color.GREEN);
+                case 0:
+                    mSettings.setLifeStoryLinesColor(Color.BLUE);
+                    break;
+                case 1:
+                    mSettings.setLifeStoryLinesColor(Color.BLACK);
+                    break;
+                case 2:
+                    mSettings.setLifeStoryLinesColor(Color.RED);
+                    break;
+                case 3:
+                    mSettings.setLifeStoryLinesColor(Color.GREEN);
+                    break;
             }
         }
         @Override
@@ -275,10 +281,18 @@ public class SettingsActivity extends AppCompatActivity  {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             int index = parent.getSelectedItemPosition();
             switch(index){
-                case 0: mSettings.setFamilyTreeLinesColor(Color.BLUE);
-                case 1: mSettings.setFamilyTreeLinesColor(Color.BLACK);
-                case 2: mSettings.setFamilyTreeLinesColor(Color.RED);
-                case 3: mSettings.setFamilyTreeLinesColor(Color.GREEN);
+                case 0:
+                    mSettings.setFamilyTreeLinesColor(Color.BLUE);
+                    break;
+                case 1:
+                    mSettings.setFamilyTreeLinesColor(Color.BLACK);
+                    break;
+                case 2:
+                    mSettings.setFamilyTreeLinesColor(Color.RED);
+                    break;
+                case 3:
+                    mSettings.setFamilyTreeLinesColor(Color.GREEN);
+                    break;
             }
         }
         @Override
@@ -292,10 +306,18 @@ public class SettingsActivity extends AppCompatActivity  {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             int index = parent.getSelectedItemPosition();
             switch(index){
-                case 0: mSettings.setSpouseLinesColor(Color.BLUE);
-                case 1: mSettings.setSpouseLinesColor(Color.BLACK);
-                case 2: mSettings.setSpouseLinesColor(Color.RED);
-                case 3: mSettings.setSpouseLinesColor(Color.GREEN);
+                case 0:
+                    mSettings.setSpouseLinesColor(Color.BLUE);
+                    break;
+                case 1:
+                    mSettings.setSpouseLinesColor(Color.BLACK);
+                    break;
+                case 2:
+                    mSettings.setSpouseLinesColor(Color.RED);
+                    break;
+                case 3:
+                    mSettings.setSpouseLinesColor(Color.GREEN);
+                    break;
             }
         }
         @Override

@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     //DONE Connect client to server through the Server Proxy
     //DONE Wire up Login Fragment to Server
     //DONE setup maps https://developers.google.com/maps/documentation/android-sdk/start
-    //TODO up button coming back to login screen
+    //DONE up button coming back to login screen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

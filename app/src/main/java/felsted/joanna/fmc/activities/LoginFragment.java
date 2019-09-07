@@ -81,7 +81,7 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
-        //TODO abstract listener setup into a voi function (to cleanup screen)
+        //NOTE abstract listener setup into a voi function (to cleanup screen)
         mRegisterRequest = new registerRequest();
         mLoginRequest =  new loginRequest();
 

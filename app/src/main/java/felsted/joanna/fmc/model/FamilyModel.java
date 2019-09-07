@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,32 @@ public class FamilyModel implements Serializable {
 
     public void setPersons(List<person> persons) {
         this.persons = persons;
+        setupChildren();
+        setupAncestors();
+    }
+
+    public List<person> getImmediateFam(String personID){
+        List<person> fam = new ArrayList<>();
+        person root = getPerson(personID);
+        if(root.getFather().length()>0){
+            fam.add(getPerson(root.getFather()));
+        }
+        if(root.getMother().length()>0){
+            fam.add(getPerson(root.getMother()));
+        }
+        if(root.getSpouse().length()>0){
+            fam.add(getPerson(root.getSpouse()));
+        }
+
+        List<String> myChildren = children.get(personID);
+        if(myChildren == null){
+            return fam;
+        }
+        for(String s: myChildren){
+            fam.add(getPerson(s));
+        }
+
+        return fam;
     }
 
     public void addPerson(person p){
@@ -68,6 +95,12 @@ public class FamilyModel implements Serializable {
             }
         }
         return myEvents;
+    }
+
+    public List<event> getPersonsEventsOrdered(String personID){
+        List<event> life = getPersonsEvents(personID);
+        Collections.sort(life);
+        return life;
     }
 
     public List<event> getEvents() {
@@ -189,6 +222,7 @@ public class FamilyModel implements Serializable {
     public Boolean isPaternal(String person_id){
         return this.paternalAncestors.contains(person_id);
     }
+
     private void traverseFamily(Boolean isMaternal, String person_id){
         //if isMaternal add to maternal ancestors
             //otherwise, add to paternal ancestors

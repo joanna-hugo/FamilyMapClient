@@ -117,7 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         setHasOptionsMenu(true);
-        inflater.inflate(R.menu.fragment_map, menu); //TODO ...why aren't my buttons coming up?
+        inflater.inflate(R.menu.fragment_map, menu);
 
         //NOTE https://www.concretepage.com/android/android-options-menu-example-using-getmenuinflater-inflate-oncreateoptionsmenu-and-onoptionsitemselected
         MenuItem searchItem = menu.findItem(R.id.search_button);
@@ -158,7 +158,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             //CENTER_EVENT_ID
             if(i.hasExtra("CENTER_EVENT_ID")){
                 event e = mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"));
-                LatLng center = getLatLng(e); //TODO why an error here? when moving Person --> Event
+                LatLng center = getLatLng(e);
                 CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
                 map.animateCamera(update);
 //                map.addMarker(new MarkerOptions().position(center));

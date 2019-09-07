@@ -17,7 +17,7 @@ import java.io.Serializable;
  * New events can only be constructed when given ALL data members
  * All members can only be accessed through getters and setters
  */
-public class event  implements Serializable {
+public class event  implements Serializable, Comparable <event> {
 
     /*
     Event ID: Unique identifier for this event (non-empty string)
@@ -52,6 +52,34 @@ public class event  implements Serializable {
         this.city = city;
         this.eventType = eventType;
         this.year = year;
+    }
+
+    @Override
+    public int compareTo(event e){
+        //check for birth and death types
+        if(this.getEventType().equalsIgnoreCase("birth")){
+            return -1;
+        }
+        if(e.getEventType().equalsIgnoreCase("birth")){
+            return 1;
+        }
+        if(this.getEventType().equalsIgnoreCase("death")){
+            return 1;
+        }
+        if(e.getEventType().equalsIgnoreCase("death")){
+            return -1;
+        }
+
+        //check for chronological order
+        if(this.getYear() < e.getYear()){
+            return -1;
+        }
+        if(this.getYear() > e.getYear()){
+            return 1;
+        }
+
+        //order by event_type in lowercase
+        return this.getEventType().toLowerCase().compareTo(e.getEventType().toLowerCase());
     }
 
     public String getEventID() {

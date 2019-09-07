@@ -59,12 +59,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     static final int color = BLUE;
 
 
+    //TODO up arrow goes to original activity, NOT a new activity
     //DONE update map when returning from other activities (change filters or settings)
     //DONE write bottom section of screen layout
     //DONE get information from clicking on markers to show up in bottom half of screen
 
-    //TODO clicking on the icons in the menu takes the user to the Settings, Filters, or search activity
-        //TODO the buttons are in the MENU
+    //DONE clicking on the icons in the menu takes the user to the Settings, Filters, or search activity
+        //DONE the buttons are in the MENU
     //DONE filter by event-type
     //DONE filter by gender
     //DONE filter by maternal/paternal side
@@ -74,7 +75,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        setHasOptionsMenu(true);
+
+        if(getActivity() instanceof MainActivity){
+            setHasOptionsMenu(true);
+        }
 
         textView = view.findViewById(R.id.mapText);
         genderImageView = view.findViewById(R.id.mapGender);
@@ -216,7 +220,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                textView.setText(latLng.toString());
+//                textView.setText(latLng.toString());
             }
         });
     }
@@ -298,7 +302,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public boolean onMarkerClick(Marker marker) {
                 event e = mFamilyModel.getEvent((String) marker.getTag());
                 person p = mFamilyModel.getPerson(e.getPersonID());
-                String info = e.getEventType() + " : " +e.getCity() + ", " + e.getCountry() + "(" + e.getYear() + ")";
+                String info = e.getEventType() + " : " +e.getCity() + ", " + e.getCountry() + " (" + e.getYear() + ")";
                 String name = p.getFirstName() + " " + p.getLastName();
                 String all = name + "\n" + info;
                 textView.setText(all);

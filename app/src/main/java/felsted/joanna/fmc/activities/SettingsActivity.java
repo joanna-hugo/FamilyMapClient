@@ -40,12 +40,13 @@ public class SettingsActivity extends AppCompatActivity  {
     //DONE Logout
     //DONE make layout pretty
     //DONE hook up Re-sync to server //TODO test
+    //TODO Radio buttons not toggles
     //DONE make map reload when going back to map (in case Settings change)
 
     private Settings mSettings = Settings.getInstance();
     private String TAG = "SETTINGS";
 
-    private FamilyModel mFamilyModel;
+    private FamilyModel mFamilyModel = FamilyModel.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

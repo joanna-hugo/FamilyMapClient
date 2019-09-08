@@ -336,6 +336,7 @@ public class LoginFragment extends Fragment {
 //            }catch(IOException ioe){
 //                Log.e(TAG, "Failed to fetch URL: ", ioe);
 //            }
+            mFamilyModel.setupFilters();
 
             switchToMapActivity(mFamilyModel); //TODO uncomment above when done with testing
             return null;

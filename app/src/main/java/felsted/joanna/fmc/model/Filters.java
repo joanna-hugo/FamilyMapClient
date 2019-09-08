@@ -1,10 +1,14 @@
 package felsted.joanna.fmc.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Filters {
-    private Map<String, Boolean> event_filters = new HashMap<>();
+//    private Map<String, Boolean> event_filters = new HashMap<>();
+
+    private List<Filter> event_type_filters = new ArrayList<>();
     private Boolean showMale = true;
 
     private Boolean showFemale = true;
@@ -19,16 +23,37 @@ public class Filters {
         return instance;
     }
 
-    public void addEventTypeFilter(String filter){
-        event_filters.put(filter, true);
+    public void addTypeFilter(String event_type, Boolean isShow){
+        event_type_filters.add(new Filter(isShow, event_type));
     }
 
-    public Boolean getEventFilter(String filter){
-        return event_filters.get(filter);
+    public List<Filter> getEvent_type_filters() {
+        return event_type_filters;
     }
 
-    public void setEventFilter(String filter, Boolean show){
-        event_filters.put(filter, show);
+    public void addEventTypeFilter(String type){
+        event_type_filters.add(new Filter(true, type));
+    }
+
+    public void setEvent_type_filters(List<Filter> event_type_filters) {
+        this.event_type_filters = event_type_filters;
+    }
+
+    public Boolean getEventFilter(String type){
+        for(Filter f: event_type_filters){
+            if(f.getEvent_type().equals(type)){
+                return f.getShow();
+            }
+        }
+        return event_type_filters.get(0).getShow();
+    }
+
+    public void setFilter(String type, Boolean show){
+        for(Filter f: event_type_filters){
+            if(f.getEvent_type().equals(type)){
+                f.setShow(show);
+            }
+        }
     }
 
     public Boolean getShowMale() {
@@ -61,5 +86,40 @@ public class Filters {
 
     public void setShowMothersSide(Boolean showMothersSide) {
         this.showMothersSide = showMothersSide;
+    }
+
+    public class Filter {
+        private Boolean show = true;
+        private String event_type;
+
+        public Filter(Boolean show, String event_type) {
+            this.show = show;
+            this.event_type = event_type;
+        }
+
+        public Boolean getShow() {
+            return show;
+        }
+
+        public void setShow(Boolean show) {
+            this.show = show;
+        }
+
+        public String getEvent_type() {
+            return event_type;
+        }
+
+        public void setEvent_type(String event_type) {
+            this.event_type = event_type;
+        }
+
+        public void toggleFilter(){
+
+                    if(show){
+                        setShow(false);
+                    }else {
+                        setShow(true);
+                    }
+        }
     }
 }

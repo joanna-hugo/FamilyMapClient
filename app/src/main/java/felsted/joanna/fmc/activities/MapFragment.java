@@ -153,7 +153,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         initMap();
-        mFamilyModel.setupFilters();
         Intent i  = getActivity().getIntent(); // NOTE THIS IS WHAT IS MOVING THE MAP
             //CENTER_EVENT_ID
             if(i.hasExtra("CENTER_EVENT_ID")){
@@ -167,7 +166,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void initMap() {
-        mFamilyModel.setupFilters(); //TODO comment out when actually logging in
         centerMap();
         zoomMap(10);
         setMapType();

@@ -128,7 +128,7 @@ instead of localhost or 127.0.0.1.
         } catch (JSONException je) {
             System.out.println("ruh ro");
         }finally{
-//            connection.disconnect();
+            connection.disconnect();
         }
         return null; //this may cause problems, but the if/else statement should catch everything
     }
@@ -190,83 +190,73 @@ instead of localhost or 127.0.0.1.
         URL url = new URL ("http://10.0.2.2:8080/person"); //TODO generalize this to user host/port provided in screen
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        try{
-            connection.setDoInput(true); //TODO generalize this after testing
-            connection.setDoOutput(true);
+        try {
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("authorization", token);
-
-            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
-            wr.flush();
-
-            StringBuilder sb = new StringBuilder();
+            connection.setRequestProperty("Authorization", token);
             connection.connect();
-            int HttpResult = connection.getResponseCode();
-            System.out.println("GET Response Code :: " + HttpResult);
-            if (HttpResult == HttpURLConnection.HTTP_OK) {
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream(), "utf-8"));
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-                br.close();
-                System.out.println("" + sb.toString());
 
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                // Get response body input stream
+                InputStream responseBody = connection.getInputStream();
+
+                // Read response body bytes
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int length = 0;
+                while ((length = responseBody.read(buffer)) != -1) {
+                    baos.write(buffer, 0, length);
+                }
+
+                // Convert response body bytes to a string
                 Gson gson = new Gson();
-                personListResponse rsp = gson.fromJson(sb.toString(), personListResponse.class);
+                personListResponse rsp = gson.fromJson(baos.toString(), personListResponse.class);
                 return rsp;
-            }else{
-                throw new IOException("server not responding"); //TODO handle this error better, for end user convenience
             }
         } catch (Exception e) {
             System.out.println("ruh ro");
         }catch(Throwable e){
             System.out.println("ERROR: " + e.getMessage());
         }finally{
-//            connection.disconnect();
+            connection.disconnect();
         }
         return new personListResponse();
     }
 
     public eventListResponse getEvents(String token) throws IOException{ //TODO flesh this out
 
-        URL url = new URL ("http://10.0.2.2:8080/person");
+        URL url = new URL ("http://10.0.2.2:8080/event");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        try{
-            connection.setDoInput(true); //TODO generalize this after testing
-            connection.setDoOutput(true);
+        try {
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("authorization", token);
+            connection.setRequestProperty("Authorization", token);
+            connection.connect();
 
-            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
-            wr.flush();
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                // Get response body input stream
+                InputStream responseBody = connection.getInputStream();
 
-            StringBuilder sb = new StringBuilder();
-            int HttpResult = connection.getResponseCode();
-            if (HttpResult == HttpURLConnection.HTTP_OK) {
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream(), "utf-8"));
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
+                // Read response body bytes
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int length = 0;
+                while ((length = responseBody.read(buffer)) != -1) {
+                    baos.write(buffer, 0, length);
                 }
-                br.close();
-                System.out.println("" + sb.toString());
 
+                // Convert response body bytes to a string
                 Gson gson = new Gson();
-                eventListResponse rsp = gson.fromJson(sb.toString(), eventListResponse.class);
+                eventListResponse rsp = gson.fromJson(baos.toString(), eventListResponse.class);
                 return rsp;
-            }else{
-                throw new IOException("server not responding"); //TODO handle this error better, for end user convenience
             }
         } catch (Exception e) {
             System.out.println("ruh ro");
+        }catch(Throwable e){
+            System.out.println("ERROR: " + e.getMessage());
         }finally{
             connection.disconnect();
         }
-        return null;
+        return new eventListResponse();
     }
 
 }

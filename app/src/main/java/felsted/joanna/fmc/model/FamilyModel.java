@@ -2,6 +2,8 @@ package felsted.joanna.fmc.model;
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,6 +84,19 @@ public class FamilyModel implements Serializable {
         }
         Log.e("FAMILY MODEL", "failed to find correct event, returned dummy event");
         return this.events.get(0);
+    }
+
+    public LatLng averageLatLng(){
+        double avgLat = 0d;
+        double avgLong = 0d;
+        for(event e: events){
+            avgLat += e.getLatitude();
+            avgLong += e.getLongitude();
+        }
+        avgLat = avgLat/events.size();
+        avgLong = avgLong/events.size();
+
+        return new LatLng(avgLat, avgLong);
     }
 
     public event getFathersBirth(String person_id){
@@ -167,7 +182,7 @@ public class FamilyModel implements Serializable {
                 this.children.put(p.getFatherID(), new ArrayList<String>());
             }
             //add current user as child to father (if father exists)
-            if(!p.getFatherID().equals("")) {
+            if(p.getFatherID()!= null && !p.getFatherID().equals("")) {
                 this.children.get(p.getFatherID()).add(p.getPersonID());
             }
 
@@ -176,7 +191,7 @@ public class FamilyModel implements Serializable {
                 this.children.put(p.getMotherID(), new ArrayList<String>());
             }
             //add current user as child to Mother
-            if(!p.getMotherID().equals("")){
+            if(p.getMotherID() != null && !p.getMotherID().equals("")){
                 this.children.get(p.getMotherID()).add(p.getPersonID());
             }
         }
@@ -200,7 +215,7 @@ public class FamilyModel implements Serializable {
         String mother_id = root.getMotherID();
 
         //if father, then add to array and traverseFamily
-        if(!father_id.equals("")){
+        if(father_id != null && !father_id.equals("")){ //todo change to != null
             person father = getPerson(father_id);
             if(isMaternal){
                 this.maternalAncestors.add(father);
@@ -210,7 +225,7 @@ public class FamilyModel implements Serializable {
             traverseFamily(isMaternal, father_id);
         }
         //if mother, then add to array and traverseFamily
-        if(!mother_id.equals("")){
+        if(mother_id!= null && !mother_id.equals("")){
             person mother = getPerson(mother_id);
             if(isMaternal){
                 this.maternalAncestors.add(mother);

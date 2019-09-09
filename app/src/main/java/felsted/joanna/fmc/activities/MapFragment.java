@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.Iconify;
@@ -158,7 +159,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             //CENTER_EVENT_ID
             if(i.hasExtra("CENTER_EVENT_ID")){
                 event e = mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"));
-                LatLng center = getLatLng(e); //TODO why an error here? when moving Person --> Event
+                LatLng center = getLatLng(e);
                 CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
                 map.animateCamera(update);
 //                map.addMarker(new MarkerOptions().position(center));
@@ -169,10 +170,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     void initMap() {
         mFamilyModel.setupFilters(); //TODO comment out when actually logging in
         centerMap();
-        zoomMap(10);
+        zoomMap(1);
         setMapType();
         setClickListener();
-        zoomMap(2);
         addMarkers();
         setBounds();
         setMarkerListener();
@@ -189,10 +189,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             map.animateCamera(update);
             map.addMarker(new MarkerOptions().position(center));
         }else {
-            LatLng byu = new LatLng(140.2518, -111.6493); //TODO generalize this
-            CameraUpdate update = CameraUpdateFactory.newLatLng(byu);
+            LatLng center = mFamilyModel.averageLatLng();
+            CameraUpdate update = CameraUpdateFactory.newLatLng(center);
             map.moveCamera(update);
-            map.addMarker(new MarkerOptions().position(byu));
+            map.addMarker(new MarkerOptions().position(center));
         }
     }
 
@@ -291,7 +291,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         LatLngBounds bounds = builder.build();
         CameraUpdate update =
-                CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 5);
+                CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 1);
         map.moveCamera(update);
     }
 
@@ -360,7 +360,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void drawFamLines(event e, int color, float width){
-//        person temp = mFamilyModel.getPerson(e.getPersonID());
         //TODO test with large family, do we need return statement, or will the if statements work?
 
         //TODO lines get progessively thinner
@@ -379,10 +378,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void drawLine(LatLng point1, LatLng point2, int color, float width) {
-        PolylineOptions options =
-                new PolylineOptions().add(point1, point2)
-                        .color(color).width(width);
-        map.addPolyline(options);
+        Polyline line = map.addPolyline(new PolylineOptions()
+                .add(point1, point2)
+                .width(width)
+                .color(color));
+//        PolylineOptions options =
+//                new PolylineOptions().add(point1, point2)
+//                        .color(color).width(width);
+//        map.addPolyline(options); //.add(point1, point2);
     }
 
     private void startSettingsActivity(){

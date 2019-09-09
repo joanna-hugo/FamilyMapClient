@@ -11,9 +11,6 @@ import java.io.Serializable;
 
 public class Settings implements Serializable {
 
-    //TODO layout for all of these
-        //TODO go for extra cred and add to DB whenever changed??
-
     private static final Settings instance = new Settings(); //can also think of as SINGLETON
 
     private boolean mainLoadMapFragOnCreate = false;

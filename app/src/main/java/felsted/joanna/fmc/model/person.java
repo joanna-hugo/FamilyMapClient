@@ -9,9 +9,9 @@ import java.io.Serializable;
  *     First Name: Person’s first name (non-empty string)
  *     Last Name: Person’s last name (non-empty string)
  *     Gender: Person’s gender (string: “f” or “m”)
- *     Father: ID of person’s father (possibly null)
- *     Mother: ID of person’s mother (possibly null)
- *     Spouse: ID of person’s spouse (possibly null)
+ *     Father: ID of person’s fatherID (possibly null)
+ *     Mother: ID of person’s motherID (possibly null)
+ *     Spouse: ID of person’s spouseID (possibly null)
  * Persons can only be constructed when given ALL data members. Because some members are optional
  * pass in an empty string if you do not have that data.
  *
@@ -24,9 +24,9 @@ public class person  implements Serializable {
     First Name: Person’s first name (non-empty string)
     Last Name: Person’s last name (non-empty string)
     Gender: Person’s gender (string: “f” or “m”)
-    Father: ID of person’s father (possibly null)
-    Mother: ID of person’s mother (possibly null)
-    Spouse: ID of person’s spouse (possibly null)
+    Father: ID of person’s fatherID (possibly null)
+    Mother: ID of person’s motherID (possibly null)
+    Spouse: ID of person’s spouseID (possibly null)
     */
 
     /* NOTE
@@ -37,24 +37,24 @@ public class person  implements Serializable {
      */
 
     private String personID;
-    private String descendant; // username of the user this person belongs to
+    private String associatedUsername; // username of the user this person belongs to
     private String firstName;
     private String lastName;
     private String gender;
-    private String father; //possibly null
-    private String mother; //possibly null
-    private String spouse; //possibly null
+    private String fatherID; //possibly null
+    private String motherID; //possibly null
+    private String spouseID; //possibly null
 
-    public person(String personID, String descendant, String firstName, String lastName,
-                  String gender, String father, String mother, String spouse) {
+    public person(String personID, String associatedUsername, String firstName, String lastName,
+                  String gender, String fatherID, String motherID, String spouseID) {
         this.personID = personID;
-        this.descendant = descendant;
+        this.associatedUsername = associatedUsername;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
-        this.father = father;
-        this.mother = mother;
-        this.spouse = spouse;
+        this.fatherID = fatherID;
+        this.motherID = motherID;
+        this.spouseID = spouseID;
     }
     public person(){
     }
@@ -69,12 +69,12 @@ public class person  implements Serializable {
         this.personID = personID;
     }
 
-    public String getDescendant() {
-        return descendant;
+    public String getAssociatedUsername() {
+        return associatedUsername;
     }
 
-    public void setDescendant(String descendant) {
-        this.descendant = descendant;
+    public void setAssociatedUsername(String associatedUsername) {
+        this.associatedUsername = associatedUsername;
     }
 
     public String getFirstName() {
@@ -101,28 +101,28 @@ public class person  implements Serializable {
         this.gender = gender;
     }
 
-    public String getFather() {
-        return father;
+    public String getFatherID() {
+        return fatherID;
     }
 
-    public void setFather(String father) {
-        this.father = father;
+    public void setFatherID(String fatherID) {
+        this.fatherID = fatherID;
     }
 
-    public String getMother() {
-        return mother;
+    public String getMotherID() {
+        return motherID;
     }
 
-    public void setMother(String mother) {
-        this.mother = mother;
+    public void setMotherID(String motherID) {
+        this.motherID = motherID;
     }
 
-    public String getSpouse() {
-        return spouse;
+    public String getSpouseID() {
+        return spouseID;
     }
 
-    public void setSpouse(String spouse) {
-        this.spouse = spouse;
+    public void setSpouseID(String spouseID) {
+        this.spouseID = spouseID;
     }
 
 }

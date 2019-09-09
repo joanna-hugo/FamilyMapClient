@@ -2,7 +2,7 @@ package felsted.joanna.fmc.model;
 
 public class loginResponse {
     private String authToken;
-    private String username;
+    private String userName;
     private String personID;
 
     /*
@@ -16,14 +16,14 @@ public class loginResponse {
     public String jsonify(){
         return "{" +
                 " \"authToken\" : \"" + authToken + "\", " +
-                " \"userName\" : \"" + username + "\","+
+                " \"userName\" : \"" + userName + "\","+
                 " \"personID\" : \"" + personID + "\"" +
                 "}";
     }
 
-    public loginResponse(String auth_token, String username, String personID) {
+    public loginResponse(String auth_token, String userName, String personID) {
         this.authToken = auth_token;
-        this.username = username;
+        this.userName = userName;
         this.personID = personID;
     }
 
@@ -38,12 +38,12 @@ public class loginResponse {
         this.authToken = authToken;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPersonID() {

@@ -106,6 +106,7 @@ instead of localhost or 127.0.0.1.
 
             StringBuilder sb = new StringBuilder();
             int HttpResult = connection.getResponseCode();
+            System.out.println("GET Response Code :: " + HttpResult);
             if (HttpResult == HttpURLConnection.HTTP_OK) {
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(connection.getInputStream(), "utf-8"));
@@ -127,7 +128,7 @@ instead of localhost or 127.0.0.1.
         } catch (JSONException je) {
             System.out.println("ruh ro");
         }finally{
-            connection.disconnect();
+//            connection.disconnect();
         }
         return null; //this may cause problems, but the if/else statement should catch everything
     }
@@ -186,7 +187,7 @@ instead of localhost or 127.0.0.1.
 
     public personListResponse getPersons(String token) throws IOException{
 
-        URL url = new URL ("http://10.0.2.2:8080/person");
+        URL url = new URL ("http://10.0.2.2:8080/person"); //TODO generalize this to user host/port provided in screen
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         try{
@@ -199,7 +200,9 @@ instead of localhost or 127.0.0.1.
             wr.flush();
 
             StringBuilder sb = new StringBuilder();
+            connection.connect();
             int HttpResult = connection.getResponseCode();
+            System.out.println("GET Response Code :: " + HttpResult);
             if (HttpResult == HttpURLConnection.HTTP_OK) {
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(connection.getInputStream(), "utf-8"));
@@ -218,8 +221,10 @@ instead of localhost or 127.0.0.1.
             }
         } catch (Exception e) {
             System.out.println("ruh ro");
+        }catch(Throwable e){
+            System.out.println("ERROR: " + e.getMessage());
         }finally{
-            connection.disconnect();
+//            connection.disconnect();
         }
         return new personListResponse();
     }

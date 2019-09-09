@@ -86,7 +86,7 @@ public class FamilyModel implements Serializable {
 
     public event getFathersBirth(String person_id){
         person p = getPerson(person_id);
-        List<event> fatherEvents= getPersonsEvents(p.getFather());
+        List<event> fatherEvents= getPersonsEvents(p.getFatherID());
 
         if(fatherEvents.isEmpty()){
             return null;
@@ -102,7 +102,7 @@ public class FamilyModel implements Serializable {
 
     public event getMothersBirth(String person_id){
         person p = getPerson(person_id);
-        List<event> motherEvents= getPersonsEvents(p.getMother());
+        List<event> motherEvents= getPersonsEvents(p.getMotherID());
 
         if(motherEvents.isEmpty()){
             return null;
@@ -118,7 +118,7 @@ public class FamilyModel implements Serializable {
 
     public event getSpousesBirth(String person_id){
         person p = getPerson(person_id);
-        List<event> spouseEvengs= getPersonsEvents(p.getSpouse());
+        List<event> spouseEvengs= getPersonsEvents(p.getSpouseID());
 
         if(spouseEvengs.isEmpty()){
             return null;
@@ -163,21 +163,21 @@ public class FamilyModel implements Serializable {
     public void setupChildren(){
         for (person p : this.persons) {
             //if needed, create a map entry for Father
-            if (!this.children.containsKey(p.getFather())) {
-                this.children.put(p.getFather(), new ArrayList<String>());
+            if (!this.children.containsKey(p.getFatherID())) {
+                this.children.put(p.getFatherID(), new ArrayList<String>());
             }
             //add current user as child to father (if father exists)
-            if(!p.getFather().equals("")) {
-                this.children.get(p.getFather()).add(p.getPersonID());
+            if(!p.getFatherID().equals("")) {
+                this.children.get(p.getFatherID()).add(p.getPersonID());
             }
 
             //if needed, create a map entry for Mother
-            if (!this.children.containsKey(p.getMother())) {
-                this.children.put(p.getMother(), new ArrayList<String>());
+            if (!this.children.containsKey(p.getMotherID())) {
+                this.children.put(p.getMotherID(), new ArrayList<String>());
             }
             //add current user as child to Mother
-            if(!p.getMother().equals("")){
-                this.children.get(p.getMother()).add(p.getPersonID());
+            if(!p.getMotherID().equals("")){
+                this.children.get(p.getMotherID()).add(p.getPersonID());
             }
         }
     }
@@ -196,8 +196,8 @@ public class FamilyModel implements Serializable {
         //get the father
         //get the mother
         person root = getPerson(person_id);
-        String father_id = root.getFather();
-        String mother_id = root.getMother();
+        String father_id = root.getFatherID();
+        String mother_id = root.getMotherID();
 
         //if father, then add to array and traverseFamily
         if(!father_id.equals("")){

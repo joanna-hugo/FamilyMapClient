@@ -32,7 +32,7 @@ public class event  implements Serializable {
 
      */
     private String eventID;
-    private String descendant; //persons username to which this event belongs
+    private String associatedUsername; //persons username to which this event belongs
     private String personID; // ID of person to which this event belongs
     private Double latitude;
     private Double longitude;
@@ -41,10 +41,10 @@ public class event  implements Serializable {
     private String eventType;
     private int    year;
 
-    public event(String eventID, String descendant, String person, Double latitude,
+    public event(String eventID, String associatedUsername, String person, Double latitude,
                  Double longitude, String country, String city, String eventType, int year) {
         this.eventID = eventID;
-        this.descendant = descendant;
+        this.associatedUsername = associatedUsername;
         this.personID = person;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -73,12 +73,12 @@ public class event  implements Serializable {
         this.eventID = eventID;
     }
 
-    public String getDescendant() {
-        return descendant;
+    public String getAssociatedUsername() {
+        return associatedUsername;
     }
 
-    public void setDescendant(String descendant) {
-        this.descendant = descendant;
+    public void setAssociatedUsername(String associatedUsername) {
+        this.associatedUsername = associatedUsername;
     }
 
     public String getPerson() {

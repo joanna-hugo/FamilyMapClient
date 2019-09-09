@@ -300,7 +300,7 @@ public class LoginFragment extends Fragment {
         protected Void doInBackground(Void... params){
             try{
                 loginResponse result = new ServerProxy().login(mLoginRequest);
-                Log.i(TAG, "logged in " + result.getUsername());
+                Log.i(TAG, "logged in " + result.getUserName());
                 personListResponse persons = new ServerProxy().getPersons(result.getAuthToken());
                 eventListResponse events = new ServerProxy().getEvents(result.getAuthToken());
                 mFamilyModel.setCurrentUser(result.getPersonID());

@@ -2,6 +2,7 @@ package felsted.joanna.fmc.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,12 +17,17 @@ import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.GoogleMap;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import felsted.joanna.fmc.R;
+import felsted.joanna.fmc.ServerProxy;
 import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.Settings;
+import felsted.joanna.fmc.model.eventListResponse;
+import felsted.joanna.fmc.model.loginResponse;
+import felsted.joanna.fmc.model.personListResponse;
 
 public class SettingsActivity extends AppCompatActivity  {
 
@@ -37,8 +43,7 @@ public class SettingsActivity extends AppCompatActivity  {
 
     private Settings mSettings = Settings.getInstance();
     private String TAG = "SETTINGS";
-
-    private FamilyModel mFamilyModel;
+    private FamilyModel mFamilyModel= FamilyModel.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,20 +211,53 @@ public class SettingsActivity extends AppCompatActivity  {
         life_story_spinner.setAdapter(dataAdapter);
 
         //set default to NORMAL to match default Settings object
-        life_story_spinner.setSelection(0);
+        life_story_spinner.setSelection(mapTypeToIndex());
+    }
+
+    private int mapTypeToIndex(){
+        int type = mSettings.getMapType();
+        switch (type) {
+            case 2: //Satellite
+                return 2;
+            case 3: //Terrain
+                return 3;
+            case 4://Hybrid
+                return 1;
+            default: return 0; //Normal
+        }
     }
 
     private void configureReSync(){
+        //TODO config resync
         Button sync = findViewById(R.id.resync_button);
         sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(SettingsActivity.this,
-                        "Button worked but sync not hooked up",
-                        Toast.LENGTH_SHORT).show();
+                        "Resyncing data...",
+                        Toast.LENGTH_LONG).show();
+                new ResyncRequest().execute();
                 finish();
             }
         });
+    }
+    private class ResyncRequest extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... params){
+            try{
+                personListResponse persons = new ServerProxy().getPersons(mFamilyModel.getToken());
+                eventListResponse events = new ServerProxy().getEvents(mFamilyModel.getToken());
+                mFamilyModel.setEvents(events.getData());
+                mFamilyModel.setPersons(persons.getData());
+                mFamilyModel.setupFilters();
+                mFamilyModel.setupAncestors();
+                mFamilyModel.setupChildren();
+            }catch(IOException ioe){
+                Log.e(TAG, "Failed to fetch URL: ", ioe);
+                Toast.makeText(SettingsActivity.this, R.string.register400, Toast.LENGTH_SHORT).show();
+            }
+            return null;
+        }
     }
 
     private void configureLogout(){
@@ -227,12 +265,11 @@ public class SettingsActivity extends AppCompatActivity  {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO LOGOUT
                 Toast.makeText(SettingsActivity.this,
-                        "Button worked but logout not hooked up",
+                        "Logging out...",
                         Toast.LENGTH_SHORT).show();
+                mSettings.setMainLoadMapFragOnCreate(false);
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
-                intent.putExtra("FAMILY_MODEL", mFamilyModel);
                 startActivity(intent);
             }
         });

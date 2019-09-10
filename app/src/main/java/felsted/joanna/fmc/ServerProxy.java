@@ -88,7 +88,7 @@ instead of localhost or 127.0.0.1.
 
     public loginResponse login(loginRequest rqst) throws IOException{
         //https://stackoverflow.com/questions/21404252/post-request-send-json-data-java-httpurlconnection
-        URL url = new URL ("http://10.0.2.2:8080/user/login");
+        URL url = new URL ("http://10.0.2.2:8081/user/login");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         try{
@@ -187,7 +187,7 @@ instead of localhost or 127.0.0.1.
 
     public personListResponse getPersons(String token) throws IOException{
 
-        URL url = new URL ("http://10.0.2.2:8080/person"); //TODO generalize this to user host/port provided in screen
+        URL url = new URL ("http://10.0.2.2:8081/person"); //TODO generalize this to user host/port provided in screen
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         try {
@@ -211,11 +211,15 @@ instead of localhost or 127.0.0.1.
                 Gson gson = new Gson();
                 personListResponse rsp = gson.fromJson(baos.toString(), personListResponse.class);
                 return rsp;
+            }else{
+                System.out.println("ERROR SERVER NOT RESPONDING");
             }
         } catch (Exception e) {
             System.out.println("ruh ro");
+            throw e;
         }catch(Throwable e){
             System.out.println("ERROR: " + e.getMessage());
+            throw e;
         }finally{
             connection.disconnect();
         }
@@ -224,7 +228,7 @@ instead of localhost or 127.0.0.1.
 
     public eventListResponse getEvents(String token) throws IOException{ //TODO flesh this out
 
-        URL url = new URL ("http://10.0.2.2:8080/event");
+        URL url = new URL ("http://10.0.2.2:8081/event");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         try {
@@ -248,6 +252,8 @@ instead of localhost or 127.0.0.1.
                 Gson gson = new Gson();
                 eventListResponse rsp = gson.fromJson(baos.toString(), eventListResponse.class);
                 return rsp;
+            }else{
+                System.out.println("SERVER ERROR");
             }
         } catch (Exception e) {
             System.out.println("ruh ro");

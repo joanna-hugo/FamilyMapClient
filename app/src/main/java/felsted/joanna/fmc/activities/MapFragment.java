@@ -360,7 +360,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void drawFamLines(event e, int color, float width){
-        //TODO test with large family, do we need return statement, or will the if statements work?
 
         //TODO lines get progessively thinner
         event dad= mFamilyModel.getFathersBirth(e.getPersonID());

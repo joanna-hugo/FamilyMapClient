@@ -95,9 +95,9 @@ public class SearchActivity extends AppCompatActivity {
             myEvent = e;
             mType.setText(myEvent.getEventType());
             String loc = myEvent.getCity() + ", " + myEvent.getCountry();
-            mLoc.setText(loc);
+//            mLoc.setText(loc);
 //            mYear.setText(myEvent.getYear());
-            mName.setText(myEvent.getPerson());
+//            mName.setText(myEvent.getPerson());
         }
 
         @Override

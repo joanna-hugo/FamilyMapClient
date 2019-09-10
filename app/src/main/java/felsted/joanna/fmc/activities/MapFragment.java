@@ -43,6 +43,7 @@ import felsted.joanna.fmc.model.person;
 import static android.graphics.Color.BLUE;
 import static android.graphics.Color.RED;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -275,9 +276,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void addMarker(String city, LatLng latLng, event e) {
-        MarkerOptions options =
-                new MarkerOptions().position(latLng).title(city)
-                        .icon(defaultMarker(HUE_BLUE));
+        person p = mFamilyModel.getPerson(e.getPersonID());
+        MarkerOptions options ;
+        if(p.getGender().equalsIgnoreCase("f")) {
+            options =
+                    new MarkerOptions().position(latLng).title(city)
+                            .icon(defaultMarker(HUE_RED));
+        }else{
+            options =
+                    new MarkerOptions().position(latLng).title(city)
+                            .icon(defaultMarker(HUE_BLUE));
+        }
         Marker marker = map.addMarker(options);
         marker.setTag(e.getEventID());
     }

@@ -378,14 +378,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void drawLine(LatLng point1, LatLng point2, int color, float width) {
-        Polyline line = map.addPolyline(new PolylineOptions()
-                .add(point1, point2)
-                .width(width)
-                .color(color));
-//        PolylineOptions options =
-//                new PolylineOptions().add(point1, point2)
-//                        .color(color).width(width);
-//        map.addPolyline(options); //.add(point1, point2);
+        map.addPolyline(new PolylineOptions().add(point1, point2).width(12).geodesic(true).color(color));
     }
 
     private void startSettingsActivity(){

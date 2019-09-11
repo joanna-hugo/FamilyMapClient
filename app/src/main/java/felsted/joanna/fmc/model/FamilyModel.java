@@ -6,6 +6,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,21 @@ public class FamilyModel implements Serializable {
     private List<person> paternalAncestors = new ArrayList<>();
     private Map<String, List<String>> children= new HashMap<>();
 
+    private loginRequest reSyncRequest =  new loginRequest();
+
     private static FamilyModel instance = new FamilyModel();
-    //sorted list of events for each person
-    //list of children for each person
-    //paternal ancestors
-    //maternal ancestors
+
     private FamilyModel(){};
+
+    public void logout(){
+        this.currentUser = "";
+        this.persons.clear();
+        this.events.clear();
+        this.token = "";
+        this.maternalAncestors.clear();
+        this.paternalAncestors.clear();
+        this.children.clear();
+    }
 
     public static FamilyModel getInstance() {
         return instance;
@@ -46,6 +56,32 @@ public class FamilyModel implements Serializable {
 
     public void setPersons(List<person> persons) {
         this.persons = persons;
+        setupChildren();
+        setupAncestors();
+    }
+
+    public List<person> getImmediateFam(String personID){
+        List<person> fam = new ArrayList<>();
+        person root = getPerson(personID);
+        if(root.getFatherID().length()>0){
+            fam.add(getPerson(root.getFatherID()));
+        }
+        if(root.getMotherID().length()>0){
+            fam.add(getPerson(root.getMotherID()));
+        }
+        if(root.getSpouseID().length()>0){
+            fam.add(getPerson(root.getSpouseID()));
+        }
+
+        List<String> myChildren = children.get(personID);
+        if(myChildren == null){
+            return fam;
+        }
+        for(String s: myChildren){
+            fam.add(getPerson(s));
+        }
+
+        return fam;
     }
 
     public void addPerson(person p){
@@ -70,6 +106,12 @@ public class FamilyModel implements Serializable {
             }
         }
         return myEvents;
+    }
+
+    public List<event> getPersonsEventsOrdered(String personID){
+        List<event> life = getPersonsEvents(personID);
+        Collections.sort(life);
+        return life;
     }
 
     public List<event> getEvents() {
@@ -204,6 +246,7 @@ public class FamilyModel implements Serializable {
     public Boolean isPaternal(String person_id){
         return this.paternalAncestors.contains(person_id);
     }
+
     private void traverseFamily(Boolean isMaternal, String person_id){
         //if isMaternal add to maternal ancestors
             //otherwise, add to paternal ancestors
@@ -253,12 +296,12 @@ public class FamilyModel implements Serializable {
         return valid;
     }
 
-    public List<person> searchPersons(String input){
+    public List<person> searchPersons(String input) {
         List<person> valid = new ArrayList<>();
-        for(person p: persons){
-            if(p.getLastName().contains(input)){
+        for (person p : persons) {
+            if (p.getLastName().contains(input)) {
                 valid.add(p);
-            }else if(p.getFirstName().contains(input)){
+            } else if (p.getFirstName().contains(input)) {
                 valid.add(p);
             }
         }

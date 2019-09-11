@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     //DONE Connect client to server through the Server Proxy
     //DONE Wire up Login Fragment to Server
     //DONE setup maps https://developers.google.com/maps/documentation/android-sdk/start
-    //TODO up button coming back to login screen
+    //DONE up button coming back to login screen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,23 +56,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Settings s = null;
+        s = s.getInstance();
+        if (!s.isMainLoadMapFragOnCreate()){
+            switchToLoginFragment();
+        }else {
 
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int errorCode = apiAvailability.isGooglePlayServicesAvailable(this);
+            GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+            int errorCode = apiAvailability.isGooglePlayServicesAvailable(this);
 
-        if (errorCode != ConnectionResult.SUCCESS) {
-            Dialog errorDialog = apiAvailability
-                    .getErrorDialog(this, errorCode, REQUEST_ERROR,
-                            new DialogInterface.OnCancelListener() {
+            if (errorCode != ConnectionResult.SUCCESS) {
+                Dialog errorDialog = apiAvailability
+                        .getErrorDialog(this, errorCode, REQUEST_ERROR,
+                                new DialogInterface.OnCancelListener() {
 
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    // Leave if services are unavailable.
-                                    finish();
-                                }
-                            });
+                                    @Override
+                                    public void onCancel(DialogInterface dialog) {
+                                        // Leave if services are unavailable.
+                                        finish();
+                                    }
+                                });
 
-            errorDialog.show();
+                errorDialog.show();
+            }
         }
 
     }

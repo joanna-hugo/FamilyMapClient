@@ -1,7 +1,6 @@
 package felsted.joanna.fmc.db;
 
 public class DBschema {
-            // TODO do we need for auth and users
     public static final class EventTable{
         public static final String NAME = "events";
 

@@ -3,6 +3,7 @@ package felsted.joanna.fmc.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,8 +39,9 @@ public class SettingsActivity extends AppCompatActivity  {
     //DONE Re-sync data
     //DONE Logout
     //DONE make layout pretty
-    //TODO hook up Re-sync to server
-    //TODO make map reload when going back to map (in case Settings change)
+    //DONE hook up Re-sync to server //TODO test
+    //TODO Radio buttons not toggles
+    //DONE make map reload when going back to map (in case Settings change)
 
     private Settings mSettings = Settings.getInstance();
     private String TAG = "SETTINGS";
@@ -211,7 +213,7 @@ public class SettingsActivity extends AppCompatActivity  {
         life_story_spinner.setAdapter(dataAdapter);
 
         //set default to NORMAL to match default Settings object
-        life_story_spinner.setSelection(mapTypeToIndex());
+        life_story_spinner.setSelection(mapToInt(mSettings.getMapType()));
     }
 
     private int mapTypeToIndex(){
@@ -234,10 +236,9 @@ public class SettingsActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 Toast.makeText(SettingsActivity.this,
-                        "Resyncing data...",
-                        Toast.LENGTH_LONG).show();
+                        "Resyncing data",
+                        Toast.LENGTH_SHORT).show();
                 new ResyncRequest().execute();
-                finish();
             }
         });
     }
@@ -268,9 +269,10 @@ public class SettingsActivity extends AppCompatActivity  {
                 Toast.makeText(SettingsActivity.this,
                         "Logging out...",
                         Toast.LENGTH_SHORT).show();
+
                 mSettings.setMainLoadMapFragOnCreate(false);
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
-                startActivity(intent);
+                mFamilyModel.logout();
+                finish();
             }
         });
     }
@@ -287,7 +289,20 @@ public class SettingsActivity extends AppCompatActivity  {
         }
     }
 
+    private int mapToInt(int mapType){
+        switch(mapType){
+            case GoogleMap.MAP_TYPE_HYBRID :
+                return 1;
+            case GoogleMap.MAP_TYPE_SATELLITE:
+                return 2;
+            case GoogleMap.MAP_TYPE_TERRAIN:
+                return 3;
+            default : return 0; // BLUE
+        }
+    }
+
     //HELPER CLASSES FOLLOW
+
     private class life_story_listener implements AdapterView.OnItemSelectedListener{
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

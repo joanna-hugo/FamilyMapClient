@@ -27,4 +27,12 @@
         android:text="@string/filters_activity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/filter_recycler"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"/>
+
+
 </android.support.constraint.ConstraintLayout>

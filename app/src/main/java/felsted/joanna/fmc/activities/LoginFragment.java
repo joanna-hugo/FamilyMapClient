@@ -81,7 +81,7 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
-        //TODO abstract listener setup into a voi function (to cleanup screen)
+        //NOTE abstract listener setup into a voi function (to cleanup screen)
         mRegisterRequest = new registerRequest();
         mLoginRequest =  new loginRequest();
 
@@ -310,7 +310,7 @@ public class LoginFragment extends Fragment {
                 mFamilyModel.setupFilters();
                 mFamilyModel.setupAncestors();
                 mFamilyModel.setupChildren();
-                switchToMapActivity(mFamilyModel);
+                switchToMapActivity(mFamilyModel); //TODO we might want to add a resyn request to mFamilyModel
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
 //                Toast.makeText(LoginFragment.this.getContext(), R.string.register400, Toast.LENGTH_SHORT).show();

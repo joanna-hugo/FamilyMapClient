@@ -44,6 +44,7 @@ import felsted.joanna.fmc.model.person;
 import static android.graphics.Color.BLUE;
 import static android.graphics.Color.RED;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -118,7 +119,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         setHasOptionsMenu(true);
-        inflater.inflate(R.menu.fragment_map, menu); //TODO ...why aren't my buttons coming up?
+        inflater.inflate(R.menu.fragment_map, menu);
 
         //NOTE https://www.concretepage.com/android/android-options-menu-example-using-getmenuinflater-inflate-oncreateoptionsmenu-and-onoptionsitemselected
         MenuItem searchItem = menu.findItem(R.id.search_button);
@@ -161,7 +162,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 LatLng center = getLatLng(e);
                 CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
                 map.animateCamera(update);
-//                map.addMarker(new MarkerOptions().position(center));
             }
 
     }
@@ -185,12 +185,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             LatLng center = getLatLng(e);
             CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
             map.animateCamera(update);
-            map.addMarker(new MarkerOptions().position(center));
         }else {
             LatLng center = mFamilyModel.averageLatLng();
             CameraUpdate update = CameraUpdateFactory.newLatLng(center);
             map.moveCamera(update);
-            map.addMarker(new MarkerOptions().position(center));
         }
     }
 
@@ -275,9 +273,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void addMarker(String city, LatLng latLng, event e) {
-        MarkerOptions options =
-                new MarkerOptions().position(latLng).title(city)
-                        .icon(defaultMarker(HUE_BLUE));
+        person p = mFamilyModel.getPerson(e.getPersonID());
+        MarkerOptions options ;
+        if(p.getGender().equalsIgnoreCase("f")) {
+            options =
+                    new MarkerOptions().position(latLng).title(city)
+                            .icon(defaultMarker(HUE_RED));
+        }else{
+            options =
+                    new MarkerOptions().position(latLng).title(city)
+                            .icon(defaultMarker(HUE_BLUE));
+        }
         Marker marker = map.addMarker(options);
         marker.setTag(e.getEventID());
     }

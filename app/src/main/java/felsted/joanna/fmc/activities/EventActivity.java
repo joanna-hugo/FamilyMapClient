@@ -24,7 +24,7 @@ public class EventActivity extends AppCompatActivity {
     private FamilyModel mFamilyModel;
 
     event center_event;
-    //TODO center on the event chosen
+    //DONE center on the event chosen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

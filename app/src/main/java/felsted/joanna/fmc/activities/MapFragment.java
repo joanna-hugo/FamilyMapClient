@@ -161,7 +161,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 LatLng center = getLatLng(e);
                 CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
                 map.animateCamera(update);
-//                map.addMarker(new MarkerOptions().position(center));
             }
 
     }
@@ -186,12 +185,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             LatLng center = getLatLng(e);
             CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
             map.animateCamera(update);
-            map.addMarker(new MarkerOptions().position(center));
         }else {
             LatLng byu = new LatLng(140.2518, -111.6493); //TODO generalize this
             CameraUpdate update = CameraUpdateFactory.newLatLng(byu);
             map.moveCamera(update);
-            map.addMarker(new MarkerOptions().position(byu));
         }
     }
 

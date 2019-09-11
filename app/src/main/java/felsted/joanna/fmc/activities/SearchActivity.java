@@ -84,7 +84,7 @@ public class SearchActivity extends AppCompatActivity {
         private EventHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_event, parent, false));
 
-            mType =  itemView.findViewById(R.id.event_type);
+            mType =  itemView.findViewById(R.id.event_info);
 //            mLoc = itemView.findViewById(R.id.event_location);
 //            mYear = itemView.findViewById(R.id.event_year);
 //            mName = itemView.findViewById(R.id.event_person);

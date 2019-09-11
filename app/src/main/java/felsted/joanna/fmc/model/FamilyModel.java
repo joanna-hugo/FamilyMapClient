@@ -63,13 +63,13 @@ public class FamilyModel implements Serializable {
     public List<person> getImmediateFam(String personID){
         List<person> fam = new ArrayList<>();
         person root = getPerson(personID);
-        if(root.getFatherID().length()>0){
+        if(root.getFatherID() != null && root.getFatherID().length()>0){
             fam.add(getPerson(root.getFatherID()));
         }
-        if(root.getMotherID().length()>0){
+        if(root.getMotherID() != null && root.getMotherID().length()>0){
             fam.add(getPerson(root.getMotherID()));
         }
-        if(root.getSpouseID().length()>0){
+        if(root.getSpouseID() != null && root.getSpouseID().length()>0){
             fam.add(getPerson(root.getSpouseID()));
         }
 
@@ -258,7 +258,7 @@ public class FamilyModel implements Serializable {
         String mother_id = root.getMotherID();
 
         //if father, then add to array and traverseFamily
-        if(father_id != null && !father_id.equals("")){ //todo change to != null
+        if(father_id != null && father_id.equals(root.getFatherID())){ //NOTE possible to return dummy family member
             person father = getPerson(father_id);
             if(isMaternal){
                 this.maternalAncestors.add(father);
@@ -266,9 +266,11 @@ public class FamilyModel implements Serializable {
                 this.paternalAncestors.add(father);
             }
             traverseFamily(isMaternal, father_id);
+        }else{
+            System.out.println("END OF FAMILY LINE");
         }
         //if mother, then add to array and traverseFamily
-        if(mother_id!= null && !mother_id.equals("")){
+        if(mother_id!= null && mother_id.equals(root.getMotherID())){
             person mother = getPerson(mother_id);
             if(isMaternal){
                 this.maternalAncestors.add(mother);
@@ -276,6 +278,8 @@ public class FamilyModel implements Serializable {
                 this.paternalAncestors.add(mother);
             }
             traverseFamily(isMaternal, mother_id);
+        }else{
+            System.out.println("END OF FAMILY LINE");
         }
     }
 

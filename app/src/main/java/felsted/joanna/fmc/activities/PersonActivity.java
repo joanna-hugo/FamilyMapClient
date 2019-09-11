@@ -182,13 +182,13 @@ public class PersonActivity extends AppCompatActivity {
         private void bind(person p) {
             myPerson = p;
             String all = myPerson.getFirstName() + " " + myPerson.getLastName();
-            if(mPerson.getMother().equals(myPerson.getPersonID())){
+            if(mPerson.getMotherID().equals(myPerson.getPersonID())){
                 all += "\nMother";
             }
-            else if(mPerson.getFather().equals(myPerson.getPersonID())){
+            else if(mPerson.getFatherID().equals(myPerson.getPersonID())){
                 all += "\nFather";
             }
-            else if(mPerson.getSpouse().equals(myPerson.getPersonID())){
+            else if(mPerson.getSpouseID().equals(myPerson.getPersonID())){
                 all += "\nSpouse";
             }
             else{

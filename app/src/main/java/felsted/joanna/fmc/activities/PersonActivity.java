@@ -2,6 +2,7 @@ package felsted.joanna.fmc.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,12 +11,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bignerdranch.expandablerecyclerview.ChildViewHolder;
 import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.ParentViewHolder;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,9 @@ import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.Settings;
 import felsted.joanna.fmc.model.event;
 import felsted.joanna.fmc.model.person;
+
+import static android.graphics.Color.BLUE;
+import static android.graphics.Color.RED;
 
 public class PersonActivity extends AppCompatActivity {
 
@@ -104,6 +111,7 @@ public class PersonActivity extends AppCompatActivity {
     private class EventHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView data;
         private event myEvent;
+        private ImageView markerImageView;
 
         private EventHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_event, parent, false));
@@ -111,6 +119,7 @@ public class PersonActivity extends AppCompatActivity {
             data = itemView.findViewById(R.id.event_info);
 
             itemView.setOnClickListener(this);
+            markerImageView = itemView.findViewById(R.id.image);
 
         }
 
@@ -122,6 +131,9 @@ public class PersonActivity extends AppCompatActivity {
             String name = p.getFirstName() + " " + p.getLastName();
             String all = info  + "\n" + name;
             data.setText(all);
+
+            Drawable markerIcon = new IconDrawable(PersonActivity.this, FontAwesomeIcons.fa_map_marker).sizeDp(40);
+            markerImageView.setImageDrawable(markerIcon);
 
 //            Drawable marker = new IconDrawable(this, FontAwesomeIcons.fa_map_marker).sizeDp(15);
         }
@@ -169,11 +181,13 @@ public class PersonActivity extends AppCompatActivity {
     private class PersonHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
         private TextView data;
         private person myPerson;
+        private ImageView genderImageView;
 
         private PersonHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_event, parent, false));
 
             data = itemView.findViewById(R.id.event_info);
+            genderImageView = itemView.findViewById(R.id.image);
 
             itemView.setOnClickListener(this);
 
@@ -195,6 +209,16 @@ public class PersonActivity extends AppCompatActivity {
                 all += "\nChild";
             }
             data.setText(all);
+
+            if(p.getGender().startsWith("m") || p.getGender().startsWith("M")) {
+                Drawable genderIcon = new IconDrawable(PersonActivity.this, FontAwesomeIcons.fa_male).sizeDp(40);
+                genderImageView.setImageDrawable(genderIcon);
+                genderImageView.setColorFilter(BLUE);
+            }else{
+                Drawable genderIcon = new IconDrawable(PersonActivity.this, FontAwesomeIcons.fa_female).sizeDp(40);
+                genderImageView.setImageDrawable(genderIcon);
+                genderImageView.setColorFilter(RED);
+            }
         }
 
         @Override

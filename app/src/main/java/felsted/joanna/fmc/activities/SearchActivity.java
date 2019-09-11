@@ -100,10 +100,10 @@ public class SearchActivity extends AppCompatActivity {
         private event myEvent;
         private ImageView markerImageView;
         private EventHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_event, parent, false));
+            super(inflater.inflate(R.layout.search_item, parent, false));
 
-            mType =  itemView.findViewById(R.id.event_info);
-            markerImageView = itemView.findViewById(R.id.image);
+            mType =  itemView.findViewById(R.id.search_event_info);
+            markerImageView = itemView.findViewById(R.id.search_image);
         }
 
         private void bind(event e) {
@@ -115,20 +115,12 @@ public class SearchActivity extends AppCompatActivity {
             String all = info  + "\n" + name;
             mType.setText(all);
 
-            Drawable genderIcon = new IconDrawable(SearchActivity.this, FontAwesomeIcons.fa_map_marker).sizeDp(40);
-            markerImageView.setImageDrawable(genderIcon);
+            Drawable markerIcon = new IconDrawable(SearchActivity.this, FontAwesomeIcons.fa_map_marker).sizeDp(40);
+            markerImageView.setImageDrawable(markerIcon);
         }
 
         @Override
         public void onClick(View v){
-            Toast.makeText(v.getContext(),
-                    "you clicked a " + myEvent.getEventType() + " event!", Toast.LENGTH_SHORT).show();
-
-            Intent i = new Intent(v.getContext(), EventActivity.class);
-            i.putExtra("SETTINGS", mSettings);
-            i.putExtra("CENTER_EVENT_ID", myEvent.getEventID());
-            i.putExtra("FAMILY_MODEL", mFamilyModel);
-            startActivity(new Intent(i));
         }
     }
 
@@ -165,10 +157,11 @@ public class SearchActivity extends AppCompatActivity {
         private ImageView genderImageView;
 
         private PersonHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_event, parent, false));
+            super(inflater.inflate(R.layout.search_item, parent, false));
 
-            data = itemView.findViewById(R.id.event_info);
-            genderImageView = itemView.findViewById(R.id.image);
+            data = itemView.findViewById(R.id.search_event_info);
+            data.setPadding(10,10,10,10);
+            genderImageView = itemView.findViewById(R.id.search_image);
 
             itemView.setOnClickListener(this);
 
@@ -192,14 +185,6 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v){
-//            Toast.makeText(v.getContext(),
-//                    "you clicked a " + mTextView.getEventType() + " event!", Toast.LENGTH_SHORT).show();
-
-            Intent i = new Intent(v.getContext(), PersonActivity.class);
-            i.putExtra("SETTINGS", mSettings);
-            i.putExtra("PERSON_ID", myPerson.getPersonID());
-            i.putExtra("FAMILY_MODEL", mFamilyModel);
-            startActivity(new Intent(i));
         }
     }
 

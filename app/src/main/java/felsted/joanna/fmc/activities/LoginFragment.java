@@ -313,7 +313,7 @@ public class LoginFragment extends Fragment {
                 switchToMapActivity(mFamilyModel);
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
-                Toast.makeText(LoginFragment.this.getContext(), R.string.register400, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LoginFragment.this.getContext(), R.string.register400, Toast.LENGTH_SHORT).show();
             }
             return null;
         }

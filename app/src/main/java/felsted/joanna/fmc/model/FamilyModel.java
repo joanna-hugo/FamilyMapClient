@@ -287,11 +287,11 @@ public class FamilyModel implements Serializable {
         List<event> valid = new ArrayList<>();
         for(event e: events){
             String year = Integer.toString(e.getYear());
-            if(e.getCountry().contains(input)){
+            if(e.getCountry().toLowerCase().contains(input)){
                 valid.add(e);
-            }else if(e.getCity().contains(input)){
+            }else if(e.getCity().toLowerCase().contains(input)){
                 valid.add(e);
-            }else if(e.getEventType().contains(input)){
+            }else if(e.getEventType().toLowerCase().contains(input)){
                 valid.add(e);
             }else if(year.contains(input)){
                 valid.add(e);
@@ -303,9 +303,9 @@ public class FamilyModel implements Serializable {
     public List<person> searchPersons(String input) {
         List<person> valid = new ArrayList<>();
         for (person p : persons) {
-            if (p.getLastName().contains(input)) {
+            if (p.getLastName().toLowerCase().contains(input)) {
                 valid.add(p);
-            } else if (p.getFirstName().contains(input)) {
+            } else if (p.getFirstName().toLowerCase().contains(input)) {
                 valid.add(p);
             }
         }

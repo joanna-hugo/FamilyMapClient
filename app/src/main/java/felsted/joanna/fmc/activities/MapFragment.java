@@ -237,9 +237,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     void addMarkers() {
         for(event e :mFamilyModel.getEvents()){
-            if(checkFilters(e)) {
+//            if(checkFilters(e)) {
                 addMarker(e.getCity(), new LatLng(e.getLatitude(), e.getLongitude()), e);
-            }
+//            }
         }
     }
 

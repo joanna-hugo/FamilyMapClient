@@ -33,9 +33,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_toStartOf="@+id/life_story_button"
+                android:layout_marginRight="2dp"
                 android:layout_toLeftOf="@+id/life_story_button"
+                android:layout_toStartOf="@+id/life_story_button"
                 android:paddingTop="7dp"
                 android:prompt="@string/back" />
 
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="2dp"
                 android:layout_toStartOf="@+id/family_tree_button"
                 android:layout_toLeftOf="@+id/family_tree_button"
                 android:paddingTop="7dp"
@@ -122,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="2dp"
                 android:layout_toStartOf="@+id/spouse_button"
                 android:layout_toLeftOf="@+id/spouse_button"
                 android:paddingTop="7dp" />

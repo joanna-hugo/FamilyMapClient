@@ -98,6 +98,14 @@ public class FamilyModel implements Serializable {
         return this.persons.get(0);
     }
 
+    private boolean isPerson(String person_id){
+        if(person_id == null || person_id.equals("")){
+            return false;
+        }
+        person temp = getPerson(person_id);
+        return temp.getPersonID().equals(person_id);
+    }
+
     public List<event> getPersonsEvents(String personID){
         List<event> myEvents = new ArrayList<>();
         for(event e: this.events){
@@ -258,7 +266,7 @@ public class FamilyModel implements Serializable {
         String mother_id = root.getMotherID();
 
         //if father, then add to array and traverseFamily
-        if(father_id != null && father_id.equals(root.getFatherID())){ //NOTE possible to return dummy family member
+        if(isPerson(father_id)){ //NOTE possible to return dummy family member
             person father = getPerson(father_id);
             if(isMaternal){
                 this.maternalAncestors.add(father);
@@ -270,7 +278,7 @@ public class FamilyModel implements Serializable {
             System.out.println("END OF FAMILY LINE");
         }
         //if mother, then add to array and traverseFamily
-        if(mother_id!= null && mother_id.equals(root.getMotherID())){
+        if(isPerson(mother_id)){
             person mother = getPerson(mother_id);
             if(isMaternal){
                 this.maternalAncestors.add(mother);

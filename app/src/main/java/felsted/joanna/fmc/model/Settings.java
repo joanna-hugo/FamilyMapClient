@@ -19,7 +19,7 @@ public class Settings implements Serializable {
     private boolean showLifeStoryLines = true;
 
     private int familyTreeLinesColor = Color.BLUE;
-    private boolean showTreeLines = true;
+    private boolean showFamilyTreeLines = true;
 
     private int spouseLinesColor = Color.RED;
     private boolean showSpouseLines = true;
@@ -71,12 +71,12 @@ public class Settings implements Serializable {
         this.familyTreeLinesColor = familyTreeLinesColor;
     }
 
-    public boolean isShowTreeLines() {
-        return showTreeLines;
+    public boolean isShowFamilyTreeLines() {
+        return showFamilyTreeLines;
     }
 
-    public void setShowTreeLines(boolean showTreeLines) {
-        this.showTreeLines = showTreeLines;
+    public void setShowFamilyTreeLines(boolean showFamilyTreeLines) {
+        this.showFamilyTreeLines = showFamilyTreeLines;
     }
 
     public int getSpouseLinesColor() {

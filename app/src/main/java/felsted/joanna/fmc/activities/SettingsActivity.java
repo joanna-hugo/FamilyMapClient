@@ -1,9 +1,7 @@
 package felsted.joanna.fmc.activities;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +25,6 @@ import felsted.joanna.fmc.ServerProxy;
 import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.Settings;
 import felsted.joanna.fmc.model.eventListResponse;
-import felsted.joanna.fmc.model.loginResponse;
 import felsted.joanna.fmc.model.personListResponse;
 
 public class SettingsActivity extends AppCompatActivity  {
@@ -88,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity  {
         //set default to GREEN to match default Settings object
         life_story_spinner.setSelection(colorToInt(mSettings.getLifeStoryLinesColor()));
         ToggleButton button = findViewById(R.id.life_story_button);
-        button.setChecked(true);
+        button.setChecked(mSettings.isShowLifeStoryLines());
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -131,15 +128,15 @@ public class SettingsActivity extends AppCompatActivity  {
         //set default to BLUE to match default Settings object
         life_story_spinner.setSelection(colorToInt(mSettings.getFamilyTreeLinesColor()));
         ToggleButton button = findViewById(R.id.family_tree_button);
-        button.setChecked(true);
+        button.setChecked(mSettings.isShowFamilyTreeLines());
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mSettings.setShowLifeStoryLines(true);
+                    mSettings.setShowFamilyTreeLines(true);
                     Log.i(TAG, "set ShowLifeStoryLines to true");
                 } else {
-                    mSettings.setShowLifeStoryLines(false);
+                    mSettings.setShowFamilyTreeLines(false);
                     Log.i(TAG, "set ShowLifeStoryLines to false");
                 }
             }
@@ -174,14 +171,14 @@ public class SettingsActivity extends AppCompatActivity  {
         //set default to RED to match default Settings object
         life_story_spinner.setSelection(colorToInt(mSettings.getSpouseLinesColor()));
         ToggleButton button = findViewById(R.id.spouse_button);
-        button.setChecked(true);
+        button.setChecked(mSettings.isShowSpouseLines());
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mSettings.setShowLifeStoryLines(true);
+                    mSettings.setShowSpouseLines(true);
                 } else {
-                    mSettings.setShowLifeStoryLines(false);
+                    mSettings.setShowSpouseLines(false);
                 }
             }
         });

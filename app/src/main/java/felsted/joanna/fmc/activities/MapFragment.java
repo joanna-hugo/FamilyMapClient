@@ -338,7 +338,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         connecting each event in a persons story, ordered chronologically
                             if some events not visible (bc of filtering) leave them out
                  */
-        if(mSettings.isShowLifeStoryLines()){
+        if(mSettings.isShowFamilyTreeLines()){
             for (event e1: mFamilyModel.getEvents()){
                 drawFamLines(e1, mSettings.getFamilyTreeLinesColor(), WIDTH);
             }

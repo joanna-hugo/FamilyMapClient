@@ -34,6 +34,9 @@ import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
 import felsted.joanna.fmc.model.Filters;
@@ -54,8 +57,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private ImageView genderImageView;
     private MapView mapView;
     private FamilyModel mFamilyModel = FamilyModel.getInstance();
+    private List<event> mShownEvents = new ArrayList<>();
     private Settings mSettings = Settings.getInstance();
     private Filters mFilters = Filters.getInstance();
+
 
     static final float WIDTH = 10;  // in pixels
     static final int color = BLUE;
@@ -167,6 +172,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void initMap() {
+        filterEvents();
         centerMap();
         zoomMap(1);
         setMapType();
@@ -175,6 +181,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setBounds();
         setMarkerListener();
         drawLines();
+    }
+
+    private void filterEvents(){
+        for(event e: mFamilyModel.getEvents()){
+            //check paternal
+            if(mFamilyModel.isPaternal(e.getPersonID()) && !mFilters.getShowFathersSide() ){
+                return;
+            }
+
+            //check maternal
+            if(mFamilyModel.isMaternal(e.getPersonID()) && !mFilters.getShowMothersSide()){
+                return;
+            }
+
+            //check type
+            if(!mFilters.getMappedFilter(e.getEventType())){
+                return;
+            }
+
+            //check gender
+            if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("f") && !mFilters.getShowFemale()){
+                return;
+            }
+
+            if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("m") && !mFilters.getShowMale()){
+                return;
+            }
+
+            mShownEvents.add(e);
+        }
     }
 
     public void centerMap() {
@@ -236,40 +272,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void addMarkers() {
-        for(event e :mFamilyModel.getEvents()){
-//            if(checkFilters(e)) {
+        for(event e : mShownEvents){
                 addMarker(e.getCity(), new LatLng(e.getLatitude(), e.getLongitude()), e);
-//            }
         }
-    }
-
-    Boolean checkFilters(event e){
-        //filter by event-type
-        if(!mFilters.getEventFilter(e.getEventType())){
-            return false;
-        }
-
-        //filter by gender
-        String person_id = e.getPersonID();
-        String gender = mFamilyModel.getPerson(person_id).getGender();
-        if(gender.equals("m") & !mFilters.getShowMale()){
-            return false;
-        }
-        if(gender.equals("f") & !mFilters.getShowFemale()){
-            return false;
-        }
-
-        //filter by maternal/paternal side
-        if(e.getPersonID().equals(mFamilyModel.getCurrentUser())){
-            return true; //if the event is for the root user, it won't be in maternal/paternal lists
-        }
-        if(!mFilters.getShowMale() && mFamilyModel.isPaternal(e.getPersonID())){
-            return false;
-        }
-        if(!mFilters.getShowFemale() && mFamilyModel.isMaternal(e.getPersonID())){
-            return false;
-        }
-        return true;
     }
 
     void addMarker(String city, LatLng latLng, event e) {
@@ -290,7 +295,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     void setBounds() {
         LatLngBounds.Builder builder = LatLngBounds.builder();
-        for (event e : mFamilyModel.getEvents()) {
+        for (event e : mShownEvents) {
             builder.include(getLatLng(e));
         }
         LatLngBounds bounds = builder.build();
@@ -339,12 +344,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             if some events not visible (bc of filtering) leave them out
                  */
         if(mSettings.isShowFamilyTreeLines()){
-            for (event e1: mFamilyModel.getEvents()){
+            for (event e1: mShownEvents){
                 drawFamLines(e1, mSettings.getFamilyTreeLinesColor(), WIDTH);
             }
         }
         if(mSettings.isShowSpouseLines()){
-            for(event e: mFamilyModel.getEvents()){
+            for(event e: mShownEvents){
                 event spouse = mFamilyModel.getSpousesBirth(e.getPersonID());
                 if(spouse != null) {
                     drawLine(getLatLng(e), getLatLng(spouse), mSettings.getSpouseLinesColor(), WIDTH);
@@ -353,7 +358,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         }
         if(mSettings.isShowLifeStoryLines()){
-            for(event e: mFamilyModel.getEvents()){
+            for(event e: mShownEvents){
                 for(event e2 :mFamilyModel.getPersonsEvents(e.getPersonID())){
                     if(e2 != null) {
                         drawLine(getLatLng(e), getLatLng(e2), mSettings.getLifeStoryLinesColor(), WIDTH);

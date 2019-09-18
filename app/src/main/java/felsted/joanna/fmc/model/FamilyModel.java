@@ -255,6 +255,22 @@ public class FamilyModel implements Serializable {
         return this.paternalAncestors.contains(person_id);
     }
 
+    public List<person> getMaternalAncestors() {
+        return maternalAncestors;
+    }
+
+    public void setMaternalAncestors(List<person> maternalAncestors) {
+        this.maternalAncestors = maternalAncestors;
+    }
+
+    public List<person> getPaternalAncestors() {
+        return paternalAncestors;
+    }
+
+    public void setPaternalAncestors(List<person> paternalAncestors) {
+        this.paternalAncestors = paternalAncestors;
+    }
+
     private void traverseFamily(Boolean isMaternal, String person_id){
         //if isMaternal add to maternal ancestors
             //otherwise, add to paternal ancestors

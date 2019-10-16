@@ -26,6 +26,7 @@ import java.util.List;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.Filters;
 import felsted.joanna.fmc.model.Settings;
 import felsted.joanna.fmc.model.event;
 import felsted.joanna.fmc.model.person;
@@ -53,7 +54,7 @@ public class PersonActivity extends AppCompatActivity {
     //DONE set gender specific icons
     //DONE trigger person activity by clicking on person (person activity for THAT person)
     //TODO implement filtering
-    //TODO fix double event listing
+    //DONE fix double event listing
     //DONE fix multiple person listing (patrick as main person)
 
     @Override
@@ -92,10 +93,13 @@ public class PersonActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.person_gender)).setText("Male");
         }
 
+        Filters filters = Filters.getInstance();
+        mEvents = filters.filterEvents(mEvents);
         mEventAdapter = new EventAdapter(mEvents);
         mEventRecyclerView.setAdapter(mEventAdapter);
 
         List<person> family = mFamilyModel.getImmediateFam(mPerson.getPersonID());
+        family = filters.filterPersons(family);
         mPersonAdapter = new PersonAdapter(family);
         mFamilyRecyclerView.setAdapter(mPersonAdapter);
     }
@@ -259,76 +263,4 @@ public class PersonActivity extends AppCompatActivity {
             return mFamily.size();
         }
     }
-
-    // -------------------------
-
-//    private class TitlesHolder extends ParentViewHolder{
-//        private TextView mTitleText;
-//
-//        public TitlesHolder(View itemView){
-//            super(itemView);
-//            mTitleText = itemView.findViewById(R.id.title_view);
-//        }
-//        public void bind(String text){
-//            mTitleText.setText(text);
-//        }
-//    }
-//
-//    private class EventTextHolder extends ChildViewHolder{
-//        private TextView mTextView;
-//        private event myEvent;
-//
-//        public EventTextHolder(View itemView){
-//            super(itemView);
-//            mTextView = itemView.findViewById(R.id.event_text);
-//        }
-//
-//        public void bind(event e){
-//            myEvent = e;
-//            person p = mFamilyModel.getPerson(myEvent.getPersonID());
-//
-//            String info = myEvent.getEventType() + " : " + myEvent.getCity() + ", " + myEvent.getCountry() + " (" + myEvent.getYear() + ")";
-//            String name = p.getFirstName() + " " + p.getLastName();
-//            String all = info  + "\n" + name;
-//            mTextView.setText(all);
-//        }
-//    }
-//
-//    public class TitleAdapter extends ExpandableRecyclerAdapter<String, event, TitlesHolder, EventTextHolder> {
-//
-//        private LayoutInflater mInflater;
-//
-//        public TitleAdapter(Context context, @NonNull List<String> TitleList) {
-//            super(parentItemList);
-//            mInflater = LayoutInflater.from(context);
-//        }
-//
-//        // onCreate ...
-//        @Override
-//        public TitlesHolder onCreateParentViewHolder(@NonNull ViewGroup parentViewGroup, int viewType) {
-//            View recipeView = mInflater.inflate(R.layout.title_text, parentViewGroup, false);
-//            return new TitlesHolder(recipeView);
-//        }
-//
-//        @Override
-//        public EventTextHolder onCreateChildViewHolder(@NonNull ViewGroup childViewGroup, int viewType) {
-//            View ingredientView = mInflater.inflate(R.layout.ingredient_view, childViewGroup, false);
-//            return new EventTextHolder(ingredientView);
-//        }
-//
-//        // onBind ...
-//        @Override
-//        public void onBindParentViewHolder(@NonNull TitlesHolder recipeViewHolder, int parentPosition, @NonNull String title) {
-//            TitlesHolder.bind(title);
-//        }
-//
-//        @Override
-//        public void onBindChildViewHolder(@NonNull EventTextHolder ingredientViewHolder, int parentPosition, int childPosition, @NonNull event event) {
-//            ingredientViewHolder.bind(event);
-//        }
-//    }
-
-//--------------
-    // NOTE If you want to make the list expandable, follow this BigNerdRanch Tutorial
-    // https://bignerdranch.github.io/expandable-recycler-view/
 }

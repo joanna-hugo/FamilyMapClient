@@ -46,6 +46,7 @@ public class Filters {
             this.event_type_filters.put(event_type, show);
         }
     }
+
     public List<String> getEvent_type_filters_names(){
         List<String> myFilters = new ArrayList<>();
         for (Map.Entry<String, Boolean> entry : event_type_filters.entrySet()) {
@@ -94,38 +95,58 @@ public class Filters {
         this.showMothersSide = showMothersSide;
     }
 
-    public class Filter {
-        private Boolean show = true;
-        private String event_type;
+    public List<event> filterEvents(List<event> givenEvents){
+            for(event e: givenEvents){
+                //check paternal
+                if(mFamilyModel.isPaternal(e.getPersonID()) && !getShowFathersSide() ){
+                 givenEvents.remove(e);
+                }
 
-        public Filter(Boolean show, String event_type) {
-            this.show = show;
-            this.event_type = event_type;
+                //check maternal
+                if(mFamilyModel.isMaternal(e.getPersonID()) && !getShowMothersSide()){
+                    givenEvents.remove(e);
+                }
+
+                //check type
+                if(!getMappedFilter(e.getEventType())){
+                    givenEvents.remove(e);
+                }
+
+                //check gender
+                if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("f") && !getShowFemale()){
+                    givenEvents.remove(e);
+                }
+
+                if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("m") && !getShowMale()){
+                    givenEvents.remove(e);
+                }
+
+            }
+            return givenEvents;
+    }
+
+    public List<person> filterPersons(List<person> people){
+        for(person p: people){
+            //check paternal
+            if(mFamilyModel.isPaternal(p.getPersonID()) && !getShowFathersSide() ){
+                people.remove(p);
+            }
+
+            //check maternal
+            if(mFamilyModel.isMaternal(p.getPersonID()) && !getShowMothersSide()){
+                people.remove(p);
+            }
+
+            //check gender
+            if(mFamilyModel.getPerson(p.getPersonID()).getGender().equalsIgnoreCase("f") && !getShowFemale()){
+                people.remove(p);
+            }
+
+            if(mFamilyModel.getPerson(p.getPersonID()).getGender().equalsIgnoreCase("m") && !getShowMale()){
+                people.remove(p);
+            }
+
         }
-
-        public Boolean getShow() {
-            return show;
-        }
-
-        public void setShow(Boolean show) {
-            this.show = show;
-        }
-
-        public String getEvent_type() {
-            return event_type;
-        }
-
-        public void setEvent_type(String event_type) {
-            this.event_type = event_type;
-        }
-
-        public void toggleFilter(){
-
-                    if(show){
-                        setShow(false);
-                    }else {
-                        setShow(true);
-                    }
-        }
+        return people;
     }
 }

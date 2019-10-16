@@ -1,5 +1,6 @@
 package felsted.joanna.fmc.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.Filters;
 import felsted.joanna.fmc.model.Settings;
 import felsted.joanna.fmc.model.event;
 import felsted.joanna.fmc.model.person;
@@ -47,6 +49,8 @@ public class SearchActivity extends AppCompatActivity {
 
     //DONE make layout
     //TODO allow filtering
+    //DONE add listeners for events and people
+    //TODO events in chronological order
     //DONE search function
         // use FamilyModel searches
 
@@ -80,6 +84,10 @@ public class SearchActivity extends AppCompatActivity {
                 mEvents = mFamilyModel.searchEvents(search);
                 mPersons = mFamilyModel.searchPersons(search);
 
+                Filters filters = Filters.getInstance();
+                mEvents= filters.filterEvents(mEvents);
+                mPersons= filters.filterPersons(mPersons); //TODO order events
+
                 mEventAdapter = new EventAdapter(mEvents);
                 mEventRecyclerView.setAdapter(mEventAdapter);
 
@@ -104,6 +112,8 @@ public class SearchActivity extends AppCompatActivity {
 
             mType =  itemView.findViewById(R.id.search_event_info);
             markerImageView = itemView.findViewById(R.id.search_image);
+
+            itemView.setOnClickListener(this);
         }
 
         private void bind(event e) {
@@ -117,10 +127,28 @@ public class SearchActivity extends AppCompatActivity {
 
             Drawable markerIcon = new IconDrawable(SearchActivity.this, FontAwesomeIcons.fa_map_marker).sizeDp(40);
             markerImageView.setImageDrawable(markerIcon);
+
+//            mType = findViewById(R.id.search_event_info);
+//            mType.setOnClickListener(new View.OnClickListener(){
+//
+//                @Override
+//                public void onClick(View v) {
+//                    Intent i = new Intent(v.getContext(), EventActivity.class);
+//                    i.putExtra("SETTINGS", mSettings);
+//                    i.putExtra("CENTER_EVENT_ID", myEvent.getEventID());
+//                    i.putExtra("FAMILY_MODEL", mFamilyModel);
+//                    startActivity(new Intent(i));
+//                }
+//            });
         }
 
         @Override
         public void onClick(View v){
+            Intent i = new Intent(v.getContext(), EventActivity.class);
+                    i.putExtra("SETTINGS", mSettings);
+                    i.putExtra("CENTER_EVENT_ID", myEvent.getEventID());
+                    i.putExtra("FAMILY_MODEL", mFamilyModel);
+                    startActivity(new Intent(i));
         }
     }
 
@@ -185,6 +213,12 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v){
+            Intent intent = new Intent(v.getContext(), PersonActivity.class);
+            intent.putExtra("SETTINGS", mSettings);
+            intent.putExtra("FAMILY_MODEL", mFamilyModel);
+            intent.putExtra("PERSON_ID", myPerson.getPersonID());
+
+            startActivity(intent);
         }
     }
 

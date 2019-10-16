@@ -37,7 +37,7 @@ public class SettingsActivity extends AppCompatActivity  {
     //DONE Re-sync data
     //DONE Logout
     //DONE make layout pretty
-    //DONE hook up Re-sync to server //TODO test
+    //DONE hook up Re-sync to server //DONE test
     //TODO Radio buttons not toggles
     //DONE make map reload when going back to map (in case Settings change)
 
@@ -228,7 +228,7 @@ public class SettingsActivity extends AppCompatActivity  {
     }
 
     private void configureReSync(){
-        //TODO config resync
+        //DONE config resync
         Button sync = findViewById(R.id.resync_button);
         sync.setOnClickListener(new View.OnClickListener() {
             @Override

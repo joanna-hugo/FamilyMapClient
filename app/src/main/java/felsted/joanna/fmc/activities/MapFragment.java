@@ -190,33 +190,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void filterEvents(){
-        for(event e: mFamilyModel.getEvents()){
-            //check paternal
-            if(mFamilyModel.isPaternal(e.getPersonID()) && !mFilters.getShowFathersSide() ){
-                return;
-            }
+        Filters filters = Filters.getInstance();
 
-            //check maternal
-            if(mFamilyModel.isMaternal(e.getPersonID()) && !mFilters.getShowMothersSide()){
-                return;
-            }
-
-            //check type
-            if(!mFilters.getMappedFilter(e.getEventType())){
-                return;
-            }
-
-            //check gender
-            if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("f") && !mFilters.getShowFemale()){
-                return;
-            }
-
-            if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("m") && !mFilters.getShowMale()){
-                return;
-            }
-
-            mShownEvents.add(e);
-        }
+        List<person> people = filters.filterPersons(mFamilyModel.getPersons());
+        mShownEvents=filters.filterEvents(mFamilyModel.getEvents());
     }
 
     public void centerMap() {
@@ -380,24 +357,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void drawFamLines(event e, int color, float width){
+        float given_width =  width;
 
-        //TODO lines get progessively thinner
+        //DONE lines get progressively thinner
         event dad= mFamilyModel.getFathersBirth(e.getPersonID());
         if(dad != null){
+            if(width > 3){
+                width = width -3;
+            }
             drawLine(getLatLng(e), getLatLng(dad), color, width);
             drawFamLines(dad, color, width);
         }
 
         event mom= mFamilyModel.getMothersBirth(e.getPersonID());
+        width = given_width;
         if(mom != null){
+            if(width > 3){
+                width = width -3;
+            }
             drawLine(getLatLng(e), getLatLng(mom), color, width);
             drawFamLines(mom, color, width);
         }
 
     }
 
-    void drawLine(LatLng point1, LatLng point2, int color, float width) {
-        map.addPolyline(new PolylineOptions().add(point1, point2).width(12).geodesic(true).color(color));
+    void drawLine(LatLng point1, LatLng point2, int color, float width){
+        map.addPolyline(new PolylineOptions().add(point1, point2).width(width).geodesic(true).color(color));
     }
 
     private void startSettingsActivity(){

@@ -233,7 +233,10 @@ public class FamilyModel implements Serializable {
             }
             //add current user as child to father (if father exists)
             if(p.getFatherID()!= null && !p.getFatherID().equals("")) {
-                this.children.get(p.getFatherID()).add(p.getPersonID());
+                //if this child is not already listed, add them
+                if(!this.children.get(p.getFatherID()).contains(p.getPersonID())) {
+                    this.children.get(p.getFatherID()).add(p.getPersonID());
+                }
             }
 
             //if needed, create a map entry for Mother
@@ -242,7 +245,9 @@ public class FamilyModel implements Serializable {
             }
             //add current user as child to Mother
             if(p.getMotherID() != null && !p.getMotherID().equals("")){
-                this.children.get(p.getMotherID()).add(p.getPersonID());
+                if(!this.children.get(p.getMotherID()).contains(p.getPersonID())) {
+                    this.children.get(p.getMotherID()).add(p.getPersonID());
+                }
             }
         }
     }

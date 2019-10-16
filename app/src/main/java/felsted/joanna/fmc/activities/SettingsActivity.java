@@ -1,5 +1,6 @@
 package felsted.joanna.fmc.activities;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -239,17 +240,22 @@ public class SettingsActivity extends AppCompatActivity  {
             }
         });
     }
+
     private class ResyncRequest extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... params){
             try{
                 personListResponse persons = new ServerProxy().getPersons(mFamilyModel.getToken());
                 eventListResponse events = new ServerProxy().getEvents(mFamilyModel.getToken());
-                mFamilyModel.setEvents(events.getData());
-                mFamilyModel.setPersons(persons.getData());
-                mFamilyModel.setupFilters();
-                mFamilyModel.setupAncestors();
-                mFamilyModel.setupChildren();
+                if (persons != null && events != null) {
+                    mFamilyModel.setEvents(events.getData());
+                    mFamilyModel.setPersons(persons.getData());
+                    mFamilyModel.setupFilters();
+                    mFamilyModel.setupAncestors();
+                    mFamilyModel.setupChildren();
+                } else {
+                    Toast.makeText(SettingsActivity.this, "Resync Unsuccessful", Toast.LENGTH_SHORT).show();
+                }
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
                 Toast.makeText(SettingsActivity.this, R.string.register400, Toast.LENGTH_SHORT).show();

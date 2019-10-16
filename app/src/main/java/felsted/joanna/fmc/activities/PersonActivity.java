@@ -46,15 +46,15 @@ public class PersonActivity extends AppCompatActivity {
     private RecyclerView mFamilyRecyclerView;
     private PersonAdapter mPersonAdapter;
 
-    //TODO pretty layout
+    //DONE pretty layout
         //TODO lists are EXPANDABLE
     //DONE order events chronologically
     //DONE list family
-    //TODO set gender specific icons
+    //DONE set gender specific icons
     //DONE trigger person activity by clicking on person (person activity for THAT person)
     //TODO implement filtering
     //TODO fix double event listing
-    //TODO fix multiple person listing (patrick as main person)
+    //DONE fix multiple person listing (patrick as main person)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

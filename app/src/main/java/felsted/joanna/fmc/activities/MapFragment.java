@@ -160,14 +160,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         initMap();
-        Intent i  = getActivity().getIntent(); // NOTE THIS IS WHAT IS MOVING THE MAP
-            //CENTER_EVENT_ID
-            if(i.hasExtra("CENTER_EVENT_ID")){
-                event e = mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"));
-                LatLng center = getLatLng(e);
-                CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
-                map.animateCamera(update);
+        try {
+            if (getActivity().getIntent() != null) {
+                Intent i = getActivity().getIntent(); // NOTE THIS IS WHAT IS MOVING THE MAP
+                //CENTER_EVENT_ID
+                if (i.hasExtra("CENTER_EVENT_ID")) {
+                    event e = mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"));
+                    LatLng center = getLatLng(e);
+                    CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
+                    map.animateCamera(update);
+                }
             }
+        }catch(NullPointerException e){
+            System.out.println("CAUGHT NULL POINTER EXCEPTION. EVERYTHING IS FINE");
+        }
 
     }
 
@@ -298,10 +304,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         for (event e : mShownEvents) {
             builder.include(getLatLng(e));
         }
+        if(mShownEvents.size() == 0){
+            LatLng temp = new LatLng(40.7500d, -110.1167d);
+            builder.include(temp);
+        }
         LatLngBounds bounds = builder.build();
         CameraUpdate update =
                 CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 1);
         map.moveCamera(update);
+
     }
 
     void setMarkerListener() {

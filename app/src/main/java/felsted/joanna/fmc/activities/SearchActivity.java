@@ -45,9 +45,9 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
-    //TODO make layout
+    //DONE make layout
     //TODO allow filtering
-    //TODO search function
+    //DONE search function
         // use FamilyModel searches
 
     @Override

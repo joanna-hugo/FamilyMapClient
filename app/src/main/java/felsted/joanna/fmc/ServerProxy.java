@@ -3,7 +3,7 @@ package felsted.joanna.fmc;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;

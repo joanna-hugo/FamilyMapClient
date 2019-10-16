@@ -55,7 +55,7 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        fakeTestData();
+//        fakeTestData();
     }
 
     private void fakeTestData(){
@@ -250,7 +250,7 @@ public class LoginFragment extends Fragment {
                 new RegisterRequest().execute();
             }
         });
-        mRegister.setEnabled(true); //TODO change to false when done testing
+        mRegister.setEnabled(false); //DONE change to false when done testing
 
         mSignIn = v.findViewById(R.id.SignIn);
         mSignIn.setOnClickListener(new View.OnClickListener(){
@@ -310,7 +310,7 @@ public class LoginFragment extends Fragment {
                 mFamilyModel.setupFilters();
                 mFamilyModel.setupAncestors();
                 mFamilyModel.setupChildren();
-                switchToMapActivity(mFamilyModel); //TODO we might want to add a resyn request to mFamilyModel
+                switchToMapActivity(mFamilyModel); //TODO we might want to add a resync request to mFamilyModel
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
 //                Toast.makeText(LoginFragment.this.getContext(), R.string.register400, Toast.LENGTH_SHORT).show();
@@ -336,7 +336,7 @@ public class LoginFragment extends Fragment {
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
             }
 
-            switchToMapActivity(mFamilyModel); //TODO uncomment above when done with testing
+//            switchToMapActivity(mFamilyModel); //TODO uncomment above when done with testing
             return null;
         }
     }

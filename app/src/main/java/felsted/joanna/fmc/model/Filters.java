@@ -8,11 +8,12 @@ import java.util.Map;
 public class Filters {
 //    private Map<String, Boolean> event_filters = new HashMap<>();
 
-    private Map<String, Boolean> event_type_filters_2 = new HashMap<>();
+    private Map<String, Boolean> event_type_filters = new HashMap<>(); //this is the event_types
     private FamilyModel mFamilyModel = FamilyModel.getInstance();
+    
     private Boolean showMale = true;
-
     private Boolean showFemale = true;
+
     private Boolean showFathersSide = true;
     private Boolean showMothersSide = true;
     private static final Filters instance = new Filters();
@@ -20,7 +21,7 @@ public class Filters {
     //SINGLETON
     private Filters(){
         for(event e: mFamilyModel.getEvents()){
-            event_type_filters_2.put(e.getEventType(), true);
+            event_type_filters.put(e.getEventType(), true);
         }
     }
 
@@ -29,16 +30,36 @@ public class Filters {
     }
 
     public void addTypeFilter(String event_type, Boolean isShow){
-        event_type_filters_2.put(event_type, isShow);
+        event_type_filters.put(event_type, isShow);
     }
 
+    public Map<String, Boolean> getEvent_type_filters() {
+        return event_type_filters;
+    }
+
+    public void setEvent_type_filters(Map<String, Boolean> event_type_filters) {
+        this.event_type_filters = event_type_filters;
+    }
+
+    public void setEvent_type_filters(String event_type, Boolean show){
+        if(this.event_type_filters.containsKey(event_type)){
+            this.event_type_filters.put(event_type, show);
+        }
+    }
+    public List<String> getEvent_type_filters_names(){
+        List<String> myFilters = new ArrayList<>();
+        for (Map.Entry<String, Boolean> entry : event_type_filters.entrySet()) {
+            myFilters.add(entry.getKey());
+        }
+        return myFilters;
+    }
 
     public void addEventTypeFilter(String type){
-        event_type_filters_2.put(type, true);
+        event_type_filters.put(type, true);
     }
 
     public Boolean getMappedFilter(String type){
-        return event_type_filters_2.get(type);
+        return event_type_filters.get(type);
     }
 
     public Boolean getShowMale() {

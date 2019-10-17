@@ -55,7 +55,7 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-//        fakeTestData();
+        fakeTestData();
     }
 
     private void fakeTestData(){
@@ -322,20 +322,20 @@ public class LoginFragment extends Fragment {
     private class RegisterRequest extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... params){
-            try{
-                loginResponse result = new ServerProxy().register(mRegisterRequest); //TODO uncomment this, this is just for testing so I don't have to login every time
+//            try{
+//                loginResponse result = new ServerProxy().register(mRegisterRequest); //TODO uncomment this, this is just for testing so I don't have to login every time
 //            TODO check for 200 response, then create a toast if not
 
-                personListResponse persons = new ServerProxy().getPersons(result.getAuthToken());
-                eventListResponse events = new ServerProxy().getEvents(result.getAuthToken());
-                mFamilyModel.setEvents(events.getData());
-                mFamilyModel.setPersons(persons.getData());
-                mFamilyModel.setToken(result.getAuthToken());
+//                personListResponse persons = new ServerProxy().getPersons(result.getAuthToken());
+//                eventListResponse events = new ServerProxy().getEvents(result.getAuthToken());
+//                mFamilyModel.setEvents(events.getData());
+//                mFamilyModel.setPersons(persons.getData());
+//                mFamilyModel.setToken(result.getAuthToken());
                 switchToMapActivity(mFamilyModel);
-            }catch(IOException ioe){
-                Log.e(TAG, "Failed to fetch URL: ", ioe);
-                Toast.makeText(getActivity(), "Server not responding", Toast.LENGTH_LONG).show();
-            }
+//            }catch(IOException ioe){
+//                Log.e(TAG, "Failed to fetch URL: ", ioe);
+//                Toast.makeText(getActivity(), "Server not responding", Toast.LENGTH_LONG).show();
+//            }
 
 //            switchToMapActivity(mFamilyModel); //TODO uncomment above when done with testing
             return null;

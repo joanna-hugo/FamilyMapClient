@@ -50,6 +50,7 @@ import static android.graphics.Color.RED;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.fromFile;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -271,28 +272,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     void addMarkers() {
+        mFamilyModel.setupColors();
         for(event e : mShownEvents){
-            if(mFilters.showEvent(e)) {
+            if(mFilters.showEvent(e) && mFilters.showPerson(mFamilyModel.getPerson(e.getPersonID()))) {
                 addMarker(e.getCity(), new LatLng(e.getLatitude(), e.getLongitude()), e);
             }
         }
     }
 
     void addMarker(String city, LatLng latLng, event e) {
+        //not already filtered event and person, we need to show this marker
         person p = mFamilyModel.getPerson(e.getPersonID());
-        if(!mFilters.showPerson(p)){
-            return;
-        }
         MarkerOptions options ;
-        if(p.getGender().equalsIgnoreCase("f")) {
+//        if(p.getGender().equalsIgnoreCase("f")) {
             options =
                     new MarkerOptions().position(latLng).title(city)
-                            .icon(defaultMarker(HUE_RED));
-        }else{
-            options =
-                    new MarkerOptions().position(latLng).title(city)
-                            .icon(defaultMarker(HUE_BLUE));
-        }
+                            .icon(defaultMarker(mFamilyModel.getColor(e.getEventType())));
+//        }else{
+//            options =
+//                    new MarkerOptions().position(latLng).title(city)
+//                            .icon(defaultMarker(HUE_BLUE));
+//        }
         Marker marker = map.addMarker(options);
         marker.setTag(e.getEventID());
     }

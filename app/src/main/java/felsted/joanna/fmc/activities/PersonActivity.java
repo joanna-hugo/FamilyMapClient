@@ -22,10 +22,13 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.FamilyModel;
+import felsted.joanna.fmc.model.Filters;
 import felsted.joanna.fmc.model.Settings;
 import felsted.joanna.fmc.model.event;
 import felsted.joanna.fmc.model.person;
@@ -45,16 +48,17 @@ public class PersonActivity extends AppCompatActivity {
 
     private RecyclerView mFamilyRecyclerView;
     private PersonAdapter mPersonAdapter;
+    private Filters filters = Filters.getInstance();
 
-    //TODO pretty layout
+    //DONE pretty layout
         //TODO lists are EXPANDABLE
     //DONE order events chronologically
     //DONE list family
-    //TODO set gender specific icons
+    //DONE set gender specific icons
     //DONE trigger person activity by clicking on person (person activity for THAT person)
     //TODO implement filtering
-    //TODO fix double event listing
-    //TODO fix multiple person listing (patrick as main person)
+    //DONE fix double event listing
+    //DONE fix multiple person listing (patrick as main person)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,10 +96,13 @@ public class PersonActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.person_gender)).setText("Male");
         }
 
+        Filters filters = Filters.getInstance();
+        mEvents = filters.filterEvents(mEvents);
         mEventAdapter = new EventAdapter(mEvents);
         mEventRecyclerView.setAdapter(mEventAdapter);
 
         List<person> family = mFamilyModel.getImmediateFam(mPerson.getPersonID());
+        family = filters.filterPersons(family);
         mPersonAdapter = new PersonAdapter(family);
         mFamilyRecyclerView.setAdapter(mPersonAdapter);
     }
@@ -157,6 +164,7 @@ public class PersonActivity extends AppCompatActivity {
 
         private EventAdapter(List<event> events) {
             myEvents = events;
+            Collections.sort(myEvents);
         }
 
         @Override
@@ -169,7 +177,9 @@ public class PersonActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(EventHolder holder, int position) {
             event event = myEvents.get(position);
-            holder.bind(event);
+            if(filters.showEvent(event)){
+                holder.bind(event);
+            }
         }
 
         @Override
@@ -196,13 +206,16 @@ public class PersonActivity extends AppCompatActivity {
         private void bind(person p) {
             myPerson = p;
             String all = myPerson.getFirstName() + " " + myPerson.getLastName();
-            if(mPerson.getMotherID().equals(myPerson.getPersonID())){
+            if(mPerson.getMotherID() != null &&
+                mPerson.getMotherID().equals(myPerson.getPersonID())){
                 all += "\nMother";
             }
-            else if(mPerson.getFatherID().equals(myPerson.getPersonID())){
+            else if(mPerson.getFatherID() != null &&
+                mPerson.getFatherID().equals(myPerson.getPersonID())){
                 all += "\nFather";
             }
-            else if(mPerson.getSpouseID().equals(myPerson.getPersonID())){
+            else if(mPerson.getSpouseID() != null &&
+                mPerson.getSpouseID().equals(myPerson.getPersonID())){
                 all += "\nSpouse";
             }
             else{
@@ -251,7 +264,9 @@ public class PersonActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(PersonHolder holder, int position) {
             person p = mFamily.get(position);
-            holder.bind(p);
+            if(filters.showPerson(p)){
+                holder.bind(p);
+            }
         }
 
         @Override
@@ -259,76 +274,4 @@ public class PersonActivity extends AppCompatActivity {
             return mFamily.size();
         }
     }
-
-    // -------------------------
-
-//    private class TitlesHolder extends ParentViewHolder{
-//        private TextView mTitleText;
-//
-//        public TitlesHolder(View itemView){
-//            super(itemView);
-//            mTitleText = itemView.findViewById(R.id.title_view);
-//        }
-//        public void bind(String text){
-//            mTitleText.setText(text);
-//        }
-//    }
-//
-//    private class EventTextHolder extends ChildViewHolder{
-//        private TextView mTextView;
-//        private event myEvent;
-//
-//        public EventTextHolder(View itemView){
-//            super(itemView);
-//            mTextView = itemView.findViewById(R.id.event_text);
-//        }
-//
-//        public void bind(event e){
-//            myEvent = e;
-//            person p = mFamilyModel.getPerson(myEvent.getPersonID());
-//
-//            String info = myEvent.getEventType() + " : " + myEvent.getCity() + ", " + myEvent.getCountry() + " (" + myEvent.getYear() + ")";
-//            String name = p.getFirstName() + " " + p.getLastName();
-//            String all = info  + "\n" + name;
-//            mTextView.setText(all);
-//        }
-//    }
-//
-//    public class TitleAdapter extends ExpandableRecyclerAdapter<String, event, TitlesHolder, EventTextHolder> {
-//
-//        private LayoutInflater mInflater;
-//
-//        public TitleAdapter(Context context, @NonNull List<String> TitleList) {
-//            super(parentItemList);
-//            mInflater = LayoutInflater.from(context);
-//        }
-//
-//        // onCreate ...
-//        @Override
-//        public TitlesHolder onCreateParentViewHolder(@NonNull ViewGroup parentViewGroup, int viewType) {
-//            View recipeView = mInflater.inflate(R.layout.title_text, parentViewGroup, false);
-//            return new TitlesHolder(recipeView);
-//        }
-//
-//        @Override
-//        public EventTextHolder onCreateChildViewHolder(@NonNull ViewGroup childViewGroup, int viewType) {
-//            View ingredientView = mInflater.inflate(R.layout.ingredient_view, childViewGroup, false);
-//            return new EventTextHolder(ingredientView);
-//        }
-//
-//        // onBind ...
-//        @Override
-//        public void onBindParentViewHolder(@NonNull TitlesHolder recipeViewHolder, int parentPosition, @NonNull String title) {
-//            TitlesHolder.bind(title);
-//        }
-//
-//        @Override
-//        public void onBindChildViewHolder(@NonNull EventTextHolder ingredientViewHolder, int parentPosition, int childPosition, @NonNull event event) {
-//            ingredientViewHolder.bind(event);
-//        }
-//    }
-
-//--------------
-    // NOTE If you want to make the list expandable, follow this BigNerdRanch Tutorial
-    // https://bignerdranch.github.io/expandable-recycler-view/
 }

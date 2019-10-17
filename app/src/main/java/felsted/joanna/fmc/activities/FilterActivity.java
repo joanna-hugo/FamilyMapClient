@@ -3,11 +3,13 @@ package felsted.joanna.fmc.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -37,8 +39,8 @@ public class FilterActivity extends AppCompatActivity {
     FilterAdapter mFilterAdapter;
 
 
-    //TODO make layout pretty
-    //TODO add all buttons and listeners
+    //DONE make layout pretty
+    //DONE add all buttons and listeners
     //DONE add recycler view(?) to dynamically show event_types
         //DONE I should get the person activity running well then apply what I learn here
 
@@ -52,32 +54,100 @@ public class FilterActivity extends AppCompatActivity {
         filterRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mFilterAdapter = new FilterAdapter(mFilters.getEvent_type_filters_names());
         filterRecyclerView.setAdapter(mFilterAdapter);
+
+        addListeners();
+        setFilters();
+
     }
 
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            // Respond to the action bar's Up/Home button
+//            case android.R.id.home:
+//                NavUtils.navigateUpFromSameTask(this);
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
+    void addListeners(){
+        Switch temp = findViewById(R.id.show_father_switch);
+        temp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mFilters.setShowFathersSide( isChecked);
+                System.out.println("FILTERS: CLICKED SHOW FATHERS SIDE TO " + isChecked);
+            }
+        });
+
+        temp=findViewById(R.id.show_mother_switch);
+        temp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mFilters.setShowMothersSide( isChecked);
+                System.out.println("FILTERS: CLICKED SHOW MOTHERS SIDE TO " + isChecked);
+            }
+        });
+
+        temp=findViewById(R.id.show_male_switch);
+        temp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mFilters.setShowMale( isChecked);
+                System.out.println("FILTERS: CLICKED SHOW MALE SIDE TO " + isChecked);
+            }
+        });
+
+        temp=findViewById(R.id.show_female_switch);
+        temp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mFilters.setShowFemale(isChecked);
+                System.out.println("FILTERS: CLICKED SHOW FEMALE SIDE TO " + isChecked);
+            }
+        });
+    }
+
+    void setFilters(){
+        Switch temp = findViewById(R.id.show_father_switch);
+        temp.setChecked(mFilters.getShowFathersSide());
+
+        temp=findViewById(R.id.show_mother_switch);
+        temp.setChecked(mFilters.getShowMothersSide());
+
+        temp=findViewById(R.id.show_male_switch);
+        temp.setChecked(mFilters.getShowMale());
+
+        temp=findViewById(R.id.show_female_switch);
+        temp.setChecked(mFilters.getShowFemale());
+    }
 
 // -----------------------------------------------------------------------------------------------------
 
     private class FilterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView data;
         private Switch showSwitch;
+        private String event_type;
 
         private FilterViewHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.filter_layout, parent, false));
 
             data = itemView.findViewById(R.id.filter_text);
             showSwitch = itemView.findViewById(R.id.filters_button);
-            showSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                     mFilters.setEvent_type_filters(data.getText().toString(), isChecked);
-                }
-            });
-
         }
 
-        private void bind(String given ){
+        private void bind(final String given){
             StringBuilder sb = new StringBuilder(given + " Events \n FILTER BY " + given.toUpperCase() + " EVENTS");
             data.setText(sb.toString());
             showSwitch.setChecked(mFilters.getMappedFilter(given));
+
+            showSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mFilters.setEvent_type_filters(given, isChecked);
+                    System.out.println("FILTERS: CLICKED " + data.getText() + " to " + isChecked);
+                }
+            });
         }
 
         @Override
@@ -89,10 +159,14 @@ public class FilterActivity extends AppCompatActivity {
 
     private class FilterAdapter extends RecyclerView.Adapter<FilterViewHolder> {
 
-        private List<String> myFilters;
+        private List<String> myFilters = new ArrayList<>();
 
         private FilterAdapter(List<String> filters) {
-            myFilters = filters;
+            for(String s: filters){
+                if(!myFilters.contains(s.toLowerCase())){
+                    myFilters.add(s.toLowerCase());
+                }
+            }
         }
 
         @Override

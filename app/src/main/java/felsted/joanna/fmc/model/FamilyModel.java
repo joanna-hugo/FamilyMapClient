@@ -1,5 +1,6 @@
 package felsted.joanna.fmc.model;
 
+import android.graphics.Color;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -21,6 +22,7 @@ public class FamilyModel implements Serializable {
     private List<person> maternalAncestors = new ArrayList<>();
     private List<person> paternalAncestors = new ArrayList<>();
     private Map<String, List<String>> children= new HashMap<>();
+    private Map<String, String> event_type_colors = new HashMap<>();
 
     private loginRequest reSyncRequest =  new loginRequest();
 
@@ -181,7 +183,7 @@ public class FamilyModel implements Serializable {
         return temp;
     }
 
-    public event getSpousesBirth(String person_id){
+    public event getSpousesBirth(String person_id){ //TODO fix this
         person p = getPerson(person_id);
         List<event> spouseEvengs= getPersonsEvents(p.getSpouseID());
 
@@ -216,7 +218,7 @@ public class FamilyModel implements Serializable {
     public void setupFilters(){
         Filters filters = Filters.getInstance();
         for(event e: events){
-            filters.addEventTypeFilter(e.getEventType());
+            filters.addEventTypeFilter(e.getEventType().toLowerCase());
         }
     }
 
@@ -233,7 +235,10 @@ public class FamilyModel implements Serializable {
             }
             //add current user as child to father (if father exists)
             if(p.getFatherID()!= null && !p.getFatherID().equals("")) {
-                this.children.get(p.getFatherID()).add(p.getPersonID());
+                //if this child is not already listed, add them
+                if(!this.children.get(p.getFatherID()).contains(p.getPersonID())) {
+                    this.children.get(p.getFatherID()).add(p.getPersonID());
+                }
             }
 
             //if needed, create a map entry for Mother
@@ -242,17 +247,28 @@ public class FamilyModel implements Serializable {
             }
             //add current user as child to Mother
             if(p.getMotherID() != null && !p.getMotherID().equals("")){
-                this.children.get(p.getMotherID()).add(p.getPersonID());
+                if(!this.children.get(p.getMotherID()).contains(p.getPersonID())) {
+                    this.children.get(p.getMotherID()).add(p.getPersonID());
+                }
+            }
+        }
+    }
+
+    public void setupColors(){
+        int temp =0;
+        for(event e: events){
+            if(!event_type_colors.containsKey(e.getEventType().toLowerCase())){
+//                event_type_colors.put(e.getEventType().toLowerCase(), Color.argb(temp, temp, temp).toString()); //TODO
             }
         }
     }
 
     public Boolean isMaternal(String person_id){
-        return this.maternalAncestors.contains(person_id);
+        return this.maternalAncestors.contains(getPerson(person_id));
     }
 
     public Boolean isPaternal(String person_id){
-        return this.paternalAncestors.contains(person_id);
+        return this.paternalAncestors.contains(getPerson(person_id));
     }
 
     public List<person> getMaternalAncestors() {
@@ -271,12 +287,13 @@ public class FamilyModel implements Serializable {
         this.paternalAncestors = paternalAncestors;
     }
 
-    private void traverseFamily(Boolean isMaternal, String person_id){
-        //if isMaternal add to maternal ancestors
+    private void traverseFamily(Boolean givenIsMaternal, String person_id){
+        //if givenIsMaternal add to maternal ancestors
             //otherwise, add to paternal ancestors
 
         //get the father
         //get the mother
+
         person root = getPerson(person_id);
         String father_id = root.getFatherID();
         String mother_id = root.getMotherID();
@@ -284,24 +301,24 @@ public class FamilyModel implements Serializable {
         //if father, then add to array and traverseFamily
         if(isPerson(father_id)){ //NOTE possible to return dummy family member
             person father = getPerson(father_id);
-            if(isMaternal){
+            if(givenIsMaternal){
                 this.maternalAncestors.add(father);
             }else{
                 this.paternalAncestors.add(father);
             }
-            traverseFamily(isMaternal, father_id);
+            traverseFamily(givenIsMaternal, father_id);
         }else{
             System.out.println("END OF FAMILY LINE");
         }
         //if mother, then add to array and traverseFamily
         if(isPerson(mother_id)){
             person mother = getPerson(mother_id);
-            if(isMaternal){
+            if(givenIsMaternal){
                 this.maternalAncestors.add(mother);
             }else{
                 this.paternalAncestors.add(mother);
             }
-            traverseFamily(isMaternal, mother_id);
+            traverseFamily(givenIsMaternal, mother_id);
         }else{
             System.out.println("END OF FAMILY LINE");
         }

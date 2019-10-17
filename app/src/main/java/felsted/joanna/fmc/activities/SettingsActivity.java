@@ -1,5 +1,6 @@
 package felsted.joanna.fmc.activities;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +37,7 @@ public class SettingsActivity extends AppCompatActivity  {
     //DONE Re-sync data
     //DONE Logout
     //DONE make layout pretty
-    //DONE hook up Re-sync to server //TODO test
+    //DONE hook up Re-sync to server //DONE test
     //TODO Radio buttons not toggles
     //DONE make map reload when going back to map (in case Settings change)
 
@@ -227,7 +228,7 @@ public class SettingsActivity extends AppCompatActivity  {
     }
 
     private void configureReSync(){
-        //TODO config resync
+        //DONE config resync
         Button sync = findViewById(R.id.resync_button);
         sync.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,24 +237,31 @@ public class SettingsActivity extends AppCompatActivity  {
                         "Resyncing data",
                         Toast.LENGTH_SHORT).show();
                 new ResyncRequest().execute();
+//                finish();
             }
         });
     }
+
     private class ResyncRequest extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... params){
             try{
                 personListResponse persons = new ServerProxy().getPersons(mFamilyModel.getToken());
                 eventListResponse events = new ServerProxy().getEvents(mFamilyModel.getToken());
-                mFamilyModel.setEvents(events.getData());
-                mFamilyModel.setPersons(persons.getData());
-                mFamilyModel.setupFilters();
-                mFamilyModel.setupAncestors();
-                mFamilyModel.setupChildren();
+                if (persons != null && events != null) {
+                    mFamilyModel.setEvents(events.getData());
+                    mFamilyModel.setPersons(persons.getData());
+                    mFamilyModel.setupFilters();
+                    mFamilyModel.setupAncestors();
+                    mFamilyModel.setupChildren();
+                } else {
+                    Toast.makeText(SettingsActivity.this, "Resync Unsuccessful", Toast.LENGTH_SHORT).show();
+                }
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
                 Toast.makeText(SettingsActivity.this, R.string.register400, Toast.LENGTH_SHORT).show();
             }
+            finish();
             return null;
         }
     }

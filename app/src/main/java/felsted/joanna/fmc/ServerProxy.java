@@ -3,7 +3,7 @@ package felsted.joanna.fmc;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -135,7 +135,7 @@ instead of localhost or 127.0.0.1.
 
     public loginResponse register(registerRequest rqst) throws IOException{
         //https://stackoverflow.com/questions/21404252/post-request-send-json-data-java-httpurlconnection
-        URL url = new URL ("http://10.0.2.2:8080/user/register");
+        URL url = new URL ("http://10.0.2.2:8080/user/register"); //TODO change this for after testing
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         try{
@@ -158,7 +158,7 @@ instead of localhost or 127.0.0.1.
 
             StringBuilder sb = new StringBuilder();
             int HttpResult = connection.getResponseCode();
-            if (HttpResult == HttpURLConnection.HTTP_OK) { //TODO why is the server breaking right now??
+            if (HttpResult == HttpURLConnection.HTTP_OK) {
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(connection.getInputStream(), "utf-8"));
                 String line = null;
@@ -174,8 +174,8 @@ instead of localhost or 127.0.0.1.
                 authToken = rsp.getAuthToken();
                 return rsp;
             }else{
-                //TODO make this a more meaningful error, maybe use the same procedure as above but make an error message
-                throw new IOException("server not responding"); //TODO handle this error better, for end user convenience
+
+                throw new IOException("server not responding");
             }
         } catch (JSONException je) {
             System.out.println("ruh ro");

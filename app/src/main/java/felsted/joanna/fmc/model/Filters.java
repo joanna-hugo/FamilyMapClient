@@ -21,7 +21,7 @@ public class Filters {
     //SINGLETON
     private Filters(){
         for(event e: mFamilyModel.getEvents()){
-            event_type_filters.put(e.getEventType(), true);
+            event_type_filters.put(e.getEventType().toLowerCase(), true);
         }
     }
 
@@ -46,6 +46,7 @@ public class Filters {
             this.event_type_filters.put(event_type, show);
         }
     }
+
     public List<String> getEvent_type_filters_names(){
         List<String> myFilters = new ArrayList<>();
         for (Map.Entry<String, Boolean> entry : event_type_filters.entrySet()) {
@@ -94,38 +95,112 @@ public class Filters {
         this.showMothersSide = showMothersSide;
     }
 
-    public class Filter {
-        private Boolean show = true;
-        private String event_type;
+    public List<event> filterEvents(List<event> givenEvents){
+        List<event> filtered = new ArrayList<>();
+            for(event e: givenEvents){
+                //check paternal
+                if(mFamilyModel.isPaternal(e.getPersonID()) && !getShowFathersSide() ){
+                     continue;
+                }
 
-        public Filter(Boolean show, String event_type) {
-            this.show = show;
-            this.event_type = event_type;
-        }
+                //check maternal
+                if(mFamilyModel.isMaternal(e.getPersonID()) && !getShowMothersSide()){
+                    continue;
+                }
 
-        public Boolean getShow() {
-            return show;
-        }
+                //check type
+                if(!getMappedFilter(e.getEventType().toLowerCase())){
+                    continue;
+                }
 
-        public void setShow(Boolean show) {
-            this.show = show;
-        }
+                //check gender
+                if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("f") && !getShowFemale()){
+                    continue;
+                }
 
-        public String getEvent_type() {
-            return event_type;
-        }
-
-        public void setEvent_type(String event_type) {
-            this.event_type = event_type;
-        }
-
-        public void toggleFilter(){
-
-                    if(show){
-                        setShow(false);
-                    }else {
-                        setShow(true);
-                    }
-        }
+                if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("m") && !getShowMale()){
+                    continue;
+                }
+                filtered.add(e);
+            }
+            return filtered;
     }
+
+    public List<person> filterPersons(List<person> people){
+        List<person> filtered = new ArrayList<>();
+        for(person p: people){
+            //check paternal
+            if(mFamilyModel.isPaternal(p.getPersonID()) && !getShowFathersSide() ){
+                continue;
+            }
+
+            //check maternal
+            if(mFamilyModel.isMaternal(p.getPersonID()) && !getShowMothersSide()){
+                continue;
+            }
+
+            //check gender
+            if(mFamilyModel.getPerson(p.getPersonID()).getGender().equalsIgnoreCase("f") && !getShowFemale()){
+                continue;
+            }
+
+            if(mFamilyModel.getPerson(p.getPersonID()).getGender().equalsIgnoreCase("m") && !getShowMale()){
+                continue;
+            }
+            filtered.add(p);
+        }
+        return filtered;
+    }
+
+    public Boolean showPerson(person p){
+        List<person> filtered = new ArrayList<>();
+            //check paternal
+            if(mFamilyModel.isPaternal(p.getPersonID()) && !getShowFathersSide() ){
+                return false;
+            }
+
+            //check maternal
+            if(mFamilyModel.isMaternal(p.getPersonID()) && !getShowMothersSide()){
+                return false;
+            }
+
+            //check gender
+            if(mFamilyModel.getPerson(p.getPersonID()).getGender().equalsIgnoreCase("f") && !getShowFemale()){
+                return false;
+            }
+
+            if(mFamilyModel.getPerson(p.getPersonID()).getGender().equalsIgnoreCase("m") && !getShowMale()){
+                return false;
+            }
+            return true;
+    }
+
+    public Boolean showEvent(event e){
+        if(mFamilyModel.isPaternal(e.getPersonID()) && !getShowFathersSide() ){
+            return false;
+        }
+
+        //check maternal
+        if(mFamilyModel.isMaternal(e.getPersonID()) && !getShowMothersSide()){
+            return false;
+        }
+
+        //check type
+        if(!getMappedFilter(e.getEventType().toLowerCase())){
+            return false;
+        }
+
+        //check gender
+        if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("f") && !getShowFemale()){
+            return false;
+        }
+
+        if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("m") && !getShowMale()){
+            return false;
+        }
+
+        return true;
+    }
+
+
 }

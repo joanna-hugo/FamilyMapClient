@@ -35,6 +35,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import felsted.joanna.fmc.R;
@@ -65,8 +66,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     static final float WIDTH = 10;  // in pixels
     static final int color = BLUE;
 
+    List<Polyline> polylines = new ArrayList<Polyline>();
 
-    //TODO up arrow goes to original activity, NOT a new activity
+    //I should do ... up arrow goes to original activity, NOT a new activity
     //DONE update map when returning from other activities (change filters or settings)
     //DONE write bottom section of screen layout
     //DONE get information from clicking on markers to show up in bottom half of screen
@@ -95,6 +97,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         setTextViewListener();
 
+        Filters filters = Filters.getInstance();
+        mShownEvents =  filters.filterEvents(mFamilyModel.getEvents());
+
         return view;
     }
 
@@ -105,6 +110,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
         mapView = (MapView) view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
+        mapView.onResume();
         mapView.onResume();
         mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
     }
@@ -160,14 +166,40 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         initMap();
-        Intent i  = getActivity().getIntent(); // NOTE THIS IS WHAT IS MOVING THE MAP
-            //CENTER_EVENT_ID
-            if(i.hasExtra("CENTER_EVENT_ID")){
-                event e = mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"));
-                LatLng center = getLatLng(e);
-                CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
-                map.animateCamera(update);
+        try {
+            if (getActivity().getIntent() != null) {
+                Intent i = getActivity().getIntent(); // NOTE THIS IS WHAT IS MOVING THE MAP
+                //CENTER_EVENT_ID
+                if (i.hasExtra("CENTER_EVENT_ID")) {
+                    event e = mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"));
+                    LatLng center = getLatLng(e);
+                    CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
+                    map.animateCamera(update);
+
+                    //setup textview below map
+                    person p = mFamilyModel.getPerson(e.getPersonID());
+                    String info = e.getEventType() + " : " +e.getCity() + ", " + e.getCountry() + " (" + e.getYear() + ")";
+                    String name = p.getFirstName() + " " + p.getLastName();
+                    String all = name + "\n" + info;
+                    textView.setText(all);
+                    textView.setTag(e.getPersonID());
+
+                    if(p.getGender().startsWith("m") || p.getGender().startsWith("M")) {
+                        Drawable genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_male).sizeDp(40);
+                        genderImageView.setImageDrawable(genderIcon);
+                        genderImageView.setColorFilter(BLUE);
+                    }else{
+                        Drawable genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_female).sizeDp(40);
+                        genderImageView.setImageDrawable(genderIcon);
+                        genderImageView.setColorFilter(RED);
+                    }
+
+                    drawLines(e);
+                }
             }
+        }catch(NullPointerException e){
+            System.out.println("CAUGHT NULL POINTER EXCEPTION. EVERYTHING IS FINE");
+        }
 
     }
 
@@ -176,41 +208,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         centerMap();
         zoomMap(1);
         setMapType();
-        setClickListener();
         addMarkers();
         setBounds();
         setMarkerListener();
-        drawLines();
+//        drawLines();
     }
 
     private void filterEvents(){
-        for(event e: mFamilyModel.getEvents()){
-            //check paternal
-            if(mFamilyModel.isPaternal(e.getPersonID()) && !mFilters.getShowFathersSide() ){
-                return;
-            }
+        Filters filters = Filters.getInstance();
 
-            //check maternal
-            if(mFamilyModel.isMaternal(e.getPersonID()) && !mFilters.getShowMothersSide()){
-                return;
-            }
-
-            //check type
-            if(!mFilters.getMappedFilter(e.getEventType())){
-                return;
-            }
-
-            //check gender
-            if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("f") && !mFilters.getShowFemale()){
-                return;
-            }
-
-            if(mFamilyModel.getPerson(e.getPersonID()).getGender().equalsIgnoreCase("m") && !mFilters.getShowMale()){
-                return;
-            }
-
-            mShownEvents.add(e);
-        }
+        List<person> people = filters.filterPersons(mFamilyModel.getPersons());
+        mShownEvents=filters.filterEvents(mFamilyModel.getEvents());
     }
 
     public void centerMap() {
@@ -248,15 +256,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    void setClickListener() {
-        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-//                textView.setText(latLng.toString());
-            }
-        });
-    }
-
     void setTextViewListener(){
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,12 +272,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     void addMarkers() {
         for(event e : mShownEvents){
+            if(mFilters.showEvent(e)) {
                 addMarker(e.getCity(), new LatLng(e.getLatitude(), e.getLongitude()), e);
+            }
         }
     }
 
     void addMarker(String city, LatLng latLng, event e) {
         person p = mFamilyModel.getPerson(e.getPersonID());
+        if(!mFilters.showPerson(p)){
+            return;
+        }
         MarkerOptions options ;
         if(p.getGender().equalsIgnoreCase("f")) {
             options =
@@ -298,10 +302,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         for (event e : mShownEvents) {
             builder.include(getLatLng(e));
         }
+        if(mShownEvents.size() == 0){
+            LatLng temp = new LatLng(40.7500d, -110.1167d);
+            builder.include(temp);
+        }
         LatLngBounds bounds = builder.build();
         CameraUpdate update =
                 CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), 1);
         map.moveCamera(update);
+
     }
 
     void setMarkerListener() {
@@ -317,6 +326,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 textView.setText(all);
                 textView.setTag(e.getPersonID());
 
+
                 if(p.getGender().startsWith("m") || p.getGender().startsWith("M")) {
                     Drawable genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_male).sizeDp(40);
                     genderImageView.setImageDrawable(genderIcon);
@@ -326,12 +336,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     genderImageView.setImageDrawable(genderIcon);
                     genderImageView.setColorFilter(RED);
                 }
+
+                map.clear();
+                addMarkers();
+
+                drawLines(e);
                 return false;
             }
         });
     }
 
-    void drawLines() {
+    void drawLines(event e) {
         /*
                     spouse lines
                         selected event to birth event of spouse (or earliest event)
@@ -343,50 +358,68 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         connecting each event in a persons story, ordered chronologically
                             if some events not visible (bc of filtering) leave them out
                  */
-        if(mSettings.isShowFamilyTreeLines()){
-            for (event e1: mShownEvents){
-                drawFamLines(e1, mSettings.getFamilyTreeLinesColor(), WIDTH);
-            }
+        if(mSettings.isShowFamilyTreeLines()){ //TODO family tree lines not checking for gender
+            drawFamLines(e, mSettings.getFamilyTreeLinesColor(), WIDTH);
         }
         if(mSettings.isShowSpouseLines()){
-            for(event e: mShownEvents){
-                event spouse = mFamilyModel.getSpousesBirth(e.getPersonID());
-                if(spouse != null) {
-                    drawLine(getLatLng(e), getLatLng(spouse), mSettings.getSpouseLinesColor(), WIDTH);
-                }
-
+            event spouse = mFamilyModel.getSpousesBirth(e.getPersonID());
+            if(spouse != null && mFilters.showEvent(e) && mFilters.showEvent(spouse)) {
+                drawLine(getLatLng(e), getLatLng(spouse), mSettings.getSpouseLinesColor(), WIDTH);
             }
         }
-        if(mSettings.isShowLifeStoryLines()){
-            for(event e: mShownEvents){
-                for(event e2 :mFamilyModel.getPersonsEvents(e.getPersonID())){
-                    if(e2 != null) {
-                        drawLine(getLatLng(e), getLatLng(e2), mSettings.getLifeStoryLinesColor(), WIDTH);
+        if(mSettings.isShowLifeStoryLines()){ //TODO show lifeSToryLines
+            List<event> lifeEvents = mFamilyModel.getPersonsEvents(e.getPersonID());
+            lifeEvents = mFilters.filterEvents(lifeEvents);
+            Collections.sort(lifeEvents);
+
+            if(lifeEvents.size() != 0){
+                event first = lifeEvents.get(0);
+
+                for(event secondEvent : lifeEvents){
+                    if(secondEvent != null && mFilters.showEvent(first) && mFilters.showEvent(secondEvent)) {
+                        drawLine(getLatLng(first), getLatLng(secondEvent), mSettings.getLifeStoryLinesColor(), WIDTH);
                     }
+                    first = secondEvent;
                 }
             }
+
         }
     }
 
     void drawFamLines(event e, int color, float width){
+        float given_width =  width;
 
-        //TODO lines get progessively thinner
+        //DONE lines get progressively thinner
         event dad= mFamilyModel.getFathersBirth(e.getPersonID());
-        if(dad != null){
-            drawLine(getLatLng(e), getLatLng(dad), color, width);
+
+        //draw line to dad's birth
+        if(dad != null && mFilters.getShowFathersSide()){
+            if(width > 3){
+                width = width -3;
+            }
+            if(mFilters.showEvent(e) && mFilters.showEvent(dad)) {
+                drawLine(getLatLng(e), getLatLng(dad), color, width);
+            }
             drawFamLines(dad, color, width);
         }
 
         event mom= mFamilyModel.getMothersBirth(e.getPersonID());
-        if(mom != null){
-            drawLine(getLatLng(e), getLatLng(mom), color, width);
+        width = given_width;
+        if(mom != null && mFilters.getShowMothersSide()){
+            if(width > 3){
+                width = width -3;
+            }
+            if(mFilters.showEvent(e) && mFilters.showEvent(mom)) {
+                drawLine(getLatLng(e), getLatLng(mom), color, width);
+            }
             drawFamLines(mom, color, width);
         }
 
     }
 
-    void drawLine(LatLng point1, LatLng point2, int color, float width) {
-        map.addPolyline(new PolylineOptions().add(point1, point2).width(12).geodesic(true).color(color));
+    void drawLine(LatLng point1, LatLng point2, int color, float width){
+        map.addPolyline(new PolylineOptions().add(point1, point2).width(width).geodesic(true).color(color));
+        polylines.add(map.addPolyline(new PolylineOptions().add(point1, point2).width(width).geodesic(true).color(color)));
     }
 
     private void startSettingsActivity(){

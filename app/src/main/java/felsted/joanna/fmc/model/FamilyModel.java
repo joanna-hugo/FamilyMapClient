@@ -22,7 +22,7 @@ public class FamilyModel implements Serializable {
     private List<person> maternalAncestors = new ArrayList<>();
     private List<person> paternalAncestors = new ArrayList<>();
     private Map<String, List<String>> children= new HashMap<>();
-    private Map<String, String> event_type_colors = new HashMap<>();
+    private Map<String, Float> event_type_colors = new HashMap<>();
 
     private loginRequest reSyncRequest =  new loginRequest();
 
@@ -255,12 +255,20 @@ public class FamilyModel implements Serializable {
     }
 
     public void setupColors(){
-        int temp =0;
+        Float myColor = 0f;
         for(event e: events){
             if(!event_type_colors.containsKey(e.getEventType().toLowerCase())){
-//                event_type_colors.put(e.getEventType().toLowerCase(), Color.argb(temp, temp, temp).toString()); //TODO
+                event_type_colors.put(e.getEventType().toLowerCase(), myColor); //TODO
+                myColor += 30f;
+                if(myColor > 360f){
+                    myColor = 25f;
+                }
             }
         }
+    }
+
+    public Float getColor(String type){
+        return event_type_colors.get(type.toLowerCase());
     }
 
     public Boolean isMaternal(String person_id){

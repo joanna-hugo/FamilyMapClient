@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Filters {
-//    private Map<String, Boolean> event_filters = new HashMap<>();
 
     private Map<String, Boolean> event_type_filters = new HashMap<>(); //this is the event_types
     private FamilyModel mFamilyModel = FamilyModel.getInstance();

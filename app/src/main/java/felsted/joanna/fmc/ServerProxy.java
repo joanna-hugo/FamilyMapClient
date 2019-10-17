@@ -15,7 +15,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import felsted.joanna.fmc.model.event;
 import felsted.joanna.fmc.model.eventListResponse;
 import felsted.joanna.fmc.model.loginRequest;
 import felsted.joanna.fmc.model.loginResponse;
@@ -55,7 +54,6 @@ instead of localhost or 127.0.0.1.
         return sb.toString();
     }
 
-    // TODO abstract as much as possible into helper functions
 
 
     public byte[] getUrlBytes(String urlSpec) throws IOException {
@@ -87,12 +85,11 @@ instead of localhost or 127.0.0.1.
     }
 
     public loginResponse login(loginRequest rqst) throws IOException{
-        //https://stackoverflow.com/questions/21404252/post-request-send-json-data-java-httpurlconnection
         URL url = new URL ("http://10.0.2.2:8080/user/login");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         try{
-            connection.setDoInput(true); //TODO generalize this after testing
+            connection.setDoInput(true);
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
 
@@ -123,7 +120,7 @@ instead of localhost or 127.0.0.1.
                 authToken=rsp.getAuthToken();
                 return rsp;
             }else{
-                throw new IOException("server not responding"); //TODO handle this error better, for end user convenience
+                throw new IOException("server not responding");
             }
         } catch (JSONException je) {
             System.out.println("ruh ro");
@@ -134,16 +131,15 @@ instead of localhost or 127.0.0.1.
     }
 
     public loginResponse register(registerRequest rqst) throws IOException{
-        //https://stackoverflow.com/questions/21404252/post-request-send-json-data-java-httpurlconnection
-        URL url = new URL ("http://10.0.2.2:8080/user/register"); //TODO change this for after testing
+        URL url = new URL ("http://10.0.2.2:8080/user/register");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         try{
-            connection.setDoInput(true); //TODO generalize this after testing
+            connection.setDoInput(true);
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
 
-            JSONObject req =  new JSONObject(); //TODO can we use GSON to make the json object?
+            JSONObject req =  new JSONObject();
             req.put("userName", rqst.getUsername());
             req.put("password", rqst.getPassword());
             req.put("email", rqst.getEmail());
@@ -187,7 +183,7 @@ instead of localhost or 127.0.0.1.
 
     public personListResponse getPersons(String token) throws IOException{
 
-        URL url = new URL ("http://10.0.2.2:8080/person"); //TODO generalize this to user host/port provided in screen
+        URL url = new URL ("http://10.0.2.2:8080/person");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         try {
@@ -226,7 +222,7 @@ instead of localhost or 127.0.0.1.
         return new personListResponse();
     }
 
-    public eventListResponse getEvents(String token) throws IOException{ //TODO flesh this out
+    public eventListResponse getEvents(String token) throws IOException{
 
         URL url = new URL ("http://10.0.2.2:8080/event");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

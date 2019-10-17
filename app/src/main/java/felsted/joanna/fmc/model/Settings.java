@@ -5,13 +5,10 @@ import com.google.android.gms.maps.GoogleMap;
 
 import java.io.Serializable;
 
-/**
- * Created by bondd on 12/9/2017.
- */
 
 public class Settings implements Serializable {
 
-    private static final Settings instance = new Settings(); //can also think of as SINGLETON
+    private static final Settings instance = new Settings(); //SINGLETON
 
     private boolean mainLoadMapFragOnCreate = false;
 

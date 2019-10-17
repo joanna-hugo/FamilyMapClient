@@ -1,34 +1,24 @@
 package felsted.joanna.fmc.activities;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import felsted.joanna.fmc.R;
 import felsted.joanna.fmc.model.Filters;
-import felsted.joanna.fmc.model.event;
-import felsted.joanna.fmc.model.person;
 
 public class FilterActivity extends AppCompatActivity {
 //    private FamilyModel mFamilyModel;
@@ -59,17 +49,6 @@ public class FilterActivity extends AppCompatActivity {
         setFilters();
 
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            // Respond to the action bar's Up/Home button
-//            case android.R.id.home:
-//                NavUtils.navigateUpFromSameTask(this);
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     void addListeners(){
         Switch temp = findViewById(R.id.show_father_switch);

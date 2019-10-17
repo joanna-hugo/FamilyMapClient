@@ -1,6 +1,5 @@
 package felsted.joanna.fmc.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -133,19 +131,6 @@ public class SearchActivity extends AppCompatActivity {
 
             Drawable markerIcon = new IconDrawable(SearchActivity.this, FontAwesomeIcons.fa_map_marker).sizeDp(40);
             markerImageView.setImageDrawable(markerIcon);
-
-//            mType = findViewById(R.id.search_event_info);
-//            mType.setOnClickListener(new View.OnClickListener(){
-//
-//                @Override
-//                public void onClick(View v) {
-//                    Intent i = new Intent(v.getContext(), EventActivity.class);
-//                    i.putExtra("SETTINGS", mSettings);
-//                    i.putExtra("CENTER_EVENT_ID", myEvent.getEventID());
-//                    i.putExtra("FAMILY_MODEL", mFamilyModel);
-//                    startActivity(new Intent(i));
-//                }
-//            });
         }
 
         @Override

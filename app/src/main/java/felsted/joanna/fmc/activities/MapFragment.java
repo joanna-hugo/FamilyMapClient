@@ -1,7 +1,6 @@
 package felsted.joanna.fmc.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +20,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -30,9 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
-import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,10 +42,7 @@ import felsted.joanna.fmc.model.person;
 
 import static android.graphics.Color.BLUE;
 import static android.graphics.Color.RED;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.fromFile;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -104,8 +96,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
-    // NOTE
-    // https://stackoverflow.com/questions/35496493/getmapasync-in-fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -113,7 +103,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.onResume();
-        mapView.getMapAsync(this);//when you already implement OnMapReadyCallback in your fragment
+        mapView.getMapAsync(this);
     }
 
     @Override
@@ -133,7 +123,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setHasOptionsMenu(true);
         inflater.inflate(R.menu.fragment_map, menu);
 
-        //NOTE https://www.concretepage.com/android/android-options-menu-example-using-getmenuinflater-inflate-oncreateoptionsmenu-and-onoptionsitemselected
         MenuItem searchItem = menu.findItem(R.id.search_button);
         searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
             @Override
@@ -226,8 +215,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Intent i  = getActivity().getIntent();
         //CENTER_EVENT_ID
         if(i.hasExtra("CENTER_EVENT_ID")){
-            event e = mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"));
-            LatLng center = getLatLng(e);
             CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
             map.animateCamera(update);
         }else {
@@ -284,15 +271,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         //not already filtered event and person, we need to show this marker
         person p = mFamilyModel.getPerson(e.getPersonID());
         MarkerOptions options ;
-//        if(p.getGender().equalsIgnoreCase("f")) {
             options =
                     new MarkerOptions().position(latLng).title(city)
                             .icon(defaultMarker(mFamilyModel.getColor(e.getEventType())));
-//        }else{
-//            options =
-//                    new MarkerOptions().position(latLng).title(city)
-//                            .icon(defaultMarker(HUE_BLUE));
-//        }
         Marker marker = map.addMarker(options);
         marker.setTag(e.getEventID());
     }

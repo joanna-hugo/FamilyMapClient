@@ -1,6 +1,5 @@
 package felsted.joanna.fmc.model;
 
-import android.graphics.Color;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -23,8 +22,6 @@ public class FamilyModel implements Serializable {
     private List<person> paternalAncestors = new ArrayList<>();
     private Map<String, List<String>> children= new HashMap<>();
     private Map<String, Float> event_type_colors = new HashMap<>();
-
-    private loginRequest reSyncRequest =  new loginRequest();
 
     private static FamilyModel instance = new FamilyModel();
 

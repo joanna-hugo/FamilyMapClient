@@ -1,9 +1,7 @@
 package felsted.joanna.fmc.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,14 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bignerdranch.expandablerecyclerview.ChildViewHolder;
-import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter;
-import com.bignerdranch.expandablerecyclerview.ParentViewHolder;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -236,8 +230,6 @@ public class PersonActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v){
-//            Toast.makeText(v.getContext(),
-//                    "you clicked a " + mTextView.getEventType() + " event!", Toast.LENGTH_SHORT).show();
 
             Intent i = new Intent(v.getContext(), PersonActivity.class);
             i.putExtra("SETTINGS", mSettings);

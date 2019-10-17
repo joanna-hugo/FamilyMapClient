@@ -1,6 +1,5 @@
 package felsted.joanna.fmc.activities;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -59,9 +58,6 @@ public class SettingsActivity extends AppCompatActivity  {
     }
 
     private void configureLifeStorySpinner(){
-//        https://www.journaldev.com/9231/android-spinner-drop-down-list
-
-        //https://docs.oracle.com/javase/tutorial/uiswing/components/spinner.html
         Spinner life_story_spinner = findViewById(R.id.life_story_spinner);
 
         // Spinner click listener
@@ -102,9 +98,6 @@ public class SettingsActivity extends AppCompatActivity  {
     }
 
     private void configureFamilyTreeSpinner(){
-//        https://www.journaldev.com/9231/android-spinner-drop-down-list
-
-        //https://docs.oracle.com/javase/tutorial/uiswing/components/spinner.html
         Spinner life_story_spinner = findViewById(R.id.family_tree_spinner);
 
         // Spinner click listener
@@ -145,9 +138,6 @@ public class SettingsActivity extends AppCompatActivity  {
     }
 
     private void configureSpouseSpinner(){
-//        https://www.journaldev.com/9231/android-spinner-drop-down-list
-
-        //https://docs.oracle.com/javase/tutorial/uiswing/components/spinner.html
         Spinner life_story_spinner = findViewById(R.id.spouse_spinner);
 
         // Spinner click listener
@@ -186,9 +176,6 @@ public class SettingsActivity extends AppCompatActivity  {
     }
 
     private void configureMapTypeSpinner() {
-//        https://www.journaldev.com/9231/android-spinner-drop-down-list
-
-        //https://docs.oracle.com/javase/tutorial/uiswing/components/spinner.html
         Spinner life_story_spinner = findViewById(R.id.map_spinner);
 
         // Spinner click listener

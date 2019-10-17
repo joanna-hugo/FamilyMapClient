@@ -48,6 +48,7 @@ public class PersonActivity extends AppCompatActivity {
 
     private RecyclerView mFamilyRecyclerView;
     private PersonAdapter mPersonAdapter;
+    private Filters filters = Filters.getInstance();
 
     //DONE pretty layout
         //TODO lists are EXPANDABLE
@@ -176,7 +177,9 @@ public class PersonActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(EventHolder holder, int position) {
             event event = myEvents.get(position);
-            holder.bind(event);
+            if(filters.showEvent(event)){
+                holder.bind(event);
+            }
         }
 
         @Override
@@ -203,13 +206,16 @@ public class PersonActivity extends AppCompatActivity {
         private void bind(person p) {
             myPerson = p;
             String all = myPerson.getFirstName() + " " + myPerson.getLastName();
-            if(mPerson.getMotherID().equals(myPerson.getPersonID())){
+            if(mPerson.getMotherID() != null &&
+                mPerson.getMotherID().equals(myPerson.getPersonID())){
                 all += "\nMother";
             }
-            else if(mPerson.getFatherID().equals(myPerson.getPersonID())){
+            else if(mPerson.getFatherID() != null &&
+                mPerson.getFatherID().equals(myPerson.getPersonID())){
                 all += "\nFather";
             }
-            else if(mPerson.getSpouseID().equals(myPerson.getPersonID())){
+            else if(mPerson.getSpouseID() != null &&
+                mPerson.getSpouseID().equals(myPerson.getPersonID())){
                 all += "\nSpouse";
             }
             else{
@@ -258,7 +264,9 @@ public class PersonActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(PersonHolder holder, int position) {
             person p = mFamily.get(position);
-            holder.bind(p);
+            if(filters.showPerson(p)){
+                holder.bind(p);
+            }
         }
 
         @Override

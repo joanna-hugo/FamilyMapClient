@@ -159,10 +159,14 @@ public class FilterActivity extends AppCompatActivity {
 
     private class FilterAdapter extends RecyclerView.Adapter<FilterViewHolder> {
 
-        private List<String> myFilters;
+        private List<String> myFilters = new ArrayList<>();
 
         private FilterAdapter(List<String> filters) {
-            myFilters = filters;
+            for(String s: filters){
+                if(!myFilters.contains(s.toLowerCase())){
+                    myFilters.add(s.toLowerCase());
+                }
+            }
         }
 
         @Override

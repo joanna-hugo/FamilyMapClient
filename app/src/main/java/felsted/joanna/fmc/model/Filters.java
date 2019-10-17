@@ -21,7 +21,7 @@ public class Filters {
     //SINGLETON
     private Filters(){
         for(event e: mFamilyModel.getEvents()){
-            event_type_filters.put(e.getEventType(), true);
+            event_type_filters.put(e.getEventType().toLowerCase(), true);
         }
     }
 
@@ -109,7 +109,7 @@ public class Filters {
                 }
 
                 //check type
-                if(!getMappedFilter(e.getEventType())){
+                if(!getMappedFilter(e.getEventType().toLowerCase())){
                     continue;
                 }
 
@@ -152,6 +152,29 @@ public class Filters {
         return filtered;
     }
 
+    public Boolean showPerson(person p){
+        List<person> filtered = new ArrayList<>();
+            //check paternal
+            if(mFamilyModel.isPaternal(p.getPersonID()) && !getShowFathersSide() ){
+                return false;
+            }
+
+            //check maternal
+            if(mFamilyModel.isMaternal(p.getPersonID()) && !getShowMothersSide()){
+                return false;
+            }
+
+            //check gender
+            if(mFamilyModel.getPerson(p.getPersonID()).getGender().equalsIgnoreCase("f") && !getShowFemale()){
+                return false;
+            }
+
+            if(mFamilyModel.getPerson(p.getPersonID()).getGender().equalsIgnoreCase("m") && !getShowMale()){
+                return false;
+            }
+            return true;
+    }
+
     public Boolean showEvent(event e){
         if(mFamilyModel.isPaternal(e.getPersonID()) && !getShowFathersSide() ){
             return false;
@@ -163,7 +186,7 @@ public class Filters {
         }
 
         //check type
-        if(!getMappedFilter(e.getEventType())){
+        if(!getMappedFilter(e.getEventType().toLowerCase())){
             return false;
         }
 
@@ -178,4 +201,6 @@ public class Filters {
 
         return true;
     }
+
+
 }

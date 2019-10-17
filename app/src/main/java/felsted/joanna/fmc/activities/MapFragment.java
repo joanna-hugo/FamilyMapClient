@@ -66,7 +66,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     static final int color = BLUE;
 
 
-    //TODO up arrow goes to original activity, NOT a new activity
+    //I should do ... up arrow goes to original activity, NOT a new activity
     //DONE update map when returning from other activities (change filters or settings)
     //DONE write bottom section of screen layout
     //DONE get information from clicking on markers to show up in bottom half of screen
@@ -94,6 +94,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
 
         setTextViewListener();
+
+        Filters filters = Filters.getInstance();
+        mShownEvents =  filters.filterEvents(mFamilyModel.getEvents());
 
         return view;
     }
@@ -169,6 +172,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     LatLng center = getLatLng(e);
                     CameraUpdate update = CameraUpdateFactory.newLatLng(getLatLng(mFamilyModel.getEvent(i.getStringExtra("CENTER_EVENT_ID"))));
                     map.animateCamera(update);
+
+                    //setup textview below map
+                    person p = mFamilyModel.getPerson(e.getPersonID());
+                    String info = e.getEventType() + " : " +e.getCity() + ", " + e.getCountry() + " (" + e.getYear() + ")";
+                    String name = p.getFirstName() + " " + p.getLastName();
+                    String all = name + "\n" + info;
+                    textView.setText(all);
+                    textView.setTag(e.getPersonID());
+
+                    if(p.getGender().startsWith("m") || p.getGender().startsWith("M")) {
+                        Drawable genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_male).sizeDp(40);
+                        genderImageView.setImageDrawable(genderIcon);
+                        genderImageView.setColorFilter(BLUE);
+                    }else{
+                        Drawable genderIcon = new IconDrawable(getActivity(), FontAwesomeIcons.fa_female).sizeDp(40);
+                        genderImageView.setImageDrawable(genderIcon);
+                        genderImageView.setColorFilter(RED);
+                    }
                 }
             }
         }catch(NullPointerException e){
@@ -331,24 +352,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         connecting each event in a persons story, ordered chronologically
                             if some events not visible (bc of filtering) leave them out
                  */
-        if(mSettings.isShowFamilyTreeLines()){
+        if(mSettings.isShowFamilyTreeLines()){ //TODO family tree lines not checking for gender
             for (event e1: mShownEvents){
-                drawFamLines(e1, mSettings.getFamilyTreeLinesColor(), WIDTH);
+                if(mFilters.showEvent(e1)) {
+                    drawFamLines(e1, mSettings.getFamilyTreeLinesColor(), WIDTH);
+                }
             }
         }
-        if(mSettings.isShowSpouseLines()){
+        if(mSettings.isShowSpouseLines() && mFilters.getShowMale() && mFilters.getShowFemale()){
             for(event e: mShownEvents){
                 event spouse = mFamilyModel.getSpousesBirth(e.getPersonID());
-                if(spouse != null) {
+                if(spouse != null && mFilters.showEvent(e) && mFilters.showEvent(spouse)) {
                     drawLine(getLatLng(e), getLatLng(spouse), mSettings.getSpouseLinesColor(), WIDTH);
                 }
 
             }
         }
-        if(mSettings.isShowLifeStoryLines()){
+        if(mSettings.isShowLifeStoryLines()){ //TODO show lifeSToryLines
             for(event e: mShownEvents){
-                for(event e2 :mFamilyModel.getPersonsEvents(e.getPersonID())){
-                    if(e2 != null) {
+                List<event> secondaryEvents = mFamilyModel.getPersonsEvents(e.getPersonID());
+                secondaryEvents = mFilters.filterEvents(secondaryEvents);
+                for(event e2 : secondaryEvents){
+                    if(e2 != null && mFilters.showEvent(e) && mFilters.showEvent(e2)) {
                         drawLine(getLatLng(e), getLatLng(e2), mSettings.getLifeStoryLinesColor(), WIDTH);
                     }
                 }
@@ -361,21 +386,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         //DONE lines get progressively thinner
         event dad= mFamilyModel.getFathersBirth(e.getPersonID());
-        if(dad != null){
+
+        //draw line to dad's birth
+        if(dad != null && mFilters.getShowFathersSide()){
             if(width > 3){
                 width = width -3;
             }
-            drawLine(getLatLng(e), getLatLng(dad), color, width);
+            if(mFilters.showEvent(e) && mFilters.showEvent(dad)) {
+                drawLine(getLatLng(e), getLatLng(dad), color, width);
+            }
             drawFamLines(dad, color, width);
         }
 
         event mom= mFamilyModel.getMothersBirth(e.getPersonID());
         width = given_width;
-        if(mom != null){
+        if(mom != null && mFilters.getShowMothersSide()){
             if(width > 3){
                 width = width -3;
             }
-            drawLine(getLatLng(e), getLatLng(mom), color, width);
+            if(mFilters.showEvent(e) && mFilters.showEvent(mom)) {
+                drawLine(getLatLng(e), getLatLng(mom), color, width);
+            }
             drawFamLines(mom, color, width);
         }
 

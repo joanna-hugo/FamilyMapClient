@@ -334,6 +334,7 @@ public class LoginFragment extends Fragment {
                 switchToMapActivity(mFamilyModel);
             }catch(IOException ioe){
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
+                Toast.makeText(getActivity(), "Server not responding", Toast.LENGTH_LONG).show();
             }
 
 //            switchToMapActivity(mFamilyModel); //TODO uncomment above when done with testing

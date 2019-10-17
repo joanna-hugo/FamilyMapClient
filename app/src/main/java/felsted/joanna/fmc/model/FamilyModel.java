@@ -276,12 +276,13 @@ public class FamilyModel implements Serializable {
         this.paternalAncestors = paternalAncestors;
     }
 
-    private void traverseFamily(Boolean isMaternal, String person_id){
-        //if isMaternal add to maternal ancestors
+    private void traverseFamily(Boolean givenIsMaternal, String person_id){
+        //if givenIsMaternal add to maternal ancestors
             //otherwise, add to paternal ancestors
 
         //get the father
         //get the mother
+
         person root = getPerson(person_id);
         String father_id = root.getFatherID();
         String mother_id = root.getMotherID();
@@ -289,24 +290,24 @@ public class FamilyModel implements Serializable {
         //if father, then add to array and traverseFamily
         if(isPerson(father_id)){ //NOTE possible to return dummy family member
             person father = getPerson(father_id);
-            if(isMaternal){
+            if(givenIsMaternal){
                 this.maternalAncestors.add(father);
             }else{
                 this.paternalAncestors.add(father);
             }
-            traverseFamily(isMaternal, father_id);
+            traverseFamily(givenIsMaternal, father_id);
         }else{
             System.out.println("END OF FAMILY LINE");
         }
         //if mother, then add to array and traverseFamily
         if(isPerson(mother_id)){
             person mother = getPerson(mother_id);
-            if(isMaternal){
+            if(givenIsMaternal){
                 this.maternalAncestors.add(mother);
             }else{
                 this.paternalAncestors.add(mother);
             }
-            traverseFamily(isMaternal, mother_id);
+            traverseFamily(givenIsMaternal, mother_id);
         }else{
             System.out.println("END OF FAMILY LINE");
         }

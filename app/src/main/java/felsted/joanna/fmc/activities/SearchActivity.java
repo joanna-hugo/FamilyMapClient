@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
+import java.util.Collections;
 import java.util.List;
 
 import felsted.joanna.fmc.R;
@@ -48,9 +49,9 @@ public class SearchActivity extends AppCompatActivity {
 
 
     //DONE make layout
-    //TODO allow filtering
+    //DONE allow filtering
     //DONE add listeners for events and people
-    //TODO events in chronological order
+    //DONE events in chronological order
     //DONE search function
         // use FamilyModel searches
 
@@ -84,12 +85,17 @@ public class SearchActivity extends AppCompatActivity {
                 mEvents = mFamilyModel.searchEvents(search);
                 mPersons = mFamilyModel.searchPersons(search);
 
+                //filter events and people
                 Filters filters = Filters.getInstance();
                 mEvents= filters.filterEvents(mEvents);
-                mPersons= filters.filterPersons(mPersons); //TODO order events
+                mPersons= filters.filterPersons(mPersons);
+
+                //order events
+                Collections.sort(mEvents);
 
                 mEventAdapter = new EventAdapter(mEvents);
                 mEventRecyclerView.setAdapter(mEventAdapter);
+                Collections.sort(mEvents);
 
                 mPersonAdapter = new PersonAdapter(mPersons);
                 mPersonRecyclerView.setAdapter(mPersonAdapter);

@@ -22,6 +22,8 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import felsted.joanna.fmc.R;
@@ -161,6 +163,7 @@ public class PersonActivity extends AppCompatActivity {
 
         private EventAdapter(List<event> events) {
             myEvents = events;
+            Collections.sort(myEvents);
         }
 
         @Override

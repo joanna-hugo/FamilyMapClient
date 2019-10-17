@@ -237,6 +237,7 @@ public class SettingsActivity extends AppCompatActivity  {
                         "Resyncing data",
                         Toast.LENGTH_SHORT).show();
                 new ResyncRequest().execute();
+//                finish();
             }
         });
     }
@@ -260,6 +261,7 @@ public class SettingsActivity extends AppCompatActivity  {
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
                 Toast.makeText(SettingsActivity.this, R.string.register400, Toast.LENGTH_SHORT).show();
             }
+            finish();
             return null;
         }
     }
